@@ -23,16 +23,16 @@ public class ReservasController {
         return ResponseEntity.status(HttpStatus.OK).body(lista);
     }
 
-    @GetMapping("/{idreserva}")
+    /*@GetMapping("/{idreserva}")
     public ResponseEntity<Reservas> consultarById(@PathVariable("idreserva") Long idreserva){
         return  ResponseEntity.ok().body(service.consultarById(idreserva));
-    }
-
-    /*@GetMapping("/ConsultaByIdItem/{iditem}")
-    public ResponseEntity<Object> consultarReservasByIdItem(@PathVariable("iditem") Long iditem){
-        Object lista = service.consultarByIdItem(iditem);
-        return ResponseEntity.status(HttpStatus.OK).body(lista);
     }*/
+
+    @GetMapping("/{iditem}")
+    public ResponseEntity<List<Reservas>> consultarReservasByIdItem(@PathVariable("iditem") Long iditem){
+        List<Reservas> lista = service.consultarByIdItem(iditem);
+        return ResponseEntity.status(HttpStatus.OK).body(lista);
+    }
 
     @PostMapping
     public ResponseEntity<Reservas> salvar(@Valid @RequestBody Reservas reservas){

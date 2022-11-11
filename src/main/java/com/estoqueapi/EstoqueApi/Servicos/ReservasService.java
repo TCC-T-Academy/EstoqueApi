@@ -31,13 +31,9 @@ public class ReservasService {
         return res;
     }
 
-    /*public Object consultarByIdItem(Long idItem){
-        List<Reservas> lista = reservasRepository.findReservasByIdItem(idItem);
-        if(lista.isEmpty()){
-            return "Lista Vazia";
-        }
-        return lista;
-    }*/
+    public List<Reservas> consultarByIdItem(Long idItem){
+        return reservasRepository.ConsultarByIdItem(idItem);
+    }
 
     @Transactional
     public Reservas salvar(Reservas reservas){
