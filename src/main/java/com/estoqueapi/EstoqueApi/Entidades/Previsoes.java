@@ -2,11 +2,7 @@ package com.estoqueapi.EstoqueApi.Entidades;
 
 import java.sql.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "previsoes")
@@ -15,8 +11,13 @@ public class Previsoes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idPrevisao;
-    //private String itens_idItem;
-    //private String usuarios_idUsuario;
+
+    @ManyToOne
+    private Itens item;
+
+    @ManyToOne
+    private Usuarios usuario;
+
     private float quantidadePrevista;
     private Date dataPrevista;
     private String ordem;
@@ -68,7 +69,19 @@ public class Previsoes {
         this.finalizada = finalizada;
     }
 
-    
+    public Itens getItem() {
+        return item;
+    }
 
+    public void setItem(Itens item) {
+        this.item = item;
+    }
 
+    public Usuarios getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuarios usuario) {
+        this.usuario = usuario;
+    }
 }

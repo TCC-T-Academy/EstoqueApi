@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface MovimentacoesRepository extends JpaRepository<Movimentacoes,Long> {
-    @Query("Select m from Movimentacoes m where idItem = ?1 order by m.idMovimentacao desc")
+    @Query("Select m from Movimentacoes m where item.idItem = ?1 order by m.idMovimentacao desc")
     List<Movimentacoes> findAllByIdItem(Long idItem);
 }
