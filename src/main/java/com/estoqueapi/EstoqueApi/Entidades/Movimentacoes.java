@@ -11,37 +11,34 @@ public class Movimentacoes {
     private long idMovimentacao;
     @Column(columnDefinition = "DATETIME")
     private Instant dataMovimentacao;
+
     private String tipo; //IN OUT
+
     private String origemDestino;
+
     private float quantidade;
 
-    private long idItem;
-    private long idUsuario;
-
-    /*
+    @ManyToOne
     private Estoque estoque;
+
+    @ManyToOne
     private Itens item;
+
+    @ManyToOne
     private Usuarios usuario;
-    */
+
 
     public Movimentacoes() {
     }
 
-    public Movimentacoes(Instant dataMovimentacao, String tipo, String origemDestino, float quantidade, long idItem, long idUsuario) {
+    public Movimentacoes(Instant dataMovimentacao, String tipo, String origemDestino, float quantidade, Estoque estoque, Itens item, Usuarios usuario) {
         this.dataMovimentacao = dataMovimentacao;
         this.tipo = tipo;
         this.origemDestino = origemDestino;
         this.quantidade = quantidade;
-        this.idItem = idItem;
-        this.idUsuario = idUsuario;
-    }
-
-    public long getIdItem() {
-        return idItem;
-    }
-
-    public void setIdItem(long idItem) {
-        this.idItem = idItem;
+        this.estoque = estoque;
+        this.item = item;
+        this.usuario = usuario;
     }
 
     public long getIdMovimentacao() {
@@ -80,15 +77,31 @@ public class Movimentacoes {
         return quantidade;
     }
 
-    public long getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(long idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
     public void setQuantidade(float quantidade) {
         this.quantidade = quantidade;
+    }
+
+    public Estoque getEstoque() {
+        return estoque;
+    }
+
+    public void setEstoque(Estoque estoque) {
+        this.estoque = estoque;
+    }
+
+    public Itens getItem() {
+        return item;
+    }
+
+    public void setItem(Itens item) {
+        this.item = item;
+    }
+
+    public Usuarios getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuarios usuario) {
+        this.usuario = usuario;
     }
 }

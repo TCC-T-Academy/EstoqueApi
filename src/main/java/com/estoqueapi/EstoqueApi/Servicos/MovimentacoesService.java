@@ -1,10 +1,16 @@
 package com.estoqueapi.EstoqueApi.Servicos;
 
+import com.estoqueapi.EstoqueApi.Entidades.Estoque;
+import com.estoqueapi.EstoqueApi.Entidades.Itens;
 import com.estoqueapi.EstoqueApi.Entidades.Movimentacoes;
+import com.estoqueapi.EstoqueApi.Repositorios.EstoqueRepository;
+import com.estoqueapi.EstoqueApi.Repositorios.ItensRepository;
 import com.estoqueapi.EstoqueApi.Repositorios.MovimentacoesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +21,25 @@ public class MovimentacoesService {
     @Autowired
     MovimentacoesRepository movimentacoesRepository;
 
+    @Autowired
+    ItensRepository itensRepository;
+
+    @Autowired
+    EstoqueRepository estoqueRepository;
+
+
     public Movimentacoes salvar(Movimentacoes movimentacao){
         return  movimentacoesRepository.save(movimentacao);
     }
 
     public List<Movimentacoes> consultar(){
+        List<Movimentacoes> lista = movimentacoesRepository.findAll();
+        lista.stream().map(movimentacoes -> {
+            movimentacoes.setItem(itensRepository.findById(movimentacoes.getItem().getIdItem()).orElseThrow(() -> new EntityNotFoundException("Nao encontrado")));
+            movimentacoes.setEstoque(estoqueRepository.findById(movimentacoes.getItem().getIdItem()).orElseThrow(() -> new EntityNotFoundException("Nao encontrado")));
+            return movimentacoes;
+        });
+
         return movimentacoesRepository.findAll();
     }
 
