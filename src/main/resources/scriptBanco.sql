@@ -7,9 +7,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema estoque_api
 -- -----------------------------------------------------
-
 DROP SCHEMA IF EXISTS `estoque_api`;
-
 -- -----------------------------------------------------
 -- Schema estoque_api
 -- -----------------------------------------------------
@@ -34,15 +32,15 @@ ENGINE = InnoDB;
 -- Table `estoque_api`.`estoque`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `estoque_api`.`estoque` (
-  `idEstoque` INT NOT NULL,
-	`itens_idItem` INT NOT NULL,
-  `localização` VARCHAR(45) NULL,
-  `estoque_real` FLOAT NULL,
+	`idEstoque` INT NOT NULL,
+	`idItem` INT NOT NULL,
+	`localizacao` VARCHAR(45) NULL,
+	`estoqueReal` FLOAT NULL,
 
   PRIMARY KEY (`idEstoque`),
-  INDEX `fk_estoque_itens1_idx` (`itens_idItem` ASC) VISIBLE,
+  INDEX `fk_estoque_itens1_idx` (`idItem` ASC) VISIBLE,
   CONSTRAINT `fk_estoque_itens1`
-    FOREIGN KEY (`itens_idItem`)
+    FOREIGN KEY (`idItem`)
     REFERENCES `estoque_api`.`itens` (`idItem`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -53,42 +51,46 @@ ENGINE = InnoDB;
 -- Table `estoque_api`.`usuarios`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `estoque_api`.`usuarios` (
-  `idUsuario` INT NOT NULL AUTO_INCREMENT,
-  `nome` VARCHAR(45) NULL,
-  `senha` VARCHAR(45) NULL,
-  PRIMARY KEY (`idUsuario`))
-ENGINE = InnoDB;
+	`idUsuario` INT NOT NULL AUTO_INCREMENT,
+	`nome` VARCHAR(45) NULL,
+	`email` VARCHAR(45) NULL,
+	`senha` VARCHAR(45) NULL,
+	`perfil` int,
+ 
+  PRIMARY KEY (`idUsuario`),
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
+ENGINE = InnoDB
+COMMENT '0 - Administrador; 1 - Outro';
 
 
 -- -----------------------------------------------------
 -- Table `estoque_api`.`movimentacoes`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `estoque_api`.`movimentacoes` (
-  `idmovimentações` INT NOT NULL AUTO_INCREMENT,
-  `estoque_idEstoque` INT NOT NULL,
+  `idmovimentacao` INT NOT NULL AUTO_INCREMENT,
+  `idEstoque` INT NOT NULL,
   `dataMovimentacao` DATETIME NULL,
-  `in_out` VARCHAR(45) NULL,
-  `tipo_movimentacao` VARCHAR(45) NULL,
+  `tipo` VARCHAR(45) NULL,
+  `origemDestino` VARCHAR(45) NULL,
   `quantidade` FLOAT NULL,
-  `movimentaçõescol` VARCHAR(45) NULL,
-  `usuarios_idUsuario` INT NOT NULL,
-  `itens_idItem` INT NOT NULL,
-  PRIMARY KEY (`idmovimentações`),
-  INDEX `fk_movimentações_estoque1_idx` (`estoque_idEstoque` ASC) VISIBLE,
-  INDEX `fk_movimentacoes_usuarios1_idx` (`usuarios_idUsuario` ASC) VISIBLE,
-  INDEX `fk_movimentacoes_itens1_idx` (`itens_idItem` ASC) VISIBLE,
+  `idUsuario` INT NOT NULL,
+  `idItem` INT NOT NULL,
+  PRIMARY KEY (`idmovimentacao`),
+  INDEX `fk_movimentações_estoque1_idx` (`idEstoque` ASC) VISIBLE,
+  INDEX `fk_movimentacoes_usuarios1_idx` (`idUsuario` ASC) VISIBLE,
+  INDEX `fk_movimentacoes_itens1_idx` (`idItem` ASC) VISIBLE,
   CONSTRAINT `fk_movimentações_estoque1`
-    FOREIGN KEY (`estoque_idEstoque`)
+    FOREIGN KEY (`idEstoque`)
     REFERENCES `estoque_api`.`estoque` (`idEstoque`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_movimentacoes_usuarios1`
-    FOREIGN KEY (`usuarios_idUsuario`)
+    FOREIGN KEY (`idUsuario`)
     REFERENCES `estoque_api`.`usuarios` (`idUsuario`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_movimentacoes_itens1`
-    FOREIGN KEY (`itens_idItem`)
+    FOREIGN KEY (`idItem`)
     REFERENCES `estoque_api`.`itens` (`idItem`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -104,18 +106,18 @@ CREATE TABLE IF NOT EXISTS `estoque_api`.`reservas` (
   `quantidadeReserva` FLOAT NULL,
   `dataPrevista` DATETIME NULL,
   `ordem` VARCHAR(45) NULL,
-  `usuarios_idUsuario` INT NOT NULL,
-  `itens_idItem` INT NOT NULL,
+  `idUsuario` INT NOT NULL,
+  `idItem` INT NOT NULL,
   PRIMARY KEY (`idReserva`),
-  INDEX `fk_reservas_usuarios1_idx` (`usuarios_idUsuario` ASC) VISIBLE,
-  INDEX `fk_reservas_itens1_idx` (`itens_idItem` ASC) VISIBLE,
+  INDEX `fk_reservas_usuarios1_idx` (`idUsuario` ASC) VISIBLE,
+  INDEX `fk_reservas_itens1_idx` (`idItem` ASC) VISIBLE,
   CONSTRAINT `fk_reservas_usuarios1`
-    FOREIGN KEY (`usuarios_idUsuario`)
+    FOREIGN KEY (`idUsuario`)
     REFERENCES `estoque_api`.`usuarios` (`idUsuario`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_reservas_itens1`
-    FOREIGN KEY (`itens_idItem`)
+    FOREIGN KEY (`idItem`)
     REFERENCES `estoque_api`.`itens` (`idItem`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -131,22 +133,23 @@ CREATE TABLE IF NOT EXISTS `estoque_api`.`previsoes` (
   `quantidadePrevista` FLOAT NULL,
   `ordem` VARCHAR(45) NULL,
   `finalizada` TINYINT NULL DEFAULT 0,
-  `usuarios_idUsuario` INT NOT NULL,
-  `itens_idItem` INT NOT NULL,
+  `idUsuario` INT NOT NULL,
+  `idItem` INT NOT NULL,
   PRIMARY KEY (`idPrevisao`),
-  INDEX `fk_previsoes_usuarios1_idx` (`usuarios_idUsuario` ASC) VISIBLE,
-  INDEX `fk_previsoes_itens1_idx` (`itens_idItem` ASC) VISIBLE,
+  INDEX `fk_previsoes_usuarios1_idx` (`idUsuario` ASC) VISIBLE,
+  INDEX `fk_previsoes_itens1_idx` (`idItem` ASC) VISIBLE,
   CONSTRAINT `fk_previsoes_usuarios1`
-    FOREIGN KEY (`usuarios_idUsuario`)
+    FOREIGN KEY (`idUsuario`)
     REFERENCES `estoque_api`.`usuarios` (`idUsuario`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_previsoes_itens1`
-    FOREIGN KEY (`itens_idItem`)
+    FOREIGN KEY (`idItem`)
     REFERENCES `estoque_api`.`itens` (`idItem`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+COMMENT = '												';
 
 INSERT INTO `itens` VALUES (1400,'PARAF SEXT RI 3/16 X 1/2 BSW24 C5/16 A2,8 POLIDO','INDUSTRIALIZAÇÃO','PARAFUSOS','PC',131)
 							,(1410,'PARAF SEXT RI 3/16 X 5/8 BSW24 C5/16 A2,8 POLIDO','INDUSTRIALIZAÇÃO','PARAFUSOS','PC',58)
@@ -200,6 +203,11 @@ INSERT INTO `estoque` VALUES (1,1400,'A123',161),(2,1410,'A124',88),(3,1420,'A12
                             ,(25,1640,'A147',134),(26,1650,'A148',86),(27,1660,'A149',147),(28,1670,'A150',122),(29,1680,'A151',92),(30,1690,'A152',131)
                             ,(31,1700,'A153',170),(32,1710,'A154',124),(33,1720,'A155',162),(34,1730,'A156',171),(35,1740,'A157',142),(36,1750,'A158',112)
                             ,(37,1760,'A159',145),(38,1770,'A160',171),(39,1780,'A161',137),(40,1790,'A162',110),(41,1800,'A163',105),(42,1810,'A164',92),(43,1820,'A165',108);
+                            
+
+INSERT INTO `usuarios` VALUES (1,'Joao da Silva','joao.silva@empresa.com','1234',1)
+								, (2,'Maria Rodrigues','maria.rodrigues@empresa.com','1234',0);	
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
