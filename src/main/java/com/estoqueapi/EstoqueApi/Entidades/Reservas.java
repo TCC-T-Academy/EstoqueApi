@@ -1,9 +1,6 @@
 package com.estoqueapi.EstoqueApi.Entidades;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -16,6 +13,14 @@ public class Reservas {
     private float quantidadeReserva;
     private Date dataPrevista;
     private String ordem;
+
+    @ManyToOne
+    private Usuarios usuario;
+
+    @ManyToOne
+    private Itens item;
+
+    //Talvez ja possamos remover;
     private long usuarios_idUsuario; // fk usuário
     private long itens_idItem; // fk itens
 
@@ -73,5 +78,21 @@ public class Reservas {
 
     public void setItens_idItem(long itens_idItem) {
         this.itens_idItem = itens_idItem;
+    }
+
+    public Usuarios getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuarios usuario) {
+        this.usuario = usuario;
+    }
+
+    public Itens getItem() {
+        return item;
+    }
+
+    public void setItem(Itens item) {
+        this.item = item;
     }
 }
