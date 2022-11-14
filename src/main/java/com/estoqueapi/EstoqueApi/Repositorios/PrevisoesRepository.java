@@ -7,4 +7,6 @@ import com.estoqueapi.EstoqueApi.Entidades.Previsoes;
 
 @Repository
 public interface PrevisoesRepository extends CrudRepository<Previsoes, Long> {
+    // Retornar todos os registros com uma determinada idade.
+    Iterable<Previsoes>findByFinalizada(boolean finalizada);
 }

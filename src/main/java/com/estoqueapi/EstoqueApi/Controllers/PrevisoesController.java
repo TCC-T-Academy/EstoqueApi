@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import com.estoqueapi.EstoqueApi.Entidades.Previsoes;
 import com.estoqueapi.EstoqueApi.Repositorios.PrevisoesRepository;
 
+import java.util.Optional;
 
 
 @RestController
@@ -27,6 +28,17 @@ public class PrevisoesController {
         return acao.findAll();
     }
 
+    //Filtrar por ID da previsão
+    @GetMapping("/{idPrevisao}")
+    public Optional<Previsoes> filtrarID(@PathVariable long idPrevisao){
+        return acao.findById(idPrevisao);
+    }
+
+    //Filtrar por OC realizada ou não
+    @GetMapping("/status/{finalizada}")
+    public Iterable<Previsoes> statusPrevisoes(@PathVariable boolean finalizada){
+        return acao.findByFinalizada(finalizada);
+    }
     // Alterar previsão
     @PutMapping("/alterar")
     public Previsoes alterarPrevisoes(@RequestBody Previsoes obj) {
