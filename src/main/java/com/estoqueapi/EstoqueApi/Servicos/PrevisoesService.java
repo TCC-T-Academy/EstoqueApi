@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.sql.Date;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -16,8 +18,6 @@ public class PrevisoesService {
 
     @Autowired
     private PrevisoesRepository previsoesRepository;
-    @Autowired
-
 
     // Listar todas as previsões cadastradas
     public Iterable<Previsoes> listarPrevisoes(){
@@ -42,9 +42,17 @@ public class PrevisoesService {
         return prev;
     }
 
-    //Filtrar por OC realizada ou não
-    public Iterable<Previsoes> findByFinalizada(boolean finalizada){
+    //Filtrar por ordem de compra/produção realizadas ou não
+    public List<Previsoes> findByFinalizada(boolean finalizada){
         return previsoesRepository.findByFinalizada(finalizada);
+    }
+
+    //Filtrar pela data as previsões que venceram e estão a vencer.
+    public List<Previsoes> findByDataPrevistaVencidos(boolean finalizada) {
+        if (finalizada == true) {
+            return previsoesRepository.findByDataPrevistaVencidos();
+        } else
+            return previsoesRepository.findByDataPrevistaAVencer();
     }
 
     //Alterar previsões - Alterar somente se tiver ativo (não realizado)
@@ -65,10 +73,5 @@ public class PrevisoesService {
         Previsoes previsoes = this.filtrarId(idPrevisao);
         previsoesRepository.delete(previsoes);
     }
-
-
-
-
-
 
 }

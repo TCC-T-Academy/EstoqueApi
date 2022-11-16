@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.estoqueapi.EstoqueApi.Entidades.Previsoes;
 
 import javax.validation.Valid;
+import java.sql.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -39,12 +40,20 @@ public class PrevisoesController {
     public ResponseEntity<Previsoes> filtrarId(@PathVariable ("idPrevisao") Long idPrevisao) {
         return ResponseEntity.ok().body(service.filtrarId(idPrevisao));
     }
-    //Filtrar por OC realizada ou não
+    //Filtrar por ordem de compra/produção realizadas ou não
     @GetMapping("/status/{finalizada}")
     public ResponseEntity<List<Previsoes>> findByFinalizada(@PathVariable ("finalizada") boolean finalizada){
-        List<Previsoes> listar = (List<Previsoes>) service.findByFinalizada(finalizada);
+        List<Previsoes> listar = service.findByFinalizada(finalizada);
         return ResponseEntity.status(HttpStatus.OK).body(listar);
     }
+
+    //Filtrar pela data as previsões que venceram e estão a vencer.
+    @GetMapping("/vencimento/{finalizada}")
+    public ResponseEntity<List<Previsoes>> findByDataPrevistaVencidos(@PathVariable boolean finalizada){
+        List<Previsoes> listar = service.findByDataPrevistaVencidos(finalizada);
+        return ResponseEntity.status(HttpStatus.OK).body(listar);
+    }
+
     //Alterar previsões
     @PutMapping("/alterar/{idPrevisao}")
     public ResponseEntity<Object> alterarPrevisoes(@PathVariable ("idPrevisoes") Long idPrevisoes,
