@@ -5,8 +5,13 @@ import org.springframework.stereotype.Repository;
 
 import com.estoqueapi.EstoqueApi.Entidades.Previsoes;
 
+import java.util.Date;
+import java.util.List;
+
 @Repository
 public interface PrevisoesRepository extends CrudRepository<Previsoes, Long> {
-    // Retornar todos os registros com uma determinada idade.
-    Iterable<Previsoes>findByFinalizada(boolean finalizada);
+
+    List<Previsoes> findByFinalizada(boolean finalizada);
+
+    List<Previsoes> findBydataPrevista(Date dataPrevista);
 }
