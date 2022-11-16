@@ -10,7 +10,7 @@ public class Previsoes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idPrevisao;
+    private long idPrevisao;
 
     @ManyToOne
     private Itens item;
@@ -21,15 +21,15 @@ public class Previsoes {
     private float quantidadePrevista;
     private Date dataPrevista;
     private String ordem;
-    private boolean finalizada;
+    private boolean finalizada = false;
 
 
 
-    public int getIdPrevisao() {
+    public long getIdPrevisao() {
         return this.idPrevisao;
     }
 
-    public void setIdPrevisao(int idPrevisao) {
+    public void setIdPrevisao(long idPrevisao) {
         this.idPrevisao = idPrevisao;
     }
 
