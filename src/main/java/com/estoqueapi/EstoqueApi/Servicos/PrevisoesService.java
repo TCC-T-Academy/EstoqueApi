@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.sql.Date;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -16,8 +18,6 @@ public class PrevisoesService {
 
     @Autowired
     private PrevisoesRepository previsoesRepository;
-    @Autowired
-
 
     // Listar todas as previsões cadastradas
     public Iterable<Previsoes> listarPrevisoes(){
@@ -42,18 +42,26 @@ public class PrevisoesService {
         return prev;
     }
 
-    //Filtrar por OC realizada ou não
-    public Iterable<Previsoes> findByFinalizada(boolean finalizada){
+    //Filtrar por ordem de compra/produção realizadas ou não
+    public List<Previsoes> findByFinalizada(boolean finalizada){
         return previsoesRepository.findByFinalizada(finalizada);
     }
 
+    //Filtrar pela data as previsões que venceram e estão a vencer.
+    public List<Previsoes> findByDataPrevistaVencidos(boolean finalizada) {
+        if (finalizada == true) {
+            return previsoesRepository.findByDataPrevistaVencidos();
+        } else
+            return previsoesRepository.findByDataPrevistaAVencer();
+    }
+
     //Alterar previsões - Alterar somente se tiver ativo (não realizado)
-    public Previsoes alterarPrevisoes(Long idPrevisoes, Previsoes previsoes){
-        Previsoes prev = this.filtrarId(idPrevisoes);
-        prev.setFinalizada(previsoes.isFinalizada());
-        prev.setQuantidadePrevista(previsoes.getQuantidadePrevista());
-        prev.setDataPrevista(previsoes.getDataPrevista());
-        prev.setOrdem(previsoes.getOrdem());
+    public Previsoes alterarPrevisao(Long idPrevisao, Previsoes previsao){
+        Previsoes prev = this.filtrarId(idPrevisao);
+        prev.setFinalizada(previsao.isFinalizada());
+        prev.setQuantidadePrevista(previsao.getQuantidadePrevista());
+        prev.setDataPrevista(previsao.getDataPrevista());
+        prev.setOrdem(previsao.getOrdem());
         prev.setItem(prev.getItem());
 
         return this.cadastrarPrevisoes(prev);
@@ -65,10 +73,5 @@ public class PrevisoesService {
         Previsoes previsoes = this.filtrarId(idPrevisao);
         previsoesRepository.delete(previsoes);
     }
-
-
-
-
-
 
 }
