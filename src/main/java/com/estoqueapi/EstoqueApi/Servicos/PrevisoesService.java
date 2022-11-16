@@ -56,12 +56,12 @@ public class PrevisoesService {
     }
 
     //Alterar previsões - Alterar somente se tiver ativo (não realizado)
-    public Previsoes alterarPrevisoes(Long idPrevisoes, Previsoes previsoes){
-        Previsoes prev = this.filtrarId(idPrevisoes);
-        prev.setFinalizada(previsoes.isFinalizada());
-        prev.setQuantidadePrevista(previsoes.getQuantidadePrevista());
-        prev.setDataPrevista(previsoes.getDataPrevista());
-        prev.setOrdem(previsoes.getOrdem());
+    public Previsoes alterarPrevisao(Long idPrevisao, Previsoes previsao){
+        Previsoes prev = this.filtrarId(idPrevisao);
+        prev.setFinalizada(previsao.isFinalizada());
+        prev.setQuantidadePrevista(previsao.getQuantidadePrevista());
+        prev.setDataPrevista(previsao.getDataPrevista());
+        prev.setOrdem(previsao.getOrdem());
         prev.setItem(prev.getItem());
 
         return this.cadastrarPrevisoes(prev);

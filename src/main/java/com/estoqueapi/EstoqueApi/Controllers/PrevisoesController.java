@@ -56,9 +56,9 @@ public class PrevisoesController {
 
     //Alterar previsões
     @PutMapping("/alterar/{idPrevisao}")
-    public ResponseEntity<Object> alterarPrevisoes(@PathVariable ("idPrevisoes") Long idPrevisoes,
+    public ResponseEntity<Object> alterarPrevisao(@PathVariable ("idPrevisao") Long idPrevisao,
     @Valid @RequestBody Previsoes previsoes) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.alterarPrevisoes(idPrevisoes, previsoes));
+        return ResponseEntity.status(HttpStatus.OK).body(service.alterarPrevisao(idPrevisao, previsoes));
     }
 
     //Excluir previsão
