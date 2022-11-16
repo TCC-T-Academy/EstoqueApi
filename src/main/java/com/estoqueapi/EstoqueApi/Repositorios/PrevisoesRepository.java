@@ -13,10 +13,9 @@ import java.util.List;
 public interface PrevisoesRepository extends CrudRepository<Previsoes, Long> {
 
     List<Previsoes> findByFinalizada(boolean finalizada);
-    @Query(value = "SELECT * FROM previsoes WHERE data_prevista < now()", nativeQuery = true)
+    @Query(value = "SELECT * FROM previsoes WHERE DATE_FORMAT(data_prevista, '%Y %m %d') < DATE_FORMAT(now(), '%Y %m %d')", nativeQuery = true)
     List<Previsoes> findByDataPrevistaVencidos();
-
-    @Query(value = "SELECT * FROM previsoes WHERE data_prevista > now()", nativeQuery = true)
+    @Query(value = "SELECT * FROM previsoes WHERE DATE_FORMAT(data_prevista, '%Y %m %d') >= DATE_FORMAT(now(), '%Y %m %d')", nativeQuery = true)
     List<Previsoes> findByDataPrevistaAVencer();
 }
 
