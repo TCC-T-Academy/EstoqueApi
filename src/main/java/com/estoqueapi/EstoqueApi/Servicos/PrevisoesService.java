@@ -17,7 +17,6 @@ public class PrevisoesService {
     @Autowired
     private PrevisoesRepository previsoesRepository;
     @Autowired
-    private Resposta rp;
 
 
     // Listar todas as previsões cadastradas
