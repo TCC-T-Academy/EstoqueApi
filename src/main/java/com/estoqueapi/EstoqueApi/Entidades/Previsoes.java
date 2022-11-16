@@ -21,7 +21,7 @@ public class Previsoes {
     private float quantidadePrevista;
     private Date dataPrevista;
     private String ordem;
-    private boolean finalizada;
+    private boolean finalizada = false;
 
 
 
