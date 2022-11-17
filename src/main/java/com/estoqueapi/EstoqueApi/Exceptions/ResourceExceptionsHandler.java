@@ -38,4 +38,16 @@ public class ResourceExceptionsHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
 
+    @ExceptionHandler(MovimentacaoInvalidaException.class)
+    public ResponseEntity<StandardError> movimentacaoInvalida(MovimentacaoInvalidaException e,
+                                                         HttpServletRequest req){
+        StandardError err = new StandardError();
+        err.setTimeStamp(Instant.now());
+        err.setStatus(HttpStatus.BAD_REQUEST.value());
+        err.setError("Movimentacao Inválida");
+        err.setMessage(e.getMessage());
+        err.setPath(req.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
 }
