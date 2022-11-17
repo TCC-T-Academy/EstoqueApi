@@ -54,6 +54,12 @@ public class PrevisoesController {
         return ResponseEntity.status(HttpStatus.OK).body(listar);
     }
 
+    @GetMapping("/vencimentoefinalizada/{vencida}/{finalizada}")
+    public ResponseEntity<List<Previsoes>> findByDataPrevistaVencidos(@PathVariable("vencida") boolean vencida, @PathVariable("finalizada") boolean finalizada){
+        List<Previsoes> listar = service.findByDataPrevistaFinalizada(vencida, finalizada);
+        return ResponseEntity.status(HttpStatus.OK).body(listar);
+    }
+
     //Alterar previsões
     @PutMapping("/alterar/{idPrevisao}")
     public ResponseEntity<Object> alterarPrevisao(@PathVariable ("idPrevisao") Long idPrevisao,
