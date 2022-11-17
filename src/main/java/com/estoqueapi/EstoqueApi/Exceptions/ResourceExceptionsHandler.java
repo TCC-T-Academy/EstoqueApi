@@ -50,4 +50,30 @@ public class ResourceExceptionsHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
 
+    @ExceptionHandler(ItemForaEstoqueException.class)
+    public ResponseEntity<StandardError> itemForaDeEstoque(ItemForaEstoqueException e,
+                                                        HttpServletRequest req){
+        StandardError err = new StandardError();
+        err.setTimeStamp(Instant.now());
+        err.setStatus(HttpStatus.BAD_REQUEST.value());
+        err.setError("Quantidade indisponível");
+        err.setMessage(e.getMessage());
+        err.setPath(req.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<StandardError> itemForaDeEstoque(IllegalArgumentException e,
+                                                           HttpServletRequest req){
+        StandardError err = new StandardError();
+        err.setTimeStamp(Instant.now());
+        err.setStatus(HttpStatus.BAD_REQUEST.value());
+        err.setError("Não autorizado");
+        err.setMessage(e.getMessage());
+        err.setPath(req.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
 }
