@@ -1,9 +1,6 @@
 package com.estoqueapi.EstoqueApi.Servicos;
 
-import com.estoqueapi.EstoqueApi.Entidades.Estoque;
-import com.estoqueapi.EstoqueApi.Entidades.Itens;
-import com.estoqueapi.EstoqueApi.Entidades.Movimentacoes;
-import com.estoqueapi.EstoqueApi.Entidades.Previsoes;
+import com.estoqueapi.EstoqueApi.Entidades.*;
 import com.estoqueapi.EstoqueApi.Repositorios.EstoqueRepository;
 import com.estoqueapi.EstoqueApi.Repositorios.ItensRepository;
 import com.estoqueapi.EstoqueApi.Repositorios.MovimentacoesRepository;
@@ -93,6 +90,13 @@ public class MovimentacoesService {
         mov.setDataMovimentacao(Instant.now());
         mov.setTipo("OUT");
         Movimentacoes m = validacoesService.validarMovimentacao(mov);
+        Reservas r = validacoesService.consultaReservasByMovimentacao(mov);
+
+        if (r.getIdReserva() > 0){
+            r.setFinalizada(true);
+            reservasService.alterar(r.getIdReserva(), r);
+        }
+
         estoqueService.subtrairEstoque(mov.getItem().getIdItem(), mov.getQuantidade());
 
         return this.salvar(m);
