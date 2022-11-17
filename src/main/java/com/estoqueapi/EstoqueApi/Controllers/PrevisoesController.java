@@ -40,6 +40,12 @@ public class PrevisoesController {
     public ResponseEntity<Previsoes> filtrarId(@PathVariable ("idPrevisao") Long idPrevisao) {
         return ResponseEntity.ok().body(service.filtrarId(idPrevisao));
     }
+    // Filtra previsões com 2 opções: Data com vencimento anterior ou a partir de hoje / Finalizada (true ou false)
+    @GetMapping("/iditem/{iditem}")
+    public ResponseEntity<List<Previsoes>> consultarPrevisaoByIdItem(@PathVariable("iditem") Long iditem){
+        List<Previsoes> lista = service.consultarByIdItem(iditem);
+        return ResponseEntity.status(HttpStatus.OK).body(lista);
+    }
     //Filtrar por ordem de compra/produção realizadas ou não
     @GetMapping("/status/{finalizada}")
     public ResponseEntity<List<Previsoes>> findByFinalizada(@PathVariable ("finalizada") boolean finalizada){
