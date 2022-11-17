@@ -57,7 +57,7 @@ public class ValidacoesService {
         return m;
 
     }
-    
+
     public Previsoes consultaPrevisoesByMovimentacao(Movimentacoes m){
 
         List<Previsoes> list = previsoesService.consultarPendentesByIdItem(m.getItem().getIdItem());
