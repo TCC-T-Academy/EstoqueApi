@@ -21,7 +21,9 @@ public class Reservas {
     private Itens item;
 
     //Talvez ja possamos remover;
+    @Column(columnDefinition = "bigint default 0")
     private long usuarios_idUsuario; // fk usuário
+    @Column(columnDefinition = "bigint default 0")
     private long itens_idItem; // fk itens
 
     public long getIdReserva() {
