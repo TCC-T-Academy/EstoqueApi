@@ -20,10 +20,6 @@ public class Reservas {
     @ManyToOne
     private Itens item;
 
-    //Talvez ja possamos remover;
-    private long usuarios_idUsuario; // fk usuário
-    private long itens_idItem; // fk itens
-
     public long getIdReserva() {
         return idReserva;
     }
@@ -62,22 +58,6 @@ public class Reservas {
 
     public void setOrdem(String ordem) {
         this.ordem = ordem;
-    }
-
-    public long getUsuarios_idUsuario() {
-        return usuarios_idUsuario;
-    }
-
-    public void setUsuarios_idUsuario(long usuarios_idUsuario) {
-        this.usuarios_idUsuario = usuarios_idUsuario;
-    }
-
-    public long getItens_idItem() {
-        return itens_idItem;
-    }
-
-    public void setItens_idItem(long itens_idItem) {
-        this.itens_idItem = itens_idItem;
     }
 
     public Usuarios getUsuario() {

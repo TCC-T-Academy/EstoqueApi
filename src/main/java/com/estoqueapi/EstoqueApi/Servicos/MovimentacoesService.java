@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import javax.management.AttributeNotFoundException;
 import javax.persistence.EntityNotFoundException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -27,9 +28,13 @@ public class MovimentacoesService {
     @Autowired
     EstoqueRepository estoqueRepository;
 
+    @Autowired
+    ValidacoesService validacoesService;
 
-    public Movimentacoes salvar(Movimentacoes movimentacao){
-        return  movimentacoesRepository.save(movimentacao);
+
+    public Movimentacoes salvar(Movimentacoes movimentacao) {
+        Movimentacoes m = validacoesService.validarMovimentacao(movimentacao);
+        return movimentacoesRepository.save(m);
     }
 
     public List<Movimentacoes> consultar(){
