@@ -1,6 +1,7 @@
 package com.estoqueapi.EstoqueApi.Servicos;
 
 import com.estoqueapi.EstoqueApi.Entidades.Previsoes;
+import com.estoqueapi.EstoqueApi.Entidades.Reservas;
 import com.estoqueapi.EstoqueApi.Repositorios.PrevisoesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,11 @@ public class PrevisoesService {
     public Iterable<Previsoes> listarPrevisoes(){
        return previsoesRepository.findAll();
     }
+    // Filtrar previsões por id do item
+    public List<Previsoes> consultarByIdItem(Long idItem) {
+    return previsoesRepository.ConsultarByIdItem(idItem);
+    }
+
     //Cadastrar previsões
     @Transactional
     public Previsoes cadastrarPrevisoes(Previsoes pr){
@@ -54,6 +60,7 @@ public class PrevisoesService {
             return previsoesRepository.findByDataPrevistaAVencer();
     }
 
+        // Lista previsões com opção de escolha tanto com data anterior quanto a partir de hoje e finalizadas ou não
     public List<Previsoes> findByDataPrevistaFinalizada(boolean vencimento, boolean finalizada) {
         String venci;
         if (vencimento == true) {
