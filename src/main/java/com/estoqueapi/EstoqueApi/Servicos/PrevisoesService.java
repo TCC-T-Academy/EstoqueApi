@@ -54,6 +54,17 @@ public class PrevisoesService {
             return previsoesRepository.findByDataPrevistaAVencer();
     }
 
+    public List<Previsoes> findByDataPrevistaFinalizada(boolean vencimento, boolean finalizada) {
+        String venci;
+        if (vencimento == true) {
+            return previsoesRepository.findByDataPrevistaMenorFinalizada(finalizada);
+        } else {
+            return previsoesRepository.findByDataPrevistaMaiorIgualFinalizada(finalizada);
+        }
+
+    }
+
+
     //Alterar previsões - Alterar somente se tiver ativo (não realizado)
     public Previsoes alterarPrevisao(Long idPrevisao, Previsoes previsao){
         Previsoes prev = this.filtrarId(idPrevisao);

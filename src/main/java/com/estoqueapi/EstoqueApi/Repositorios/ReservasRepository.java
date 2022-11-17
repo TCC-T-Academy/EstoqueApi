@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ReservasRepository extends JpaRepository<Reservas, Long> {
-    @Query("select r from Reservas r where itens_idItem = ?1")
+    @Query("select r from Reservas r where item.idItem = ?1")
     List<Reservas> ConsultarByIdItem(Long idItem);
 }

@@ -47,8 +47,8 @@ public class ReservasService {
         res.setQuantidadeReserva(reservas.getQuantidadeReserva());
         res.setDataPrevista(reservas.getDataPrevista());
         res.setOrdem(reservas.getOrdem());
-        res.setUsuarios_idUsuario(reservas.getUsuarios_idUsuario());
-        res.setItens_idItem(reservas.getItens_idItem());
+        res.setUsuario(reservas.getUsuario());
+        res.setItem(reservas.getItem());
 
         return this.salvar(res);
     }
