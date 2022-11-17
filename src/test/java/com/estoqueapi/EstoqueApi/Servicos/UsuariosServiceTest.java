@@ -31,7 +31,7 @@ public class UsuariosServiceTest {
     @BeforeEach
     void setup(){
         usuario = new Usuarios("Jose","1234", PerfilUsuario.COMUM,"jose@jose");
-        usuario.setIdUsuario(1);
+        usuario.setIdUsuario(1l);
     }
 
     @Test
