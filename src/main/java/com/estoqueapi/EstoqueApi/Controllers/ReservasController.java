@@ -34,6 +34,20 @@ public class ReservasController {
         return ResponseEntity.status(HttpStatus.OK).body(lista);
     }
 
+    //Filtrar pela data as previsões que venceram e estão a vencer. TESTAR ENDPOINT
+    @GetMapping("/vencimento")
+    public ResponseEntity<List<Reservas>> consultaVencidos(){
+        List<Reservas> listar = service.findByDataPrevista(false);
+        return ResponseEntity.status(HttpStatus.OK).body(listar);
+    }
+
+    //Filtrar pela data as previsões que venceram e estão a vencer. TESTAR ENDPOINT
+    @GetMapping("/pendentes")
+    public ResponseEntity<List<Reservas>> findByDataPrevistaVencidos(){
+        List<Reservas> listar = service.findByDataPrevista(true);
+        return ResponseEntity.status(HttpStatus.OK).body(listar);
+    }
+
     @PostMapping
     public ResponseEntity<Reservas> salvar(@Valid @RequestBody Reservas reservas){
         Reservas res = service.salvar(reservas);

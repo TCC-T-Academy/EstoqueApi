@@ -35,6 +35,17 @@ public class ReservasService {
         return reservasRepository.ConsultarByIdItem(idItem);
     }
 
+        /*public List<Reservas> consultarByFinalizada(Boolean finalizada){
+        return reservasRepository.consultarByFinalizada(finalizada);
+    }*/
+
+    public List<Reservas> findByDataPrevista(boolean finalizada) {
+        if (finalizada == true) {
+            return reservasRepository.findByDataPrevistaVencidos();
+        } else
+            return reservasRepository.findByDataPrevistaAVencer();
+    }
+
     @Transactional
     public Reservas salvar(Reservas reservas){
         return reservasRepository.save(reservas);
