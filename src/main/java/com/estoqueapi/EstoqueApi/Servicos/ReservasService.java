@@ -70,4 +70,8 @@ public class ReservasService {
         reservasRepository.delete(reservas);
     }
 
+    public List<Reservas> consultarPendentesByIdItem(Long idItem){
+        return reservasRepository.consultarPendentesByIdItem(idItem);
+    }
+
 }
