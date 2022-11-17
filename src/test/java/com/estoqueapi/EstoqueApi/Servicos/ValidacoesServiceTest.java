@@ -74,7 +74,7 @@ class ValidacoesServiceTest {
         estoque.setIdEstoque(10l);
 
         user = new Usuarios("JOSE","asdf", PerfilUsuario.COMUM,"jose@jose");
-        user.setIdUsuario(1);
+        user.setIdUsuario(1l);
 
         m = new Movimentacoes();
         m.setItem(item);
