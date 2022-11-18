@@ -73,7 +73,7 @@ public class ItensServiceTest {
         Assertions.assertEquals(item,itensService.salvar(item));
     }
 
-   /* @Test
+    @Test
     @DisplayName("Retorna item alterado apos alteracao")
     public void retornaItemAlteradoAposAlteracao(){
         Itens itemAlterado = new Itens();
@@ -86,11 +86,16 @@ public class ItensServiceTest {
 
         //Mockando retorno
         Mockito.when(itensRepository.findById(item.getIdItem())).thenReturn(optItem);
-        Mockito.when(itensRepository.save(itemAlterado)).thenReturn(itemAlterado);
+        Mockito.when(itensRepository.save(item)).thenReturn(item);
 
-        //Testando
-        Assertions.assertEquals(itemAlterado,itensService.alterarItem(item.getIdItem(), itemAlterado));
-    }*/
+        //Testando se a alteracao do item realmente aconteceu
+        Itens itenRetornado = itensService.alterarItem(item.getIdItem(), itemAlterado);
+        Assertions.assertEquals(itemAlterado.getFamilia(),itenRetornado.getFamilia());
+        Assertions.assertEquals(itemAlterado.getDescricao(),itenRetornado.getDescricao());
+        Assertions.assertEquals(itemAlterado.getGrupo(),itenRetornado.getGrupo());
+        Assertions.assertEquals(itemAlterado.getUnidade(),itenRetornado.getUnidade());
+        Assertions.assertEquals(itemAlterado.getEstoqueSeguranca(),itenRetornado.getEstoqueSeguranca());
+    }
 
 
 
