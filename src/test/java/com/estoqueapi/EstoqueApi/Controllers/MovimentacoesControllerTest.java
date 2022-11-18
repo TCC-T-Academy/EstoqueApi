@@ -70,9 +70,6 @@ public class MovimentacoesControllerTest {
     @MockBean
     private MovimentacoesService service;
 
-    @MockBean
-    private MovimentacoesRepository repository;
-
     @BeforeEach
     void setup(){
 
