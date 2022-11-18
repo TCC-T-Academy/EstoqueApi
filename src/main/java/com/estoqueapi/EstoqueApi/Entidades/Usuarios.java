@@ -1,16 +1,14 @@
 package com.estoqueapi.EstoqueApi.Entidades;
 
 import com.estoqueapi.EstoqueApi.Enums.PerfilUsuario;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Usuarios {
     @Id
-    private int idUsuario;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idUsuario = 0l;
     private String nome;
     private String senha;
 
@@ -29,11 +27,11 @@ public class Usuarios {
         this.email = email;
     }
 
-    public int getIdUsuario() {
+    public long getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(int idUsuario) {
+    public void setIdUsuario(Long idUsuario) {
         this.idUsuario = idUsuario;
     }
 

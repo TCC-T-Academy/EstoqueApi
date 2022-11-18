@@ -94,4 +94,8 @@ public class PrevisoesService {
                 throw new IllegalArgumentException("Essa ordem já foi realizada, não poderá ser excluída");
         }
     }
+
+    public List<Previsoes> consultarPendentesByIdItem(Long idItem) {
+        return previsoesRepository.ConsultarPendentesByIdItem(idItem);
+    }
 }

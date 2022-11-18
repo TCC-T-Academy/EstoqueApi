@@ -2,10 +2,7 @@ package com.estoqueapi.EstoqueApi.Servicos;
 
 import com.estoqueapi.EstoqueApi.Entidades.Itens;
 import com.estoqueapi.EstoqueApi.Repositorios.ItensRepository;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -38,6 +35,8 @@ public class ItensServiceTest {
         item.setUnidade("PC");
 
         optItem = Optional.of(item);
+
+
     }
 
     @Test
@@ -62,6 +61,37 @@ public class ItensServiceTest {
         Assertions.assertEquals(msgEsperada,ex.getMessage());
 
     }
+
+    @Test
+    @DisplayName("Retorna item apos salvamento correto")
+    public void retornaItemAposSalvamentoCorreto(){
+
+        //Mockando retorno
+        Mockito.when(itensRepository.save(item)).thenReturn(item);
+
+        //Testando
+        Assertions.assertEquals(item,itensService.salvar(item));
+    }
+
+   /* @Test
+    @DisplayName("Retorna item alterado apos alteracao")
+    public void retornaItemAlteradoAposAlteracao(){
+        Itens itemAlterado = new Itens();
+        itemAlterado.setIdItem(item.getIdItem());
+        itemAlterado.setFamilia("NOVA FAMILIA");
+        itemAlterado.setDescricao("NOVA DESCRICAO");
+        itemAlterado.setGrupo("NOVO GRUPO");
+        itemAlterado.setEstoqueSeguranca(20f);
+        itemAlterado.setUnidade("NOVA UNIDADE");
+
+        //Mockando retorno
+        Mockito.when(itensRepository.findById(item.getIdItem())).thenReturn(optItem);
+        Mockito.when(itensRepository.save(itemAlterado)).thenReturn(itemAlterado);
+
+        //Testando
+        Assertions.assertEquals(itemAlterado,itensService.alterarItem(item.getIdItem(), itemAlterado));
+    }*/
+
 
 
 }

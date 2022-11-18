@@ -1,5 +1,6 @@
 package com.estoqueapi.EstoqueApi.Entidades;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -12,6 +13,7 @@ public class Itens {
     private String grupo;
     private String familia;
     private String unidade;
+    @Column(columnDefinition = "float default 0")
     private float estoqueSeguranca;
 
     public Itens() {

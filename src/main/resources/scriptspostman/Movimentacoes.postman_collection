@@ -1,0 +1,80 @@
+{
+	"info": {
+		"_postman_id": "2ed1998e-3db2-44d1-9a22-e2fb1a8d9cdf",
+		"name": "TCC T-Academy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Consulta movimentações do item",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/movimentacoes/1400",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"movimentacoes",
+						"1400"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registrar entrada de item no estoque",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"origemDestino\": \"avulso\",\r\n    \"quantidade\": 88,\r\n    \"estoque\": {\r\n      \"idEstoque\": 15\r\n    },\r\n    \"item\": {\r\n      \"idItem\": 1540\r\n    },\r\n    \"usuario\": {\r\n      \"idUsuario\": 1\r\n    }\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/movimentacoes/entrada",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"movimentacoes",
+						"entrada"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registrar saída de estoque",
+			"request": {
+				"method": "POST",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Consulta estoque item",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Consultar todo o histórico de movimentações Copy",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}

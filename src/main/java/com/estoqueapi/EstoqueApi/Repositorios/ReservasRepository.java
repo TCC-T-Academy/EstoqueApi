@@ -11,4 +11,13 @@ import java.util.List;
 public interface ReservasRepository extends JpaRepository<Reservas, Long> {
     @Query("select r from Reservas r where item.idItem = ?1")
     List<Reservas> ConsultarByIdItem(Long idItem);
+
+    @Query("select r from Reservas r where item.idItem = ?1 and r.finalizada=false")
+    List<Reservas> consultarPendentesByIdItem(Long idItem);
+
+    @Query(value = "select * from reservas where data_prevista < localtime() and finalizada = ?1 order by data_prevista asc;", nativeQuery = true)
+    List<Reservas> findByDataPrevistaVencidos(Boolean finalizada);
+    @Query(value = "select * from reservas where finalizada = ?1 order by data_prevista asc;", nativeQuery = true)
+    List<Reservas> findByDataPrevistaAVencer(Boolean finalizada);
+
 }

@@ -35,6 +35,20 @@ public class ReservasService {
         return reservasRepository.ConsultarByIdItem(idItem);
     }
 
+        /*public List<Reservas> consultarByFinalizada(Boolean finalizada){
+        return reservasRepository.consultarByFinalizada(finalizada);
+    }*/
+
+    public List<Reservas> findByDataPrevista(boolean vencida, boolean finalizada) {
+        if (vencida == true) {
+            List<Reservas> lista = (finalizada) ? reservasRepository.findByDataPrevistaVencidos(finalizada) : reservasRepository.findByDataPrevistaVencidos(finalizada);
+            return lista;
+        } else{
+            List<Reservas> lista = (finalizada) ? reservasRepository.findByDataPrevistaAVencer(finalizada) : reservasRepository.findByDataPrevistaAVencer(finalizada);
+            return lista;
+        }
+    }
+
     @Transactional
     public Reservas salvar(Reservas reservas){
         return reservasRepository.save(reservas);
@@ -57,6 +71,10 @@ public class ReservasService {
     public void excluir(Long idreserva){
         Reservas reservas = this.consultarById(idreserva);
         reservasRepository.delete(reservas);
+    }
+
+    public List<Reservas> consultarPendentesByIdItem(Long idItem){
+        return reservasRepository.consultarPendentesByIdItem(idItem);
     }
 
 }

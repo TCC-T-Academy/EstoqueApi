@@ -1,8 +1,6 @@
 package com.estoqueapi.EstoqueApi.Servicos;
 
-import com.estoqueapi.EstoqueApi.Entidades.Estoque;
-import com.estoqueapi.EstoqueApi.Entidades.Itens;
-import com.estoqueapi.EstoqueApi.Entidades.Movimentacoes;
+import com.estoqueapi.EstoqueApi.Entidades.*;
 import com.estoqueapi.EstoqueApi.Repositorios.EstoqueRepository;
 import com.estoqueapi.EstoqueApi.Repositorios.ItensRepository;
 import com.estoqueapi.EstoqueApi.Repositorios.MovimentacoesRepository;
@@ -31,10 +29,20 @@ public class MovimentacoesService {
     @Autowired
     ValidacoesService validacoesService;
 
+    @Autowired
+    EstoqueService estoqueService;
+
+    @Autowired
+    PrevisoesService previsoesService;
+
+    @Autowired
+    ReservasService reservasService;
+
+
+
 
     public Movimentacoes salvar(Movimentacoes movimentacao) {
-        Movimentacoes m = validacoesService.validarMovimentacao(movimentacao);
-        return movimentacoesRepository.save(m);
+        return movimentacoesRepository.save(movimentacao);
     }
 
     public List<Movimentacoes> consultar(){
@@ -63,22 +71,33 @@ public class MovimentacoesService {
         return movimentacoesRepository.findAllByIdItem(idItem);
     }
 
-    public Movimentacoes entradaItem(Movimentacoes m){
+    public Movimentacoes entradaItem(Movimentacoes mov){
+        mov.setDataMovimentacao(Instant.now());
+        mov.setTipo("IN");
+        Movimentacoes m = validacoesService.validarMovimentacao(mov);
+        Previsoes p = validacoesService.consultaPrevisoesByMovimentacao(mov);
+        if (p.getIdPrevisao() > 0){
+            p.setFinalizada(true);
+            previsoesService.alterarPrevisao(p.getIdPrevisao(), p);
+        }
 
-        //GERAR ALTERAR QTD NA TABELA DE ESTOQUE
-
-        m.setDataMovimentacao(Instant.now());
-        m.setTipo("IN");
+        estoqueService.adicionarEstoque(mov.getItem().getIdItem(), mov.getQuantidade());
 
         return this.salvar(m);
     }
 
-    public Movimentacoes saidaItem(Movimentacoes m){
+    public Movimentacoes saidaItem(Movimentacoes mov){
+        mov.setDataMovimentacao(Instant.now());
+        mov.setTipo("OUT");
+        Movimentacoes m = validacoesService.validarMovimentacao(mov);
+        Reservas r = validacoesService.consultaReservasByMovimentacao(mov);
 
-        //GERAR ALTERAR QTD NA TABELA DE ESTOQUE
+        if (r.getIdReserva() > 0){
+            r.setFinalizada(true);
+            reservasService.alterar(r.getIdReserva(), r);
+        }
 
-        m.setDataMovimentacao(Instant.now());
-        m.setTipo("OUT");
+        estoqueService.subtrairEstoque(mov.getItem().getIdItem(), mov.getQuantidade());
 
         return this.salvar(m);
     }

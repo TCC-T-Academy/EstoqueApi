@@ -14,8 +14,10 @@ public interface PrevisoesRepository extends CrudRepository<Previsoes, Long> {
     List<Previsoes> findByFinalizada(boolean finalizada);
 
     // Retorna todas as previsões selecionadas por um item
-    @Query(value = "SELECT * from previsões LEFT JOIN itens ON previsoes.item_id_Item = itens.id_Item WHERE itens.id_Item = :idItem", nativeQuery = true)
+    @Query(value = "SELECT * from previsoes LEFT JOIN itens ON previsoes.item_id_Item = itens.id_Item WHERE itens.id_Item = :idItem", nativeQuery = true)
     List<Previsoes> ConsultarByIdItem(Long idItem);
+    @Query(value = "SELECT * from previsoes LEFT JOIN itens ON previsoes.item_id_Item = itens.id_Item WHERE itens.id_Item = :idItem AND finalizada = 0", nativeQuery = true)
+    List<Previsoes> ConsultarPendentesByIdItem(Long idItem);
 
     // Retorna todas as previsões com data anterior a de hoje, com a opção de escolha se ela estiver finalizada ou não
     @Query(value = "SELECT * FROM previsoes WHERE DATE_FORMAT(data_prevista, '%Y %m %d') < DATE_FORMAT(now(), '%Y %m %d')", nativeQuery = true)
