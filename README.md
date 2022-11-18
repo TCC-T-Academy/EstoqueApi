@@ -2,7 +2,11 @@
 ### IMPORTANTE
 
 #### PARA PERFIL DEV:
-1. Criar schema do banco no mysql antes de rodar. CREATE SCHEMA estoque_api;
+1. Criar schema do banco no mysql antes de rodar.
+
+    ```
+    CREATE SCHEMA estoque_api;
+    ```
 2. Conferir se a senha é a mesma do seu mysql.
 3. Alterar propriedade ddl-auto para "spring.jpa.hibernate.ddl-auto:create".
 4. Rodar o projeto para hibernate criar as tabelas e inserir as informacoes do "import.sql".
