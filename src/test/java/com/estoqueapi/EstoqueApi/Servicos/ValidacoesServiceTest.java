@@ -31,9 +31,6 @@ class ValidacoesServiceTest {
     private Estoque estoque;
     private Movimentacoes m;
     private Usuarios user;
-    private Optional<Usuarios> optUsuario;
-    private Optional<Itens> optItem;
-    private Optional<Estoque> optEstoque;
 
     @Mock
     private MovimentacoesRepository movimentacoesRepository;
@@ -84,10 +81,6 @@ class ValidacoesServiceTest {
         m.setUsuario(user);
         m.setOrigemDestino("ordem1234");
 
-        //Retornos dos repositories
-        optUsuario = Optional.of(user);
-        optItem = Optional.of(item);
-        optEstoque = Optional.of(estoque);
 
     }
 
@@ -103,7 +96,7 @@ class ValidacoesServiceTest {
     }
 
     @Test
-    @DisplayName("Lanca Excecao se quantidade menor ou igual a zero ")
+    @DisplayName("Deve lancar Excecao se quantidade menor ou igual a zero ")
     void lancaExcecaoSeQuantidadeMenorOuIgualZero(){
         //Mockando o retorno para forcar erro
         m.setQuantidade(0);
@@ -119,8 +112,8 @@ class ValidacoesServiceTest {
     }
 
     @Test
-    @DisplayName("Deve retornar lista de previsoes para movimentacao")
-    void retornaListaPrevisoesParaMovimentacao(){
+    @DisplayName("Deve retornar uma previsao encontrada para movimentacao")
+    void retornaUmaPrevisaoEncontradaParaMovimentacao(){
         //Mockando lista para retorno
         Previsoes pMock = new Previsoes();
         Itens itemMock = item;
@@ -134,18 +127,19 @@ class ValidacoesServiceTest {
         listMock.add(pMock);
 
         //Mockando retorno
-        Mockito.when(previsoesService.consultarByIdItem(item.getIdItem())).thenReturn(listMock);
+        Mockito.when(previsoesService.consultarPendentesByIdItem(item.getIdItem())).thenReturn(listMock);
 
         //Testando
-        Assertions.assertEquals(listMock,validacoesService.consultaPrevisoesByMovimentacao(m));
+        Previsoes pRetorno = pMock;
+        Assertions.assertEquals(pRetorno,validacoesService.consultaPrevisoesByMovimentacao(m));
     }
 
     @Test
-    @DisplayName("Nao retorna previsoes se item ou ordem ou quantidade diferente")
-    void naoRetornaPrevisoesParaMovimentacaoSeNaoEncontrada(){
+    @DisplayName("Deve lancar excecao se origem previsao invalida")
+    void lancaExcecaoSeOrigemPrevisaoInvalida(){
         //Mockando lista para retorno
         Previsoes pMock = new Previsoes();
-        pMock.setItem(new Itens()); //Valor falso para forcar erro
+        pMock.setItem(item);
         pMock.setOrdem(m.getOrigemDestino());
         pMock.setFinalizada(false);
         pMock.setQuantidadePrevista(m.getQuantidade());
@@ -153,15 +147,45 @@ class ValidacoesServiceTest {
         listMock.add(pMock);
 
         //Mockando retorno
-        Mockito.when(previsoesService.findByFinalizada(false)).thenReturn(listMock);
+        Mockito.when(previsoesService.consultarPendentesByIdItem(item.getIdItem())).thenReturn(listMock);
 
-        //Testando
-        List<Previsoes> listaVaziaEsperada = new ArrayList<>();
-        Assertions.assertEquals(listaVaziaEsperada,validacoesService.consultaPrevisoesByMovimentacao(m));
+        //Testando ordem inexistente na lista
+        m.setOrigemDestino("Ordem4321");
+        Assertions.assertThrows(MovimentacaoInvalidaException.class,() -> validacoesService.consultaPrevisoesByMovimentacao(m));
+
+        //Testando ordem vazia
+        m.setOrigemDestino("");
+        Assertions.assertThrows(MovimentacaoInvalidaException.class,() -> validacoesService.consultaPrevisoesByMovimentacao(m));
+
+        //confirmando se o retorno mockado foi chamado 2 vezes
+        Mockito.verify(previsoesService,Mockito.times(2)).consultarPendentesByIdItem(item.getIdItem());
     }
 
     @Test
-    @DisplayName("Deve retornar lista de reservas para movimentacao")
+    @DisplayName("Deve lancar excecao se quantidade previsao diferente da movimentacao")
+    void lancaExcecaoSeQuantidadePrevisaoDiferenteMovimentacao(){
+        //Mockando lista para retorno
+        Previsoes pMock = new Previsoes();
+        pMock.setItem(item);
+        pMock.setOrdem(m.getOrigemDestino());
+        pMock.setFinalizada(false);
+        pMock.setQuantidadePrevista(m.getQuantidade());
+        List<Previsoes> listMock = new ArrayList<>();
+        listMock.add(pMock);
+
+        //Mockando retorno
+        Mockito.when(previsoesService.consultarPendentesByIdItem(item.getIdItem())).thenReturn(listMock);
+
+        //Testando quantidade movimentada diferente
+        m.setQuantidade(1000f);
+        Assertions.assertThrows(MovimentacaoInvalidaException.class,() -> validacoesService.consultaPrevisoesByMovimentacao(m));
+
+        //confirmando se o retorno mockado foi chamado 1 vezes
+        Mockito.verify(previsoesService,Mockito.times(1)).consultarPendentesByIdItem(item.getIdItem());
+    }
+
+    @Test
+    @DisplayName("Deve retornar reserva encontrada para movimentacao")
     void retornaListaReservasParaMovimentacao(){
         //Mockando lista para retorno
         Reservas rMock = new Reservas();
@@ -176,19 +200,23 @@ class ValidacoesServiceTest {
         listMock.add(rMock);
 
         //Mockando retorno
-        Mockito.when(reservasService.consultarByIdItem(item.getIdItem())).thenReturn(listMock);
+        Mockito.when(reservasService.consultarPendentesByIdItem(item.getIdItem())).thenReturn(listMock);
 
         //Testando
-        Assertions.assertEquals(listMock,validacoesService.consultaReservasByMovimentacao(m));
+        Reservas rRetornoEsperado = rMock;
+        Assertions.assertEquals(rRetornoEsperado,validacoesService.consultaReservasByMovimentacao(m));
+
+        //confirmando se o retorno mockado foi chamado 1 vez
+        Mockito.verify(reservasService,Mockito.times(1)).consultarPendentesByIdItem(item.getIdItem());
     }
 
     @Test
-    @DisplayName("Nao retorna reservas se ordem ou quantidade diferente")
-    void naoRetornaReservasParaMovimentacaoSeNaoEncontrada(){
+    @DisplayName("Deve lancar excecao se destino reserva invalida")
+    void lancaExcecaoSeDestinoReservaInvalida(){
         //Mockando lista para retorno
         Reservas rMock = new Reservas();
         Itens itemMock = item;
-        String ordemMock = "ordem4321";  //Valor falso para forcar erro
+        String ordemMock = "OP1234";
         float qtdMock = m.getQuantidade();
         rMock.setItem(itemMock);
         rMock.setOrdem(ordemMock);
@@ -198,11 +226,40 @@ class ValidacoesServiceTest {
         listMock.add(rMock);
 
         //Mockando retorno
-        Mockito.when(reservasService.consultarByIdItem(item.getIdItem())).thenReturn(listMock);
+        Mockito.when(reservasService.consultarPendentesByIdItem(item.getIdItem())).thenReturn(listMock);
 
-        //TESTANDO
-        List<Previsoes> listaVaziaEsperada = new ArrayList<>();
+        //Testando destino inexistente na lista
+        m.setOrigemDestino("OP4321");
+        Assertions.assertThrows(MovimentacaoInvalidaException.class,() -> validacoesService.consultaReservasByMovimentacao(m));
 
-        Assertions.assertEquals(listaVaziaEsperada,validacoesService.consultaReservasByMovimentacao(m));
+        //Testando ordem vazia
+        m.setOrigemDestino("");
+        Assertions.assertThrows(MovimentacaoInvalidaException.class,() -> validacoesService.consultaReservasByMovimentacao(m));
+
+        //confirmando se o retorno mockado foi chamado 2 vezes
+        Mockito.verify(reservasService,Mockito.times(2)).consultarPendentesByIdItem(item.getIdItem());
+    }
+
+    @Test
+    @DisplayName("Deve lancar excecao se quantidade reserva diferente da movimentacao")
+    void lancaExcecaoSeQuantidadeReservaDiferenteMovimentacao(){
+        //Mockando lista para retorno
+        Reservas rMock = new Reservas();
+        rMock.setItem(item);
+        rMock.setOrdem(m.getOrigemDestino());
+        rMock.setFinalizada(false);
+        rMock.setQuantidadeReserva(m.getQuantidade());
+        List<Reservas> listMock = new ArrayList<>();
+        listMock.add(rMock);
+
+        //Mockando retorno
+        Mockito.when(reservasService.consultarPendentesByIdItem(item.getIdItem())).thenReturn(listMock);
+
+        //Testando destino inexistente na lista
+        m.setQuantidade(1000f);
+        Assertions.assertThrows(MovimentacaoInvalidaException.class,() -> validacoesService.consultaReservasByMovimentacao(m));
+
+        //confirmando se o retorno mockado foi chamado 1 vezes
+        Mockito.verify(reservasService,Mockito.times(1)).consultarPendentesByIdItem(item.getIdItem());
     }
 }
