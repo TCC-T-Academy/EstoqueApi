@@ -9,10 +9,10 @@ public class Itens {
 
     @Id
     private long idItem;
-    private String descricao;
-    private String grupo;
-    private String familia;
-    private String unidade;
+    private String descricao = "";
+    private String grupo = "";
+    private String familia = "";
+    private String unidade = "";
     @Column(columnDefinition = "float default 0")
     private float estoqueSeguranca;
 
