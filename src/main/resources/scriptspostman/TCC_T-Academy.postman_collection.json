@@ -173,7 +173,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8081/reservas/vencimento",
+							"raw": "localhost:8081/reservas/vencimento?finalizada=true",
 							"host": [
 								"localhost"
 							],
@@ -181,6 +181,12 @@
 							"path": [
 								"reservas",
 								"vencimento"
+							],
+							"query": [
+								{
+									"key": "finalizada",
+									"value": "true"
+								}
 							]
 						}
 					},
@@ -192,7 +198,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8081/reservas/pendentes",
+							"raw": "localhost:8081/reservas/pendentes?finalizada=false",
 							"host": [
 								"localhost"
 							],
@@ -200,6 +206,12 @@
 							"path": [
 								"reservas",
 								"pendentes"
+							],
+							"query": [
+								{
+									"key": "finalizada",
+									"value": "false"
+								}
 							]
 						}
 					},
