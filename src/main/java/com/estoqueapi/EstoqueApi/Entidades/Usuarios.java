@@ -9,13 +9,13 @@ public class Usuarios {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idUsuario = 0l;
-    private String nome;
-    private String senha;
+    private String nome = "";
+    private String senha = "";
 
     @Column(columnDefinition = "integer default 1")
     private PerfilUsuario perfil = PerfilUsuario.COMUM;
     @Column(unique = true)
-    private String email;
+    private String email = "";
 
     public Usuarios() {
     }
