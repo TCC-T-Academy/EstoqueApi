@@ -3,7 +3,6 @@ package com.estoqueapi.EstoqueApi.Controllers;
 import com.estoqueapi.EstoqueApi.Entidades.Estoque;
 import com.estoqueapi.EstoqueApi.Entidades.Itens;
 import com.estoqueapi.EstoqueApi.Servicos.EstoqueService;
-import com.estoqueapi.EstoqueApi.Servicos.ItensService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+/**
+ * Testar seguintes endpoints:
+ * GET /estoque/
+ * GET /estoque/{idItemExistente}
+ * GET /estoque/{idItemInexistente}
+ */
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -44,11 +50,7 @@ public class EstoqueControllerTest {
     @MockBean
     private EstoqueService estoqueService;
 
-    @MockBean
-    private ItensService itensService;
 
-//    Testar endpoint /estoque
-//    Testar endpoint /estoque/{idItem}
 
     @BeforeEach
     void setup(){
@@ -86,7 +88,9 @@ public class EstoqueControllerTest {
                 mockMvc.perform(get("/estoque").accept(MediaType.APPLICATION_JSON));
 
         resultado.andExpect(status().isFound());
-        resultado.andDo(print());
+        resultado.andExpect(jsonPath("$.size()").value(lista.size()));
+        resultado.andExpect(jsonPath("$[0].idEstoque").value(10));
+//        resultado.andDo(print());
     }
 
     @Test
@@ -95,16 +99,19 @@ public class EstoqueControllerTest {
                 mockMvc.perform(get("/estoque/{idItem}", idItemExistente).accept(MediaType.APPLICATION_JSON));
 
         resultado.andExpect(status().isFound());
-        resultado.andDo(print());
+        resultado.andExpect(jsonPath("$.idEstoque").value(10));
+//        resultado.andDo(print());
     }
 
     @Test
     public void retornaNotFoundQuandoConsultaEstoquePorIdItemInexistente() throws Exception {
         ResultActions resultado =
-                mockMvc.perform(get("/estoque/{idItem}", idItemNaoExistente).accept(MediaType.APPLICATION_JSON));
+                mockMvc.perform(get("/estoque/{idItemInexistente}", idItemNaoExistente).accept(MediaType.APPLICATION_JSON));
 
         resultado.andExpect(res -> assertTrue(res.getResolvedException() instanceof EntityNotFoundException));
         resultado.andExpect(status().isNotFound());
+        resultado.andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.error").value(
+                "Recurso não encontrado"));
         resultado.andDo(print());
     }
 }
