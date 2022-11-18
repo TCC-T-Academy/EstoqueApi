@@ -6,6 +6,7 @@ import com.estoqueapi.EstoqueApi.Entidades.Usuarios;
 import com.estoqueapi.EstoqueApi.Enums.PerfilUsuario;
 import com.estoqueapi.EstoqueApi.Servicos.PrevisoesService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,8 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -72,12 +72,14 @@ public class PrevisoesControllerTest {
 
     // Teste unitário ao listar todas as previsões
     @Test
+    @DisplayName("Retorna ok quando listado todas as previsões")
     void deveRetornarOkQuandoConsultarTodos() throws Exception {
         ResultActions result = mockMvc.perform(get("/previsoes").accept(MediaType.APPLICATION_JSON));
         result.andExpect(status().isOk());
     }
 
     @Test
+    @DisplayName("Retorna criação ok quando  adicionado nova previsão")
     void deveRetornar201QuandoPrevisaoSalvaComSucesso() throws Exception {
         String jsonBody = objectMapper.writeValueAsString(previsaoNova);
 
@@ -89,13 +91,62 @@ public class PrevisoesControllerTest {
         result.andExpect(status().isCreated());
     }
 
+
     @Test
+    @DisplayName("Retorna OK quando pesquisa um ID e ele existe")
     void deveRetornarStatusOKQuandoIdExistente() throws Exception {
         ResultActions result = mockMvc
                 .perform(get("/previsoes/{id_previsao}", idExistente).accept(MediaType.APPLICATION_JSON));
         result.andExpect(status().isOk());
     }
+    @Test
+    @DisplayName("Retorna Not Found quando pesquisa um ID inexistente")
+    void deveRetornarStatusERROQuandoIdNaoExistente() throws Exception {
+        ResultActions result = mockMvc
+                .perform(get("/previsoes/{id_previsao}", idNaoExistente).accept(MediaType.APPLICATION_JSON));
+        result.andExpect(status().isNotFound());
+    }
 
+    @Test
+    @DisplayName("Retorna 200 quando uma alteração foi feita com sucesso")
+    void deveRetornarStatus200QuandoAlterarPrevisaoExistenteComSucesso() throws Exception {
+        String jsonBody = objectMapper.writeValueAsString(previsaoExistente);
+        ResultActions result = mockMvc.perform(put("/previsoes/alterar/{idPrevisao}", idExistente)
+                .content(jsonBody)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
 
+        result.andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Retorna 404 quando tenta alterar uma previsão que não existe")
+    void deveRetornarStatus404QuandoAlterarPrevisaoInexistente() throws Exception {
+        String jsonBody = objectMapper.writeValueAsString(previsaoNova);
+        ResultActions result = mockMvc.perform(put("/previsoes/alterar/{idPrevisao}", idNaoExistente)
+                .content(jsonBody)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Retorna código 200 (OK) quando foi excluído com sucesso")
+    void deveRetornar200QuandoExcluirPrevisaoExistente() throws Exception {
+        ResultActions result = mockMvc.perform(delete("/previsoes/excluir/{idPrevisao}", idExistente)
+                .accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().is(200));
+    }
+
+    @Test
+    @DisplayName("Retorna erro 404 quando a IdPrevisão não existe")
+    void deveRetornar404QuandoExcluirPrevisaoInexistente() throws Exception {
+        ResultActions result = mockMvc.perform(delete("/previsoes/excluir/{idPrevisao}", idNaoExistente)
+                .accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isNotFound());
+    }
 
 }
