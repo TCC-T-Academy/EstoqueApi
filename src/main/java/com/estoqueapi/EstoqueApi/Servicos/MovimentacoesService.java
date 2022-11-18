@@ -24,6 +24,9 @@ public class MovimentacoesService {
     ItensRepository itensRepository;
 
     @Autowired
+    ItensService itensService;
+
+    @Autowired
     EstoqueRepository estoqueRepository;
 
     @Autowired
@@ -46,14 +49,7 @@ public class MovimentacoesService {
     }
 
     public List<Movimentacoes> consultar(){
-        List<Movimentacoes> lista = movimentacoesRepository.findAll();
-        lista.stream().map(movimentacoes -> {
-            movimentacoes.setItem(itensRepository.findById(movimentacoes.getItem().getIdItem()).orElseThrow(() -> new EntityNotFoundException("Nao encontrado")));
-            movimentacoes.setEstoque(estoqueRepository.findById(movimentacoes.getItem().getIdItem()).orElseThrow(() -> new EntityNotFoundException("Nao encontrado")));
-            return movimentacoes;
-        });
-
-        return movimentacoesRepository.findAll();
+         return movimentacoesRepository.findAll();
     }
 
     public List<Movimentacoes> salvarVarios(List<Movimentacoes> lista){
