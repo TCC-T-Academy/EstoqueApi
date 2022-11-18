@@ -2,6 +2,7 @@ package com.estoqueapi.EstoqueApi.Servicos;
 
 import com.estoqueapi.EstoqueApi.Entidades.*;
 import com.estoqueapi.EstoqueApi.Enums.Origens;
+import com.estoqueapi.EstoqueApi.Exceptions.AlteracaoNaoPermitidaException;
 import com.estoqueapi.EstoqueApi.Exceptions.MovimentacaoInvalidaException;
 import com.estoqueapi.EstoqueApi.Repositorios.EstoqueRepository;
 import com.estoqueapi.EstoqueApi.Repositorios.ItensRepository;
@@ -9,6 +10,7 @@ import com.estoqueapi.EstoqueApi.Repositorios.UsuariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.naming.directory.AttributeModificationException;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,6 +96,5 @@ public class ValidacoesService {
         }
         return stream.findFirst().orElseThrow(()-> new MovimentacaoInvalidaException("Reserva não encontrada"));
     }
-
 
 }
