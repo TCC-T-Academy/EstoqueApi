@@ -2,6 +2,7 @@ package com.estoqueapi.EstoqueApi.Servicos;
 
 import com.estoqueapi.EstoqueApi.Entidades.*;
 import com.estoqueapi.EstoqueApi.Enums.Origens;
+import com.estoqueapi.EstoqueApi.Exceptions.AlteracaoNaoPermitidaException;
 import com.estoqueapi.EstoqueApi.Exceptions.MovimentacaoInvalidaException;
 import com.estoqueapi.EstoqueApi.Repositorios.EstoqueRepository;
 import com.estoqueapi.EstoqueApi.Repositorios.ItensRepository;
@@ -9,6 +10,7 @@ import com.estoqueapi.EstoqueApi.Repositorios.UsuariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.naming.directory.AttributeModificationException;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +47,6 @@ public class ValidacoesService {
         if(m.getQuantidade() <= 0){
             throw new MovimentacaoInvalidaException("Quantidade Inválida!");
         }
-        List<Reservas> reservas = reservasService.consultarByIdItem(m.getItem().getIdItem());
 
         m.setUsuario(usuario);
         m.setEstoque(estoque);
@@ -58,6 +59,7 @@ public class ValidacoesService {
         return m;
 
     }
+
     public Previsoes consultaPrevisoesByMovimentacao(Movimentacoes m){
 
         List<Previsoes> list = previsoesService.consultarPendentesByIdItem(m.getItem().getIdItem());
@@ -66,7 +68,9 @@ public class ValidacoesService {
                     && previsoes.getQuantidadePrevista() == m.getQuantidade();
             return ret;
         });
-        if (m.getOrigemDestino().equalsIgnoreCase(Origens.AVULSO.toString()) || m.getOrigemDestino().equalsIgnoreCase(Origens.DEVOLUCAO.toString())){
+
+        if (m.getOrigemDestino().equalsIgnoreCase(Origens.AVULSO.toString())
+                || m.getOrigemDestino().equalsIgnoreCase(Origens.DEVOLUCAO.toString())){
             Previsoes prev = new Previsoes();
             prev.setIdPrevisao(0);
             return prev;
@@ -78,17 +82,19 @@ public class ValidacoesService {
 
     public Reservas consultaReservasByMovimentacao(Movimentacoes m){
 
-        List<Reservas> list = reservasService.consultarByIdItem(m.getItem().getIdItem());
+        List<Reservas> list = reservasService.consultarPendentesByIdItem(m.getItem().getIdItem());
         Stream<Reservas> stream =  list.stream().filter(reservas -> {
-            boolean ret = reservas.getOrdem() == m.getOrigemDestino()
+            boolean ret = reservas.getOrdem().equalsIgnoreCase(m.getOrigemDestino())
                     && reservas.getQuantidadeReserva() == m.getQuantidade();
             return ret;
         });
-        if (Origens.valueOf(m.getOrigemDestino().toUpperCase()) == Origens.AVULSO){
-            return new Reservas();
+
+        if (m.getOrigemDestino().equalsIgnoreCase(Origens.AVULSO.toString())){
+            Reservas r = new Reservas();
+            r.setIdReserva(0);
+            return r;
         }
         return stream.findFirst().orElseThrow(()-> new MovimentacaoInvalidaException("Reserva não encontrada"));
     }
-
 
 }

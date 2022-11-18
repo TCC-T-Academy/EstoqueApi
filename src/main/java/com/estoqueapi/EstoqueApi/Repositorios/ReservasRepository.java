@@ -12,9 +12,12 @@ public interface ReservasRepository extends JpaRepository<Reservas, Long> {
     @Query("select r from Reservas r where item.idItem = ?1")
     List<Reservas> ConsultarByIdItem(Long idItem);
 
-    @Query(value = "SELECT * FROM reservas WHERE DATE_FORMAT(data_prevista, '%Y %m %d') < DATE_FORMAT(now(), '%Y %m %d')", nativeQuery = true)
-    List<Reservas> findByDataPrevistaVencidos();
-    @Query(value = "SELECT * FROM reservas WHERE DATE_FORMAT(data_prevista, '%Y %m %d') >= DATE_FORMAT(now(), '%Y %m %d')", nativeQuery = true)
-    List<Reservas> findByDataPrevistaAVencer();
+    @Query("select r from Reservas r where item.idItem = ?1 and r.finalizada=false")
+    List<Reservas> consultarPendentesByIdItem(Long idItem);
+
+    @Query(value = "select * from reservas where data_prevista < localtime() and finalizada = ?1 order by data_prevista asc;", nativeQuery = true)
+    List<Reservas> findByDataPrevistaVencidos(Boolean finalizada);
+    @Query(value = "select * from reservas where finalizada = ?1 order by data_prevista asc;", nativeQuery = true)
+    List<Reservas> findByDataPrevistaAVencer(Boolean finalizada);
 
 }

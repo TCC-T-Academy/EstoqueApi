@@ -2,21 +2,20 @@ package com.estoqueapi.EstoqueApi.Entidades;
 
 import com.estoqueapi.EstoqueApi.Enums.PerfilUsuario;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Usuarios {
     @Id
-    private Long idUsuario;
-    private String nome;
-    private String senha;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idUsuario = 0l;
+    private String nome = "";
+    private String senha = "";
 
     @Column(columnDefinition = "integer default 1")
     private PerfilUsuario perfil = PerfilUsuario.COMUM;
     @Column(unique = true)
-    private String email;
+    private String email = "";
 
     public Usuarios() {
     }

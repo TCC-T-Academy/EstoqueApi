@@ -31,10 +31,11 @@ public class MovimentacoesController {
         return ResponseEntity.status(HttpStatus.FOUND).body(movimentacoesService.consultarByIdItem(idItem));
     }
 
-    @PostMapping("/varios")
+    //Pensar sobre remoçao
+    /*    @PostMapping("/varios")
     public ResponseEntity<List<Movimentacoes>> salvarVarios(@RequestBody List<Movimentacoes> list){
         return ResponseEntity.status(HttpStatus.CREATED).body(movimentacoesService.salvarVarios(list));
-    }
+    }*/
 
     @PostMapping("/entrada")
     public ResponseEntity<Movimentacoes> entrada(@RequestBody Movimentacoes movimentacoes){
