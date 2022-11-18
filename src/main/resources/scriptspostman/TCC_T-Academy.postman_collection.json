@@ -1,0 +1,806 @@
+{
+	"info": {
+		"_postman_id": "97817c97-1b42-44ab-bf89-f7bb12b893fc",
+		"name": "TCC T-Academy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Usuarios",
+			"item": [
+				{
+					"name": "NovoUsuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"nome\": \"Joaquim Soares\",\r\n    \"senha\": \"1234\",\r\n    \"perfil\": \"ADMINISTRADOR\",\r\n    \"email\": \"joaquim.soares@empresa.com\"\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/usuarios/novo",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"usuarios",
+								"novo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AlterarUsuario",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"nome\": \"Joaquim Soares\",\r\n    \"senha\": \"1234\",\r\n    \"perfil\": \"ADMINISTRADOR\",\r\n    \"email\": \"joaquim.soares.silva@empresa.com\"\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/usuarios/alterar/joaquim.soares@empresa.com",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"usuarios",
+								"alterar",
+								"joaquim.soares@empresa.com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DesabilitarUsuario",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/usuarios/desabilitar/joaquim.soares.silva@empresa.com",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"usuarios",
+								"desabilitar",
+								"joaquim.soares.silva@empresa.com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ConsultarUsuarios",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/usuarios",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reservas",
+			"item": [
+				{
+					"name": "ConsultarTodasAsReservas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/reservas/1540",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"reservas",
+								"1540"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ConsultarReservasIdItem",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/reservas/1540",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"reservas",
+								"1540"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ConsultarReservasVencimento",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/reservas/vencimento",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"reservas",
+								"vencimento"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ConsultarReservasPendentes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/reservas/pendentes",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"reservas",
+								"pendentes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NovaReserva",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"finalizada\": false,\r\n        \"quantidadeReserva\": 52.0,\r\n        \"dataPrevista\": \"2022-12-15T01:51:53.000+00:00\",\r\n        \"ordem\": \"PO2000\",\r\n        \"usuario\": {\r\n            \"idUsuario\": 1,\r\n            \"nome\": \"Joao Silva\",\r\n            \"senha\": \"1234\",\r\n            \"perfil\": \"COMUM\",\r\n            \"email\": \"joao.silva@empresa.com\"\r\n        },\r\n        \"item\": {\r\n            \"idItem\": 1610,\r\n            \"descricao\": \"PARAF SEXT RI 1/4 X 2 UNC20 C7/16 A3,8 POLIDO\",\r\n            \"grupo\": \"INDUSTRIALIZAÇÃO\",\r\n            \"familia\": \"PARAFUSOS\",\r\n            \"unidade\": \"PC\",\r\n            \"estoqueSeguranca\": 96.0\r\n        }\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/reservas",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"reservas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AlterarReserva",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"finalizada\": false,\r\n        \"quantidadeReserva\": 85.0,\r\n        \"dataPrevista\": \"2022-11-25T01:51:53.000+00:00\",\r\n        \"ordem\": \"PO1500\",\r\n        \"usuario\": {\r\n            \"idUsuario\": 2\r\n        },\r\n        \"item\": {\r\n            \"idItem\": 1540\r\n        }\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/reservas/7",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"reservas",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RemoverReserva",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/reservas/15",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"reservas",
+								"15"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Previsoes",
+			"item": [
+				{
+					"name": "ConsultarTodasAsPrevisoes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/previsoes",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"previsoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NovaPrevisao",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"item\": {\r\n            \"idItem\": 1540\r\n        },\r\n        \"usuario\": {\r\n            \"idUsuario\": 1\r\n        },\r\n        \"quantidadePrevista\": 91.0,\r\n        \"dataPrevista\": \"2022-11-16\",\r\n        \"ordem\": \"CP1008\",\r\n        \"finalizada\": false\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/previsoes",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"previsoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AlterarPrevisao",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"item\": {\r\n            \"idItem\": 1640\r\n        },\r\n        \"usuario\": {\r\n            \"idUsuario\": 2\r\n        },\r\n        \"quantidadePrevista\": 91.0,\r\n        \"dataPrevista\": \"2022-11-16\",\r\n        \"ordem\": \"CP1100\",\r\n        \"finalizada\": false\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/previsoes/alterar/22",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"previsoes",
+								"alterar",
+								"22"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ExcluirPrevisao",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"item\": {\r\n            \"idItem\": 1640\r\n        },\r\n        \"usuario\": {\r\n            \"idUsuario\": 2\r\n        },\r\n        \"quantidadePrevista\": 91.0,\r\n        \"dataPrevista\": \"2022-11-16\",\r\n        \"ordem\": \"CP1100\",\r\n        \"finalizada\": false\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/previsoes/excluir/23",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"previsoes",
+								"excluir",
+								"23"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ConsultarPorIdPrevisao",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/previsoes/15",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"previsoes",
+								"15"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ConsultarPorVencidasEPendentes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/previsoes/vencimentoefinalizada/true/false",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"previsoes",
+								"vencimentoefinalizada",
+								"true",
+								"false"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ConsultarPorAVencerEPendentes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/previsoes/vencimentoefinalizada/false/false",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"previsoes",
+								"vencimentoefinalizada",
+								"false",
+								"false"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ConsultarPorVencidas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/previsoes/vencidas",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"previsoes",
+								"vencidas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ConsultarPorPendentes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/previsoes/pendentes",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"previsoes",
+								"pendentes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ConsultarPorStatus",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/previsoes/status/true",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"previsoes",
+								"status",
+								"true"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ConsultarPorIdItem",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/previsoes/iditem/1540",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"previsoes",
+								"iditem",
+								"1540"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Itens",
+			"item": [
+				{
+					"name": "AlterarItem",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"descricao\": \"PARAF SEXT RI 1/4 X 5/8 UNC20 C7/16 A3,8 POLIDO\",\r\n    \"grupo\": \"INDUSTRIALIZAÇÃO\",\r\n    \"familia\": \"PARAFUSOS\",\r\n    \"unidade\": \"PC\",\r\n    \"estoqueSeguranca\": 300.0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/itens/1540",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"itens",
+								"1540"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NovoItem",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"descricao\": \"PARAF SEXT RI 1/4 X 5/8 UNC20 C7/16 A3,8 POLIDO\",\r\n    \"grupo\": \"INDUSTRIALIZAÇÃO\",\r\n    \"familia\": \"PARAFUSOS\",\r\n    \"unidade\": \"PC\",\r\n    \"estoqueSeguranca\": 300.0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/itens",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"itens"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ConsultarItens Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/itens",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"itens"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ConsultarItemPorIdItem",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/itens/1540",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"itens",
+								"1540"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Estoque",
+			"item": [
+				{
+					"name": "ConsultarTodosEstoques",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/estoque",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"estoque"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ConsultarPorIdItem",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/estoque/1540",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"estoque",
+								"1540"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AlterarEstoque",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idEstoque\": 15,\r\n    \"localizacao\": \"A137\",\r\n    \"estoqueReal\": 76.0,\r\n    \"item\": {\r\n        \"idItem\": 1550\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/estoque/15",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"estoque",
+								"15"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Movimentacoes",
+			"item": [
+				{
+					"name": "Consulta movimentações do item",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/movimentacoes/1690",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"movimentacoes",
+								"1690"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ConsultarTodoHistoricoMovimentacao",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/movimentacoes",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"movimentacoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registrar entrada de item no estoque",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"origemDestino\": \"CP1003\",\r\n    \"quantidade\": 80,\r\n    \"item\": {\r\n      \"idItem\": 1500\r\n    },\r\n    \"usuario\": {\r\n      \"idUsuario\": 1\r\n    }\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/movimentacoes/entrada",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"movimentacoes",
+								"entrada"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registrar saída de estoque",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"origemDestino\": \"PO1001\",\r\n    \"quantidade\": 97,\r\n    \"item\": {\r\n      \"idItem\": 1510\r\n    },\r\n    \"usuario\": {\r\n      \"idUsuario\": 1\r\n    }\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/movimentacoes/saida",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"movimentacoes",
+								"saida"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

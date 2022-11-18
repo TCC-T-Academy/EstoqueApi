@@ -1,6 +1,8 @@
 package com.estoqueapi.EstoqueApi.Servicos;
 
 import com.estoqueapi.EstoqueApi.Entidades.Estoque;
+import com.estoqueapi.EstoqueApi.Entidades.Itens;
+import com.estoqueapi.EstoqueApi.Exceptions.AlteracaoNaoPermitidaException;
 import com.estoqueapi.EstoqueApi.Exceptions.ItemForaEstoqueException;
 import com.estoqueapi.EstoqueApi.Repositorios.EstoqueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,10 @@ public class EstoqueService {
 
     @Autowired
     private EstoqueRepository estoqueRepository;
+
+    @Autowired
+    private ItensService itensService;
+
     public List<Estoque> listarEstoque(){
         return estoqueRepository.findAll();
     }
@@ -48,5 +54,37 @@ public class EstoqueService {
         Estoque estoque = estoqueRepository.findById(idEstoque).orElseThrow(() -> new EntityNotFoundException("Estoque nao encontrado"));
 
         return estoque;
+    }
+
+    public Estoque salvar(Estoque estoque){
+        return this.validarEstoque(estoque);
+    }
+
+    public Estoque alterarEstoque(long idEstoque, Estoque estoque){
+        Estoque estoqueAlterado = this.buscarEstoqueById(idEstoque);
+
+        if(estoque.getEstoqueReal() > 0){
+            estoqueAlterado.setEstoqueReal(estoque.getEstoqueReal());
+        }
+        if(!estoque.getLocalizacao().isBlank() && !estoque.getLocalizacao().isEmpty()){
+            estoqueAlterado.setLocalizacao(estoque.getLocalizacao());
+        }
+        if(estoque.getItem().getIdItem() > 0){
+            estoqueAlterado.setItem(itensService.consultarItemById(estoque.getItem().getIdItem()));
+        }
+
+        return this.salvar(estoqueAlterado);
+
+    }
+
+    public Estoque validarEstoque(Estoque e){
+        Itens item = itensService.consultarItemById(e.getItem().getIdItem());
+        e.setItem(item);
+        if(e.getEstoqueReal() <= 0){
+            throw new AlteracaoNaoPermitidaException("Estoque menor ou igual a zero");
+        }else if(e.getLocalizacao().isEmpty() || e.getLocalizacao().isBlank()){
+            throw new AlteracaoNaoPermitidaException("Localizacao Invalida");
+        }
+        return e;
     }
 }

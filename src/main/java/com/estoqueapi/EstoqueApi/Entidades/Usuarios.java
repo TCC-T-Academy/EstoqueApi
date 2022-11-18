@@ -2,14 +2,13 @@ package com.estoqueapi.EstoqueApi.Entidades;
 
 import com.estoqueapi.EstoqueApi.Enums.PerfilUsuario;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Usuarios {
     @Id
-    private Long idUsuario;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idUsuario = 0l;
     private String nome;
     private String senha;
 
