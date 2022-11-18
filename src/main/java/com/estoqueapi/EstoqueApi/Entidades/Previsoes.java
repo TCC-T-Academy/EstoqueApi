@@ -23,7 +23,17 @@ public class Previsoes {
     private String ordem;
     private boolean finalizada = false;
 
+    public Previsoes() {
+    }
 
+    public Previsoes(Itens item, Usuarios usuario, float quantidadePrevista, Date dataPrevista, String ordem, boolean finalizada) {
+        this.item = item;
+        this.usuario = usuario;
+        this.quantidadePrevista = quantidadePrevista;
+        this.dataPrevista = dataPrevista;
+        this.ordem = ordem;
+        this.finalizada = finalizada;
+    }
 
     public long getIdPrevisao() {
         return this.idPrevisao;
