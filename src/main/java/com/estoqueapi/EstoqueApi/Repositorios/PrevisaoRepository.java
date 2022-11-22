@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.estoqueapi.EstoqueApi.Entidades.Previsao;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PrevisaoRepository extends CrudRepository<Previsao, Long> {
@@ -32,5 +33,7 @@ public interface PrevisaoRepository extends CrudRepository<Previsao, Long> {
 
     @Query(value = "SELECT * FROM previsao WHERE DATE_FORMAT(data_prevista, '%Y %m %d') >= DATE_FORMAT(now(), '%Y %m %d') AND finalizada = :realizada", nativeQuery = true)
     List<Previsao> findByDataPrevistaMaiorIgualFinalizada(boolean realizada);
+
+    Optional<Previsao> findByOrdem(String ordem);
 }
 
