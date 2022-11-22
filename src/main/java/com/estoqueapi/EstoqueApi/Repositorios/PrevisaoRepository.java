@@ -14,9 +14,9 @@ public interface PrevisaoRepository extends CrudRepository<Previsao, Long> {
     List<Previsao> findByFinalizada(boolean finalizada);
 
     // Retorna todas as previsões selecionadas por um item
-    @Query(value = "SELECT * from previsao LEFT JOIN itens ON previsoes.item_id_Item = itens.id_Item WHERE itens.id_Item = :idItem", nativeQuery = true)
+    @Query(value = "SELECT * from previsao LEFT JOIN item ON previsao.item_id_Item = item.id_Item WHERE item.id_Item = :idItem", nativeQuery = true)
     List<Previsao> ConsultarByIdItem(Long idItem);
-    @Query(value = "SELECT * from previsao LEFT JOIN itens ON previsoes.item_id_Item = itens.id_Item WHERE itens.id_Item = :idItem AND finalizada = 0", nativeQuery = true)
+    @Query(value = "SELECT * from previsao LEFT JOIN item ON previsao.item_id_Item = item.id_Item WHERE item.id_Item = :idItem AND finalizada = 0", nativeQuery = true)
     List<Previsao> ConsultarPendentesByIdItem(Long idItem);
 
     // Retorna todas as previsões com data anterior a de hoje, com a opção de escolha se ela estiver finalizada ou não
