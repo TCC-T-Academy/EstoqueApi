@@ -1,6 +1,7 @@
 package com.estoqueapi.EstoqueApi.Entidades;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.Date;
 
 @Entity
@@ -11,7 +12,8 @@ public class Reserva {
     private long idReserva;
     private boolean finalizada = false;
     private float quantidadeReserva;
-    private Date dataPrevista;
+    @Column(columnDefinition = "datetime")
+    private Instant dataPrevista;
     private String ordem;
 
     @ManyToOne
@@ -44,11 +46,11 @@ public class Reserva {
         this.quantidadeReserva = quantidadeReserva;
     }
 
-    public Date getDataPrevista() {
+    public Instant getDataPrevista() {
         return dataPrevista;
     }
 
-    public void setDataPrevista(Date dataPrevista) {
+    public void setDataPrevista(Instant dataPrevista) {
         this.dataPrevista = dataPrevista;
     }
 
