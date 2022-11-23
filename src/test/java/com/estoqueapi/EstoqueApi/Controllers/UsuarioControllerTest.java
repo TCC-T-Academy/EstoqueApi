@@ -63,11 +63,11 @@ public class UsuarioControllerTest {
     }
 
     @Test
-    @DisplayName("Retorna FOUND ao consultar Usuarios")
-    public void retornaFOUNDAoConsultarUsuarios() throws Exception {
+    @DisplayName("Retorna OK ao consultar Usuarios")
+    public void retornaOKoConsultarUsuarios() throws Exception {
         ResultActions resultado = mockMvc.perform(get("/usuarios")
                 .accept(MediaType.APPLICATION_JSON));
-        resultado.andExpect(status().isFound());
+        resultado.andExpect(status().isOk());
         resultado.andDo(print());
     }
 

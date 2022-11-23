@@ -1,11 +1,16 @@
 package com.estoqueapi.EstoqueApi.Controllers;
 
+import com.estoqueapi.EstoqueApi.Dtos.MovimentacaoDTO;
+import com.estoqueapi.EstoqueApi.Dtos.MovimentacaoNovaDTO;
+import com.estoqueapi.EstoqueApi.Dtos.UsuarioPublicoDTO;
 import com.estoqueapi.EstoqueApi.Entidades.Estoque;
 import com.estoqueapi.EstoqueApi.Entidades.Item;
 import com.estoqueapi.EstoqueApi.Entidades.Movimentacao;
 import com.estoqueapi.EstoqueApi.Entidades.Usuario;
 import com.estoqueapi.EstoqueApi.Enums.PerfilUsuario;
+import com.estoqueapi.EstoqueApi.Mapper.Mapper;
 import com.estoqueapi.EstoqueApi.Servicos.MovimentacaoService;
+import com.estoqueapi.EstoqueApi.Utils.ConversorData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,6 +51,11 @@ public class MovimentacaoControllerTest {
     private Movimentacao m1;
     private Movimentacao m2;
     private Movimentacao m3;
+    private MovimentacaoNovaDTO mNovaDTO1;
+    private MovimentacaoDTO mDTO1;
+    private MovimentacaoNovaDTO mNovaDTO2;
+    private MovimentacaoDTO mDTO2;
+
     private Item i1;
     private Item i2;
     private Estoque e1;
@@ -68,6 +78,9 @@ public class MovimentacaoControllerTest {
 
     @MockBean
     private MovimentacaoService service;
+
+    @MockBean
+    private Mapper mapper;
 
     @BeforeEach
     void setup(){
@@ -154,6 +167,23 @@ public class MovimentacaoControllerTest {
         listaPorItem2.add(m2);
         listaPorItem2.add(m3); // 2 movimentações ligadas ao item 2
 
+        mNovaDTO1 = new MovimentacaoNovaDTO(m1.getOrigemDestino(),m1.getQuantidade(),m1.getItem().getIdItem(),m1.getUsuario().getIdUsuario());
+        mDTO1 = new MovimentacaoDTO(m1.getIdMovimentacao(),
+                ConversorData.toLocalDateTime(m1.getDataMovimentacao()),
+                m1.getTipo(),
+                m1.getOrigemDestino(),
+                m1.getQuantidade(),
+                new UsuarioPublicoDTO(u.getIdUsuario(), u.getNome(), u.getPerfil()),
+                m1.getEstoque());
+        mNovaDTO2 = new MovimentacaoNovaDTO(m2.getOrigemDestino(),m2.getQuantidade(),m2.getItem().getIdItem(),m2.getUsuario().getIdUsuario());
+        mDTO2 = new MovimentacaoDTO(m2.getIdMovimentacao(),
+                ConversorData.toLocalDateTime(m2.getDataMovimentacao()),
+                m2.getTipo(),
+                m2.getOrigemDestino(),
+                m2.getQuantidade(),
+                new UsuarioPublicoDTO(u.getIdUsuario(), u.getNome(), u.getPerfil()),
+                m2.getEstoque());
+
         Mockito.when(service.consultar()).thenReturn(listaTotal);
         Mockito.when(service.consultarByIdItem(idItemExistente1)).thenReturn(listaPorItem1);
         Mockito.when(service.consultarByIdItem(idItemExistente2)).thenReturn(listaPorItem2);
@@ -167,7 +197,7 @@ public class MovimentacaoControllerTest {
         ResultActions resultado =
                 mockMvc.perform(get("/movimentacoes").accept(MediaType.APPLICATION_JSON));
 
-        resultado.andExpect(status().isFound());
+        resultado.andExpect(status().isOk());
         resultado.andExpect(jsonPath("$.size()").value(listaTotal.size()));
 //        resultado.andDo(print());
     }
@@ -177,7 +207,7 @@ public class MovimentacaoControllerTest {
         ResultActions resultado =
                 mockMvc.perform(get("/movimentacoes/{idItemExistente1}", idItemExistente1).accept(MediaType.APPLICATION_JSON));
 
-        resultado.andExpect(status().isFound());
+        resultado.andExpect(status().isOk());
         resultado.andExpect(jsonPath("$.size()").value(listaPorItem1.size()));
 //        resultado.andDo(print());
     }
@@ -187,7 +217,7 @@ public class MovimentacaoControllerTest {
         ResultActions resultado =
                 mockMvc.perform(get("/movimentacoes/{idItemExistente2}", idItemExistente2).accept(MediaType.APPLICATION_JSON));
 
-        resultado.andExpect(status().isFound());
+        resultado.andExpect(status().isOk());
         resultado.andExpect(jsonPath("$.size()").value(listaPorItem2.size()));
 //        resultado.andDo(print());
     }
@@ -206,7 +236,10 @@ public class MovimentacaoControllerTest {
 
     @Test
     public void retornaCreatedQuandoPostMovimentacaoEntrada() throws Exception {
-        String jsonBody = objectMapper.writeValueAsString(m1);
+        Mockito.when(mapper.toMovimentacaoDto(m1)).thenReturn(mDTO1);
+        Mockito.when(mapper.toMovimentacao(mDTO1)).thenReturn(m1);
+
+        String jsonBody = objectMapper.writeValueAsString(mNovaDTO1);
         ResultActions resultado = mockMvc.perform(post("/movimentacoes/entrada")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonBody));
@@ -217,7 +250,10 @@ public class MovimentacaoControllerTest {
     }
     @Test
     public void retornaCreatedQuandoPostMovimentacaoSaida() throws Exception {
-        String jsonBody = objectMapper.writeValueAsString(m2);
+        Mockito.when(mapper.toMovimentacaoDto(m2)).thenReturn(mDTO2);
+        Mockito.when(mapper.toMovimentacao(mDTO2)).thenReturn(m2);
+
+        String jsonBody = objectMapper.writeValueAsString(mNovaDTO2);
         ResultActions resultado = mockMvc.perform(post("/movimentacoes/saida")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonBody));

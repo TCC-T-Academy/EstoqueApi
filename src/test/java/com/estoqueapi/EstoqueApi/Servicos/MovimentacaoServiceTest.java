@@ -3,6 +3,7 @@ package com.estoqueapi.EstoqueApi.Servicos;
 import com.estoqueapi.EstoqueApi.Entidades.*;
 import com.estoqueapi.EstoqueApi.Enums.PerfilUsuario;
 import com.estoqueapi.EstoqueApi.Repositorios.MovimentacaoRepository;
+import com.estoqueapi.EstoqueApi.Utils.ConversorData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.sql.Date;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,7 +80,7 @@ public class MovimentacaoServiceTest {
         previsao.setQuantidadePrevista(10);
         previsao.setOrdem("CP1000");
         previsao.setItem(item);
-        previsao.setDataPrevista(new Date(2022-11-16));
+        previsao.setDataPrevista(ConversorData.toInstant(LocalDateTime.parse("2022-11-16T00:00:00")));
         previsao.setUsuario(user);
         previsao.setIdPrevisao(10l);
 
@@ -87,7 +89,7 @@ public class MovimentacaoServiceTest {
         reserva.setQuantidadeReserva(10);
         reserva.setOrdem("PO1000");
         reserva.setItem(item);
-        reserva.setDataPrevista(new Date(2022-11-16));
+        reserva.setDataPrevista(ConversorData.toInstant(LocalDateTime.parse("2022-11-16T00:00:00")));
         reserva.setUsuario(user);
         reserva.setIdReserva(10l);
 
