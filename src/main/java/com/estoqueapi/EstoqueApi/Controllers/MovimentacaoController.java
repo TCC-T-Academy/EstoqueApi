@@ -18,12 +18,12 @@ public class MovimentacaoController {
 
     @GetMapping
     public ResponseEntity<List<Movimentacao>> consultar(){
-        return ResponseEntity.status(HttpStatus.FOUND).body(movimentacaoService.consultar());
+        return ResponseEntity.status(HttpStatus.OK).body(movimentacaoService.consultar());
     }
 
     @GetMapping("/{idItem}")
     public ResponseEntity<List<Movimentacao>> consultar(@PathVariable ("idItem") Long idItem){
-        return ResponseEntity.status(HttpStatus.FOUND).body(movimentacaoService.consultarByIdItem(idItem));
+        return ResponseEntity.status(HttpStatus.OK).body(movimentacaoService.consultarByIdItem(idItem));
     }
 
     //Pensar sobre remoçao
