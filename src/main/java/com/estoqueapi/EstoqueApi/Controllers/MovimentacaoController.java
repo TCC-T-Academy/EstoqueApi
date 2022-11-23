@@ -50,14 +50,15 @@ public class MovimentacaoController {
     }
 
     @PostMapping("/entrada")
-    public ResponseEntity<MovimentacaoNovaDTO> entrada(@RequestBody MovimentacaoNovaDTO movimentacaoNovaDTO){
+    public ResponseEntity<MovimentacaoDTO> entrada(@RequestBody MovimentacaoNovaDTO movimentacaoNovaDTO){
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(mapper.toMovimentacaoNovaDTO(movimentacaoService.entradaItem(mapper.toMovimentacao(movimentacaoNovaDTO))));
+                .body(mapper.toMovimentacaoDto(movimentacaoService.entradaItem(mapper.toMovimentacao(movimentacaoNovaDTO))));
     }
 
     @PostMapping("/saida")
-    public ResponseEntity<MovimentacaoNovaDTO> saida(@RequestBody MovimentacaoNovaDTO movimentacaoNovaDTO){
-        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toMovimentacaoNovaDTO(movimentacaoService.saidaItem(mapper.toMovimentacao(movimentacaoNovaDTO))));
+    public ResponseEntity<MovimentacaoDTO> saida(@RequestBody MovimentacaoNovaDTO movimentacaoNovaDTO){
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(mapper.toMovimentacaoDto(movimentacaoService.saidaItem(mapper.toMovimentacao(movimentacaoNovaDTO))));
     }
 
 }
