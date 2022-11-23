@@ -12,12 +12,12 @@ public class Estoque {
     private Float estoqueReal;
 
     @ManyToOne
-    private Itens item;
+    private Item item;
 
     public Estoque() {
     }
 
-    public Estoque(String localizacao, Float estoqueReal, Itens item) {
+    public Estoque(String localizacao, Float estoqueReal, Item item) {
         this.localizacao = localizacao;
         this.estoqueReal = estoqueReal;
         this.item = item;
@@ -47,11 +47,11 @@ public class Estoque {
         this.estoqueReal = estoqueReal;
     }
 
-    public Itens getItem() {
+    public Item getItem() {
         return item;
     }
 
-    public void setItem(Itens item) {
+    public void setItem(Item item) {
         this.item = item;
     }
 }

@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.PrimitiveIterator;
 
 @RestController
 @RequestMapping("estoque")
@@ -19,17 +18,17 @@ public class EstoqueController {
 
     @GetMapping
     public ResponseEntity<List<Estoque>> consultarEstoque(){
-        return ResponseEntity.status(HttpStatus.FOUND).body(estoqueService.listarEstoque());
+        return ResponseEntity.status(HttpStatus.OK).body(estoqueService.listarEstoque());
     }
 
     @GetMapping("/{idItem}")
     public ResponseEntity<Estoque> consultarEstoqueIdItem(@PathVariable("idItem") long idItem){
-        return ResponseEntity.status(HttpStatus.FOUND).body(estoqueService.buscarEstoqueIdItem(idItem));
+        return ResponseEntity.status(HttpStatus.OK).body(estoqueService.buscarEstoqueIdItem(idItem));
     }
 
     @PutMapping("/{idEstoque}")
     public ResponseEntity<Estoque> alterarEstoque(@PathVariable("idEstoque") long idEstoque, @RequestBody Estoque estoque){
-        return ResponseEntity.status(HttpStatus.FOUND).body(estoqueService.alterarEstoque(idEstoque,estoque));
+        return ResponseEntity.status(HttpStatus.OK).body(estoqueService.alterarEstoque(idEstoque,estoque));
     }
 
 

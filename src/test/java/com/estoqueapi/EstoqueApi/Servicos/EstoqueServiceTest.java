@@ -1,7 +1,7 @@
 package com.estoqueapi.EstoqueApi.Servicos;
 
 import com.estoqueapi.EstoqueApi.Entidades.Estoque;
-import com.estoqueapi.EstoqueApi.Entidades.Itens;
+import com.estoqueapi.EstoqueApi.Entidades.Item;
 import com.estoqueapi.EstoqueApi.Exceptions.ItemForaEstoqueException;
 import com.estoqueapi.EstoqueApi.Repositorios.EstoqueRepository;
 import org.junit.jupiter.api.Assertions;
@@ -20,7 +20,7 @@ import java.util.Optional;
 @ExtendWith(SpringExtension.class)
 public class EstoqueServiceTest {
 
-    private Itens item;
+    private Item item;
     private Estoque estoque;
     private Optional<Estoque> optEstoque;
 
@@ -32,7 +32,7 @@ public class EstoqueServiceTest {
 
     @BeforeEach
     void setup(){
-        item = new Itens();
+        item = new Item();
         item.setIdItem(1000l);
         item.setDescricao("Item teste para teste");
         item.setFamilia("Teste");
