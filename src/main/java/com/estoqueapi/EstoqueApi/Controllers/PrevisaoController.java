@@ -34,7 +34,7 @@ public class PrevisaoController {
     //Filtrar por ID da previsão
     @GetMapping("/{idPrevisao}")
     public ResponseEntity<Previsao> filtrarId(@PathVariable ("idPrevisao") long idPrevisao) {
-        return ResponseEntity.ok().body(service.filtrarId(idPrevisao));
+        return ResponseEntity.status(HttpStatus.OK).body(service.filtrarId(idPrevisao));
     }
     // Filtra previsões com 2 opções: Data com vencimento anterior ou a partir de hoje / Finalizada (true ou false)
     @GetMapping("/iditem/{iditem}")

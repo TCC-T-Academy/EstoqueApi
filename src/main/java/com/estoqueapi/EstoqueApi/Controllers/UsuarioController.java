@@ -18,7 +18,7 @@ public class UsuarioController {
 
     @GetMapping
     public ResponseEntity<List<Usuario>> consultarUsuarios(){
-        return ResponseEntity.status(HttpStatus.FOUND).body(usuarioService.listarUsuarios());
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.listarUsuarios());
     }
 
     @PostMapping("/novo")

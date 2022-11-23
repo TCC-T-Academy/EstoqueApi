@@ -18,12 +18,12 @@ public class ItemController {
 
     @GetMapping("/{idItem}")
     public ResponseEntity<Item> consultarItemById(@PathVariable("idItem") long idItem){
-        return ResponseEntity.status(HttpStatus.FOUND).body(itemService.consultarItemById(idItem));
+        return ResponseEntity.status(HttpStatus.OK).body(itemService.consultarItemById(idItem));
     }
 
     @GetMapping
     public ResponseEntity<List<Item>> consultarItens(){
-        return ResponseEntity.status(HttpStatus.FOUND).body(itemService.listarItens());
+        return ResponseEntity.status(HttpStatus.OK).body(itemService.listarItens());
     }
 
     @PostMapping
