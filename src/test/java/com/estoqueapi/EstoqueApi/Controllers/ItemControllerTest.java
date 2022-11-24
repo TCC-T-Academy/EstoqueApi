@@ -61,7 +61,7 @@ public class ItemControllerTest {
 
         ResultActions resultado = mockMvc.perform(get("/itens").accept(MediaType.APPLICATION_JSON));
 
-        resultado.andExpect(status().isFound()); // Resultado não é 200 (ok), mas 302 (found)
+        resultado.andExpect(status().isOk()); // Resultado não é 200 (ok), mas 302 (found)
         resultado.andExpect(jsonPath("$.size()").value(listaDeItens.size()));
         resultado.andExpect(jsonPath("$[0].idItem").value(1000));
         resultado.andDo(print());

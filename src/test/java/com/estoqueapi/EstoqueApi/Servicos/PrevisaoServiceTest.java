@@ -2,6 +2,7 @@ package com.estoqueapi.EstoqueApi.Servicos;
 
 import com.estoqueapi.EstoqueApi.Entidades.Previsao;
 import com.estoqueapi.EstoqueApi.Repositorios.PrevisaoRepository;
+import com.estoqueapi.EstoqueApi.Utils.ConversorData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +15,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 
 import javax.persistence.EntityNotFoundException;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
@@ -31,7 +34,7 @@ public class PrevisaoServiceTest {
 
     @BeforeEach
     void setup() {
-        java.sql.Date data = new java.sql.Date(2022 - 11 - 16);
+        Instant data = ConversorData.toInstant(LocalDateTime.parse("2022-11-16T00:00:00"));
         idNaoExistente = 7L;
         previsao = new Previsao();
         previsao.setIdPrevisao(22);

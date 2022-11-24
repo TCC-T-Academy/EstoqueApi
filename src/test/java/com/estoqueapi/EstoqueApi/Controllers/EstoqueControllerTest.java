@@ -82,12 +82,12 @@ public class EstoqueControllerTest {
     }
 
     @Test
-    public void retornaFoundQuandoConsultaEstoque() throws Exception {
+    public void retornaOkQuandoConsultaEstoque() throws Exception {
 
         ResultActions resultado =
                 mockMvc.perform(get("/estoque").accept(MediaType.APPLICATION_JSON));
 
-        resultado.andExpect(status().isFound());
+        resultado.andExpect(status().isOk());
         resultado.andExpect(jsonPath("$.size()").value(lista.size()));
         resultado.andExpect(jsonPath("$[0].idEstoque").value(10));
 //        resultado.andDo(print());
@@ -98,7 +98,7 @@ public class EstoqueControllerTest {
         ResultActions resultado =
                 mockMvc.perform(get("/estoque/{idItem}", idItemExistente).accept(MediaType.APPLICATION_JSON));
 
-        resultado.andExpect(status().isFound());
+        resultado.andExpect(status().isOk());
         resultado.andExpect(jsonPath("$.idEstoque").value(10));
 //        resultado.andDo(print());
     }
