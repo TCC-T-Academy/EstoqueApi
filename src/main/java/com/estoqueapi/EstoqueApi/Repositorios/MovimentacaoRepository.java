@@ -11,4 +11,6 @@ import java.util.List;
 public interface MovimentacaoRepository extends JpaRepository<Movimentacao,Long> {
     @Query("Select m from Movimentacao m where item.idItem = ?1 order by m.idMovimentacao desc")
     List<Movimentacao> findAllByIdItem(Long idItem);
+    @Query("Select m from Movimentacao m order by m.idMovimentacao desc")
+    List<Movimentacao> findAllOrderByDesc();
 }
