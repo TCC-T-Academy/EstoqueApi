@@ -48,7 +48,7 @@ public class MovimentacaoService {
     }
 
     public List<Movimentacao> consultar(){
-         return movimentacaoRepository.findAll();
+         return movimentacaoRepository.findAllOrderByDesc();
     }
 
     public List<Movimentacao> salvarVarios(List<Movimentacao> lista){
