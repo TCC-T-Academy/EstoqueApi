@@ -1,7 +1,7 @@
 package com.estoqueapi.EstoqueApi.Exceptions;
 
-public class AlteracaoNaoPermitidaException extends RuntimeException{
-    public AlteracaoNaoPermitidaException(String message) {
+public class AcaoNaoPermitidaException extends RuntimeException{
+    public AcaoNaoPermitidaException(String message) {
         super(message);
     }
 }
