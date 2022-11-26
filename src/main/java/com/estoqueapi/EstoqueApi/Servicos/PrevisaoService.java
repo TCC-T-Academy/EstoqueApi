@@ -1,16 +1,24 @@
 package com.estoqueapi.EstoqueApi.Servicos;
 
+import com.estoqueapi.EstoqueApi.Entidades.Item;
 import com.estoqueapi.EstoqueApi.Entidades.Previsao;
+import com.estoqueapi.EstoqueApi.Entidades.Usuario;
+import com.estoqueapi.EstoqueApi.Exceptions.AcaoNaoPermitidaException;
 import com.estoqueapi.EstoqueApi.Repositorios.ItemRepository;
 import com.estoqueapi.EstoqueApi.Repositorios.PrevisaoRepository;
+import com.estoqueapi.EstoqueApi.Utils.ConversorData;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -25,6 +33,9 @@ public class PrevisaoService {
     @Autowired
     private ItemService itemService;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     // Listar todas as previsões cadastradas
    public Iterable<Previsao> listarPrevisoes() {
         return previsaoRepository.findAll();
@@ -35,11 +46,40 @@ public class PrevisaoService {
         return previsaoRepository.ConsultarByIdItem(idItem);
     }
 
-    //Cadastrar previsões
+
+    /** Metodo para cadastrar novas previsoes.
+     * @param pr Previsao: Objeto a ser cadastrado.
+     * @return Previsao: Objeto retornado pelo repositorio após validacoes.
+     * */
     @Transactional
     public Previsao cadastrarPrevisoes(Previsao pr){
+        //Validacoes gerais
+        pr = this.validarPrevisao(pr);
+
+        //Validacão especifica
+        if(!pr.getDataPrevista().isAfter(Instant.now())) {
+            throw new AcaoNaoPermitidaException("Informe uma data maior que a atual");
+        }
+
+
+        //  Verifica se existe a uma previsao de status finalizado = false para a ordem
+        //    alterando a quantidade em caso positivo.
+        long idItem = pr.getItem().getIdItem();
+        List<Previsao> list = previsaoRepository.findByOrdem(pr.getOrdem())
+                                                    .stream()
+                                                    .filter(previsao -> previsao.getItem().getIdItem() == idItem)
+                                                    .collect(Collectors.toList());
+        if(list.size() > 0){
+            Previsao p = list.get(0);
+            if(!p.getFinalizada() && p.getItem().getIdItem() == pr.getItem().getIdItem()){
+                p.setQuantidadePrevista(p.getQuantidadePrevista() + pr.getQuantidadePrevista());
+                return this.alterarPrevisao(p.getIdPrevisao(),p);
+            }
+        }
+
         return previsaoRepository.save(pr);
     }
+
 
     //Filtrar previsão por idPrevisao
     public Previsao filtrarId(long idPrevisao){
@@ -68,7 +108,6 @@ public class PrevisaoService {
 
         // Lista previsões com opção de escolha tanto com data anterior quanto a partir de hoje e finalizadas ou não
     public List<Previsao> findByDataPrevistaFinalizada(boolean vencimento, boolean finalizada) {
-        String venci;
         if (vencimento == true) {
             return previsaoRepository.findByDataPrevistaMenorFinalizada(finalizada);
         } else {
@@ -76,74 +115,103 @@ public class PrevisaoService {
         }
     }
 
-    //Alterar previsões - Alterar somente se tiver ativo (não realizado)
+    /**
+     * Metodo para alteracao de uma previsao a partir de um id.
+     * @param idPrevisao Long: Id da previsao a ser alterada.
+     * @param previsao Previsao: objeto previsao com as informacoes para atualizacao.
+     * @return Previsao: objeto retornado pelo repositorio após validacoes
+     * */
     public Previsao alterarPrevisao(Long idPrevisao, Previsao previsao){
+
         Previsao prev = this.filtrarId(idPrevisao);
-        if (!previsao.getFinalizada() == true) {
-            prev.setFinalizada(previsao.isFinalizada());
-        } else {
-            throw new IllegalArgumentException("A previsão não poderá estar ativa");
+
+        // Não deixa alterar se previsao finalizada
+        if (prev.getFinalizada()) {
+            throw new AcaoNaoPermitidaException("Previsão já finalizada");
         }
-        if (previsao.getQuantidadePrevista() > 0) {
-            prev.setQuantidadePrevista(previsao.getQuantidadePrevista());
-        } else {
-            throw new IllegalArgumentException("Quantidade inválida");
+
+        // Não deixa alterar se nova data é anterior a atual da previsao e anterior a now()
+        if(previsao.getDataPrevista().isBefore(prev.getDataPrevista())
+                && previsao.getDataPrevista().isBefore(Instant.now())){
+            throw new AcaoNaoPermitidaException("Informe uma data maior que a atual");
         }
-        if (!previsao.getDataPrevista().equals(null)) {
-            prev.setDataPrevista(previsao.getDataPrevista());
-        } else {
-            throw new IllegalArgumentException("Informe uma data válida");
-        }
-        if (!previsao.getOrdem().isBlank() && !previsao.getOrdem().isEmpty()) {
-            prev.setOrdem(previsao.getOrdem());
-        } else {
-            throw new IllegalArgumentException("A ordem de compra");
-        }
-        if (!previsao.getItem().equals(null)) {
-            prev.setItem(previsao.getItem());
-        } else {
-            throw new IllegalArgumentException("Informe o item previsto");
-        }
-        return this.cadastrarPrevisoes(prev);
+
+        //Lancará excecões caso haja problemas
+        previsao = this.validarPrevisao(previsao);
+
+        prev.setItem(previsao.getItem());
+        prev.setUsuario(previsao.getUsuario());
+        prev.setFinalizada(previsao.getFinalizada());
+        prev.setOrdem(previsao.getOrdem());
+        prev.setQuantidadePrevista(previsao.getQuantidadePrevista());
+        prev.setDataPrevista(previsao.getDataPrevista());
+
+        return previsaoRepository.save(prev);
     }
+
 
     //Excluir previsão (só pode ser excluído quando finalizada = false)
     @Transactional
-
     public void excluirPrevisao(long idPrevisao){
         Previsao previsao = this.filtrarId(idPrevisao);
         if(previsao.getFinalizada() == false){
             previsaoRepository.delete(previsao);
         }else{
-            throw new IllegalArgumentException("Essa ordem já foi realizada, não poderá ser excluída");
+            throw new AcaoNaoPermitidaException("Previsao já finalizada");
         }
     }
+
 
     public List<Previsao> consultarPendentesByIdItem(Long idItem) {
         return previsaoRepository.ConsultarPendentesByIdItem(idItem);
     }
 
-    public Previsao validarPrevisoes(Previsao previsao) {
-        if (previsao.getFinalizada() == true) {
-            throw new IllegalArgumentException("A previsão não poderá estar ativa");
-        } else if (previsao.getQuantidadePrevista() <= 0) {
-            throw new IllegalArgumentException("Quantidade inválida");
-        } else if (previsao.getDataPrevista().equals(null)) {
-            throw new IllegalArgumentException("Informe uma data válida");
-        } else if (previsao.getOrdem().isBlank() && !previsao.getOrdem().isEmpty()) {
-            throw new IllegalArgumentException("A ordem de compra");
-        } else if (previsao.getItem().equals(null)) {
-            throw new IllegalArgumentException("Informe o item previsto");
+
+    /**Metodo para validacao de uma previsao.
+     * @param previsao Previsao - Objeto para ser validado;
+     * @return Previsao - Objeto validado
+     * */
+    public Previsao validarPrevisao(Previsao previsao) {
+
+        if (previsao.getQuantidadePrevista() <= 0) {
+            throw new AcaoNaoPermitidaException("Quantidade inválida");
         }
+        if (previsao.getOrdem() == null || previsao.getOrdem().isEmpty()) {
+            throw new AcaoNaoPermitidaException("Ordem nao informada");
+        }
+        if (previsao.getItem() == null) {
+            throw new AcaoNaoPermitidaException("Item nao informado");
+        }
+
+        if (previsao.getDataPrevista() == null) {
+            throw new AcaoNaoPermitidaException("Informe uma data válida");
+        }
+
+        //Vai lancar excecao se o item for invalido
+        Item i = itemService.consultarItemById(previsao.getItem().getIdItem());
+        Usuario u = usuarioService.buscarUsuarioById(previsao.getUsuario().getIdUsuario());
+
         return previsao;
     }
 
-    private boolean previsaoExiste(String ordem) {
-        return previsaoRepository.findByOrdem(ordem).orElse(null) != null;
-    }
 
-    public Previsao findByOrdem(String ordem){
-        return previsaoRepository.findByOrdem(ordem).orElseThrow(() -> new EntityNotFoundException("Ordem não localizada"));
+    /**
+     * Metodo para criar uma copia de objeto em memoria para evitar conflitos.
+     * @param previsao Previsao: objeto base para clonagem
+     * @return Previsao: objeto com endereco de memoria diferente.
+     * */
+    public Previsao clonar(Previsao previsao){
+        Previsao nPrev = new Previsao();
+
+        nPrev.setItem(previsao.getItem());
+        nPrev.setUsuario(previsao.getUsuario());
+        nPrev.setIdPrevisao(previsao.getIdPrevisao());
+        nPrev.setFinalizada(previsao.getFinalizada());
+        nPrev.setOrdem(previsao.getOrdem());
+        nPrev.setQuantidadePrevista(previsao.getQuantidadePrevista());
+        nPrev.setDataPrevista(previsao.getDataPrevista());
+
+        return nPrev;
     }
 
 }

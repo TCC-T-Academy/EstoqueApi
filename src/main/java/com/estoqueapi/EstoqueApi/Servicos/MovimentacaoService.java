@@ -17,28 +17,19 @@ import java.util.List;
 public class MovimentacaoService {
 
     @Autowired
-    MovimentacaoRepository movimentacaoRepository;
+    private MovimentacaoRepository movimentacaoRepository;
 
     @Autowired
-    ItemRepository itemRepository;
+    private ValidacaoService validacaoService;
 
     @Autowired
-    ItemService itemService;
+    private EstoqueService estoqueService;
 
     @Autowired
-    EstoqueRepository estoqueRepository;
+    private PrevisaoService previsaoService;
 
     @Autowired
-    ValidacaoService validacaoService;
-
-    @Autowired
-    EstoqueService estoqueService;
-
-    @Autowired
-    PrevisaoService previsaoService;
-
-    @Autowired
-    ReservaService reservaService;
+    private ReservaService reservaService;
 
 
 
@@ -71,9 +62,11 @@ public class MovimentacaoService {
         mov.setTipo("IN");
         Movimentacao m = validacaoService.validarMovimentacao(mov);
         Previsao p = validacaoService.consultaPrevisoesByMovimentacao(mov);
+
         if (p.getIdPrevisao() > 0){
-            p.setFinalizada(true);
-            previsaoService.alterarPrevisao(p.getIdPrevisao(), p);
+            Previsao p2 = previsaoService.clonar(p);
+            p2.setFinalizada(true);
+            previsaoService.alterarPrevisao(p.getIdPrevisao(), p2);
         }
 
         estoqueService.adicionarEstoque(mov.getItem().getIdItem(), mov.getQuantidade());

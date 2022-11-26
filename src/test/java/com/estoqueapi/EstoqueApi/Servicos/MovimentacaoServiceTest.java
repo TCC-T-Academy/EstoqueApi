@@ -148,7 +148,7 @@ public class MovimentacaoServiceTest {
     public void RetornaListaMovimentacoes(){
         List<Movimentacao> lista = new ArrayList<>();
         lista.add(m);
-        Mockito.when(movimentacaoRepository.findAll()).thenReturn(lista);
+        Mockito.when(movimentacaoRepository.findAllOrderByDesc()).thenReturn(lista);
 
         Assertions.assertEquals(lista.size(), movimentacaoService.consultar().size());
     }
