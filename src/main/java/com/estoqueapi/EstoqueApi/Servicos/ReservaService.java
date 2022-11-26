@@ -14,7 +14,7 @@ import java.util.Optional;
 @Service
 public class ReservaService {
     @Autowired
-    ReservaRepository reservaRepository;
+    private ReservaRepository reservaRepository;
     public List<Reserva> consultar(){
         return reservaRepository.findAll();
     }
