@@ -112,12 +112,22 @@ public class MovimentacaoServiceTest {
         m.setDataMovimentacao(null);
         String tipoEsperado = "IN";
 
+        Previsao mockPrevisao = new Previsao();
+        mockPrevisao.setUsuario(previsao.getUsuario());
+        mockPrevisao.setItem(previsao.getItem());
+        mockPrevisao.setOrdem(previsao.getOrdem());
+        mockPrevisao.setFinalizada(previsao.getFinalizada());
+        mockPrevisao.setQuantidadePrevista(previsao.getQuantidadePrevista());
+        mockPrevisao.setDataPrevista(previsao.getDataPrevista());
+        mockPrevisao.setIdPrevisao(previsao.getIdPrevisao());
+
         //Mockando as funcoes
         Mockito.when(movimentacaoRepository.save(m)).thenReturn(m);
         Mockito.when(validacaoService.validarMovimentacao(m)).thenReturn(m);
         Mockito.when(validacaoService.consultaPrevisoesByMovimentacao(m)).thenReturn(previsao);
         Mockito.when(estoqueService.adicionarEstoque(item.getIdItem(), m.getQuantidade())).thenReturn(estoque);
         Mockito.when(previsaoService.alterarPrevisao(previsao.getIdPrevisao(),previsao)).thenReturn(previsao);
+        Mockito.when(previsaoService.clonar(previsao)).thenReturn(mockPrevisao);
 
         //Testando
         Assertions.assertEquals(tipoEsperado, movimentacaoService.entradaItem(m).getTipo());
@@ -131,12 +141,24 @@ public class MovimentacaoServiceTest {
         m.setDataMovimentacao(null);
         String tipoEsperado = "OUT";
 
+        Reserva mockReserva = new Reserva();
+        mockReserva.setIdReserva(reserva.getIdReserva());
+        mockReserva.setQuantidadeReserva(reserva.getQuantidadeReserva());
+        mockReserva.setItem(reserva.getItem());
+        mockReserva.setFinalizada(reserva.isFinalizada());
+        mockReserva.setUsuario(reserva.getUsuario());
+        mockReserva.setDataPrevista(reserva.getDataPrevista());
+        mockReserva.setOrdem(reserva.getOrdem());
+
+
+
         //Mockando as funcoes
         Mockito.when(movimentacaoRepository.save(m)).thenReturn(m);
         Mockito.when(validacaoService.validarMovimentacao(m)).thenReturn(m);
         Mockito.when(validacaoService.consultaReservasByMovimentacao(m)).thenReturn(reserva);
         Mockito.when(estoqueService.adicionarEstoque(item.getIdItem(), m.getQuantidade())).thenReturn(estoque);
         Mockito.when(reservaService.alterar(reserva.getIdReserva(),reserva)).thenReturn(reserva);
+        Mockito.when(reservaService.clonar(reserva)).thenReturn(mockReserva);
 
         //Testando
         Assertions.assertEquals(tipoEsperado, movimentacaoService.saidaItem(m).getTipo());
