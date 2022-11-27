@@ -38,6 +38,9 @@ public class MovimentacaoService {
         return movimentacaoRepository.save(movimentacao);
     }
 
+    /** Metodo para consultar todas as movimentacoes
+     * @return List<Movimentacao> - retorna lista ordenada de movimentacoes
+     * */
     public List<Movimentacao> consultar(){
          return movimentacaoRepository.findAllOrderByDesc();
     }
@@ -57,6 +60,10 @@ public class MovimentacaoService {
         return movimentacaoRepository.findAllByIdItem(idItem);
     }
 
+    /** Metodo para efetuar uma movimentacao de entrada.
+     * @param mov Movimentacao - objeto movimentacao referente a entrada
+     * @return Movimentacao - retorna movimentacao efetuada
+     * */
     public Movimentacao entradaItem(Movimentacao mov){
         mov.setDataMovimentacao(Instant.now());
         mov.setTipo("IN");
@@ -74,6 +81,10 @@ public class MovimentacaoService {
         return this.salvar(m);
     }
 
+    /** Metodo para efetuar uma movimentacao de saida.
+     * @param mov Movimentacao - objeto movimentacao referente a saida
+     * @return Movimentacao - retorna movimentacao efetuada
+     * */
     public Movimentacao saidaItem(Movimentacao mov){
         mov.setDataMovimentacao(Instant.now());
         mov.setTipo("OUT");
@@ -81,16 +92,14 @@ public class MovimentacaoService {
         Reserva r = validacaoService.consultaReservasByMovimentacao(mov);
 
         if (r.getIdReserva() > 0){
-            r.setFinalizada(true);
-            reservaService.alterar(r.getIdReserva(), r);
+            Reserva r2 = reservaService.clonar(r);
+            r2.setFinalizada(true);
+            reservaService.alterar(r.getIdReserva(), r2);
         }
 
         estoqueService.subtrairEstoque(mov.getItem().getIdItem(), mov.getQuantidade());
 
         return this.salvar(m);
     }
-
-
-
 
 }
