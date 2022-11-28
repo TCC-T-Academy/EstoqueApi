@@ -17,28 +17,19 @@ import java.util.List;
 public class MovimentacaoService {
 
     @Autowired
-    MovimentacaoRepository movimentacaoRepository;
+    private MovimentacaoRepository movimentacaoRepository;
 
     @Autowired
-    ItemRepository itemRepository;
+    private ValidacaoService validacaoService;
 
     @Autowired
-    ItemService itemService;
+    private EstoqueService estoqueService;
 
     @Autowired
-    EstoqueRepository estoqueRepository;
+    private PrevisaoService previsaoService;
 
     @Autowired
-    ValidacaoService validacaoService;
-
-    @Autowired
-    EstoqueService estoqueService;
-
-    @Autowired
-    PrevisaoService previsaoService;
-
-    @Autowired
-    ReservaService reservaService;
+    private ReservaService reservaService;
 
 
 
@@ -47,6 +38,9 @@ public class MovimentacaoService {
         return movimentacaoRepository.save(movimentacao);
     }
 
+    /** Metodo para consultar todas as movimentacoes
+     * @return List<Movimentacao> - retorna lista ordenada de movimentacoes
+     * */
     public List<Movimentacao> consultar(){
          return movimentacaoRepository.findAllOrderByDesc();
     }
@@ -66,14 +60,20 @@ public class MovimentacaoService {
         return movimentacaoRepository.findAllByIdItem(idItem);
     }
 
+    /** Metodo para efetuar uma movimentacao de entrada.
+     * @param mov Movimentacao - objeto movimentacao referente a entrada
+     * @return Movimentacao - retorna movimentacao efetuada
+     * */
     public Movimentacao entradaItem(Movimentacao mov){
         mov.setDataMovimentacao(Instant.now());
         mov.setTipo("IN");
         Movimentacao m = validacaoService.validarMovimentacao(mov);
         Previsao p = validacaoService.consultaPrevisoesByMovimentacao(mov);
+
         if (p.getIdPrevisao() > 0){
-            p.setFinalizada(true);
-            previsaoService.alterarPrevisao(p.getIdPrevisao(), p);
+            Previsao p2 = previsaoService.clonar(p);
+            p2.setFinalizada(true);
+            previsaoService.alterarPrevisao(p.getIdPrevisao(), p2);
         }
 
         estoqueService.adicionarEstoque(mov.getItem().getIdItem(), mov.getQuantidade());
@@ -81,6 +81,10 @@ public class MovimentacaoService {
         return this.salvar(m);
     }
 
+    /** Metodo para efetuar uma movimentacao de saida.
+     * @param mov Movimentacao - objeto movimentacao referente a saida
+     * @return Movimentacao - retorna movimentacao efetuada
+     * */
     public Movimentacao saidaItem(Movimentacao mov){
         mov.setDataMovimentacao(Instant.now());
         mov.setTipo("OUT");
@@ -88,16 +92,14 @@ public class MovimentacaoService {
         Reserva r = validacaoService.consultaReservasByMovimentacao(mov);
 
         if (r.getIdReserva() > 0){
-            r.setFinalizada(true);
-            reservaService.alterar(r.getIdReserva(), r);
+            Reserva r2 = reservaService.clonar(r);
+            r2.setFinalizada(true);
+            reservaService.alterar(r.getIdReserva(), r2);
         }
 
         estoqueService.subtrairEstoque(mov.getItem().getIdItem(), mov.getQuantidade());
 
         return this.salvar(m);
     }
-
-
-
 
 }

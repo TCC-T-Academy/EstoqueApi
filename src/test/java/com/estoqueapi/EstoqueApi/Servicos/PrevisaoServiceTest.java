@@ -1,8 +1,14 @@
 package com.estoqueapi.EstoqueApi.Servicos;
 
+import com.estoqueapi.EstoqueApi.Entidades.Item;
 import com.estoqueapi.EstoqueApi.Entidades.Previsao;
+import com.estoqueapi.EstoqueApi.Entidades.Usuario;
+import com.estoqueapi.EstoqueApi.Exceptions.AcaoNaoPermitidaException;
+import com.estoqueapi.EstoqueApi.Repositorios.ItemRepository;
 import com.estoqueapi.EstoqueApi.Repositorios.PrevisaoRepository;
 import com.estoqueapi.EstoqueApi.Utils.ConversorData;
+import com.sun.source.tree.ModuleTree;
+import org.hibernate.mapping.Any;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +23,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import javax.persistence.EntityNotFoundException;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
@@ -28,6 +38,10 @@ public class PrevisaoServiceTest {
 
     @Mock
     private PrevisaoRepository previsaoRepository;
+    @Mock
+    private ItemService itemService;
+    @Mock
+    private UsuarioService usuarioService;
 
     @InjectMocks
     private PrevisaoService previsaoService;
@@ -45,6 +59,94 @@ public class PrevisaoServiceTest {
 
         optPrevisoes = Optional.of(previsao);
     }
+
+    @Test
+    @DisplayName("Retorna previsao se salvamento correto")
+    public void retornaPrevisaoSeSalvamentoCorreto(){
+        Item mockItem = new Item();
+        mockItem.setIdItem(100l);
+        previsao.setItem(mockItem);
+
+        Usuario mockUsuario = new Usuario();
+        mockUsuario.setIdUsuario(1l);
+        previsao.setUsuario(mockUsuario);
+
+        previsao.setDataPrevista(Instant.now().plus(5, ChronoUnit.DAYS));
+
+        List<Previsao> mockList = new ArrayList<>();
+        mockList.add(previsao);
+
+        Mockito.when(itemService.consultarItemById(mockItem.getIdItem())).thenReturn(mockItem);
+        Mockito.when(usuarioService.buscarUsuarioById(mockUsuario.getIdUsuario())).thenReturn(mockUsuario);
+        Mockito.when(previsaoRepository.save(previsao)).thenReturn(previsao);
+
+        Assertions.assertEquals(previsao.getIdPrevisao(),previsaoService.cadastrarPrevisoes(previsao).getIdPrevisao());
+
+    }
+
+    @Test
+    @DisplayName("Lanca Excecao se data anterior a atual")
+    public void lancaExcecaoSeDataAnteriorAtual(){
+        Item mockItem = new Item();
+        mockItem.setIdItem(100l);
+        previsao.setItem(mockItem);
+
+        Usuario mockUsuario = new Usuario();
+        mockUsuario.setIdUsuario(1l);
+        previsao.setUsuario(mockUsuario);
+
+        previsao.setDataPrevista(previsao.getDataPrevista().minus(5, ChronoUnit.DAYS));
+
+        List<Previsao> mockList = new ArrayList<>();
+        mockList.add(previsao);
+
+        Mockito.when(itemService.consultarItemById(mockItem.getIdItem())).thenReturn(mockItem);
+        Mockito.when(usuarioService.buscarUsuarioById(mockUsuario.getIdUsuario())).thenReturn(mockUsuario);
+        Mockito.when(previsaoRepository.save(previsao)).thenReturn(previsao);
+
+        AcaoNaoPermitidaException ex = Assertions.assertThrows(AcaoNaoPermitidaException.class,() -> previsaoService.cadastrarPrevisoes(previsao).getIdPrevisao());
+
+    }
+
+    @Test
+    @DisplayName("Retorna previsao existente com qtd atualizada se ordem encontrada e pendente")
+    public void retornaPrevisaoExistenteComQtdAtualizadaSeOrdemEncontradaPendente(){
+        Item mockItem = new Item();
+        mockItem.setIdItem(100l);
+        previsao.setItem(mockItem);
+
+        Usuario mockUsuario = new Usuario();
+        mockUsuario.setIdUsuario(1l);
+        previsao.setUsuario(mockUsuario);
+
+        previsao.setDataPrevista(Instant.now().plus(5, ChronoUnit.DAYS));
+
+        List<Previsao> mockList = new ArrayList<>();
+        mockList.add(previsao);
+
+        float mockNovaQuantidade = 10;
+        Previsao mockPrev = new Previsao();
+        mockPrev.setDataPrevista(previsao.getDataPrevista());
+        mockPrev.setOrdem(previsao.getOrdem());
+        mockPrev.setItem(previsao.getItem());
+        mockPrev.setIdPrevisao(0);
+        mockPrev.setFinalizada(previsao.getFinalizada());
+        mockPrev.setQuantidadePrevista(mockNovaQuantidade);
+        mockPrev.setUsuario(previsao.getUsuario());
+
+        optPrevisoes = Optional.of(previsao);
+        Mockito.when(itemService.consultarItemById(mockItem.getIdItem())).thenReturn(mockItem);
+        Mockito.when(usuarioService.buscarUsuarioById(mockUsuario.getIdUsuario())).thenReturn(mockUsuario);
+        Mockito.when(previsaoRepository.save(previsao)).thenReturn(previsao);
+        Mockito.when(previsaoRepository.findById(previsao.getIdPrevisao())).thenReturn(optPrevisoes);
+        Mockito.when(previsaoRepository.findByOrdem(previsao.getOrdem())).thenReturn(mockList);
+
+        float retornoEsperado = previsao.getQuantidadePrevista() + mockNovaQuantidade;
+
+        Assertions.assertEquals(retornoEsperado,previsaoService.cadastrarPrevisoes(previsao).getQuantidadePrevista());
+
+    }
+
 
     //filtrarId (filtra ID correto)
     @Test

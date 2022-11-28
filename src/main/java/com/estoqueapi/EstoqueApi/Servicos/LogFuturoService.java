@@ -15,9 +15,9 @@ import java.util.stream.Stream;
 public class LogFuturoService {
 
     @Autowired
-    LogFuturoRepository repository;
+    private LogFuturoRepository repository;
     @Autowired
-    EstoqueService estoqueService;
+    private EstoqueService estoqueService;
 
 
     public List<LogFuturo> buscarLogIdItem(long idItem) {

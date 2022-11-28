@@ -2,7 +2,7 @@ package com.estoqueapi.EstoqueApi.Servicos;
 
 import com.estoqueapi.EstoqueApi.Entidades.Usuario;
 import com.estoqueapi.EstoqueApi.Enums.PerfilUsuario;
-import com.estoqueapi.EstoqueApi.Exceptions.AlteracaoNaoPermitidaException;
+import com.estoqueapi.EstoqueApi.Exceptions.AcaoNaoPermitidaException;
 import com.estoqueapi.EstoqueApi.Repositorios.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import java.util.List;
 public class UsuarioService {
 
     @Autowired
-    UsuarioRepository usuarioRepository;
+    private UsuarioRepository usuarioRepository;
 
     private boolean usuarioExiste(String email) {
         return usuarioRepository.findByEmail(email).orElse(null) != null;
@@ -36,7 +36,7 @@ public class UsuarioService {
     public Usuario salvar(Usuario usuario) {
         Usuario vUsuario = validarUsuario(usuario);
         if(vUsuario.getIdUsuario() == 0 && this.usuarioExiste(usuario.getEmail())){
-            throw new AlteracaoNaoPermitidaException("Email ja existe");
+            throw new AcaoNaoPermitidaException("Email ja existe");
         }
 
         return usuarioRepository.save(vUsuario);
@@ -45,13 +45,13 @@ public class UsuarioService {
     private Usuario validarUsuario(Usuario usuarios){
 
         if(usuarios.getNome().isEmpty() || usuarios.getNome().isBlank()){
-            throw new AlteracaoNaoPermitidaException("nome vazio");
+            throw new AcaoNaoPermitidaException("nome vazio");
         }else if(usuarios.getPerfil() == null){
-            throw new AlteracaoNaoPermitidaException("perfil vazio");
+            throw new AcaoNaoPermitidaException("perfil vazio");
         }else if(usuarios.getSenha().isEmpty() || usuarios.getSenha().isBlank()){
-            throw new AlteracaoNaoPermitidaException("senha vazia");
+            throw new AcaoNaoPermitidaException("senha vazia");
         }else if(usuarios.getSenha().isEmpty() || usuarios.getSenha().isBlank()){
-            throw new AlteracaoNaoPermitidaException("senha vazia");
+            throw new AcaoNaoPermitidaException("senha vazia");
         }else {
             return usuarios;
         }

@@ -34,6 +34,6 @@ public interface PrevisaoRepository extends CrudRepository<Previsao, Long> {
     @Query(value = "SELECT * FROM previsao WHERE DATE_FORMAT(data_prevista, '%Y %m %d') >= DATE_FORMAT(now(), '%Y %m %d') AND finalizada = :realizada", nativeQuery = true)
     List<Previsao> findByDataPrevistaMaiorIgualFinalizada(boolean realizada);
 
-    Optional<Previsao> findByOrdem(String ordem);
+    List<Previsao> findByOrdem(String ordem);
 }
 
