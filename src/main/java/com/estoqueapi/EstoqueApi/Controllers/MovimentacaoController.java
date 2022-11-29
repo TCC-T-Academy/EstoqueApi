@@ -6,6 +6,8 @@ import com.estoqueapi.EstoqueApi.Entidades.Movimentacao;
 import com.estoqueapi.EstoqueApi.Mapper.Mapper;
 import com.estoqueapi.EstoqueApi.Servicos.MovimentacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +40,11 @@ public class MovimentacaoController {
                         .stream()
                         .map(mapper::toMovimentacaoDto)
                         .collect(Collectors.toList()));
+    }
+
+    @GetMapping("/paginada")
+    public ResponseEntity<Page<MovimentacaoDTO>> consultaPaginada(Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK).body(movimentacaoService.consultaPaginada(pageable));
     }
 
     @GetMapping("/{idItem}")
