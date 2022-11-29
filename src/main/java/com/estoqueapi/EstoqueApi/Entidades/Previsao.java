@@ -97,4 +97,5 @@ public class Previsao {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
 }

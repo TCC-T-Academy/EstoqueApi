@@ -229,5 +229,6 @@ public class PrevisaoService {
         return previsaoRepository.consultarVencimentoHoje(date);
     }
 
+
 }
 

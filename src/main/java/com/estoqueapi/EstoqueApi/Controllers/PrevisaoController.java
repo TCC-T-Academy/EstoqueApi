@@ -94,4 +94,5 @@ public class PrevisaoController {
     public ResponseEntity<List<Previsao>> consultaVencimentoHoje(){
         return ResponseEntity.status(HttpStatus.OK).body(service.consultarVencimentoHoje());
     }
+
 }

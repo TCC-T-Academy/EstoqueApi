@@ -79,4 +79,5 @@ public class ReservaController {
         return ResponseEntity.status(HttpStatus.OK).body(service.consultarVencimentoHoje());
     }
 
+
 }

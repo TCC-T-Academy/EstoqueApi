@@ -30,4 +30,5 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     @Query(value = "SELECT * FROM reserva r WHERE data_prevista = ?1", nativeQuery = true)
     List<Reserva> consultarVencimentoHoje(String date);
 
+
 }

@@ -42,5 +42,6 @@ public interface PrevisaoRepository extends CrudRepository<Previsao, Long> {
     List<Previsao> consultarVencimentoHoje(String date);
 
     Page<Previsao> findAll(Pageable pageable);
+    
 }
 

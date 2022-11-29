@@ -196,4 +196,5 @@ public class ReservaService {
         String date = (LocalDate.from(ConversorData.toLocalDateTime(Instant.now()))).toString();
         return reservaRepository.consultarVencimentoHoje(date);
     }
+
 }
