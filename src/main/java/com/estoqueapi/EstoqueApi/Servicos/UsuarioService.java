@@ -5,13 +5,16 @@ import com.estoqueapi.EstoqueApi.Enums.PerfilUsuario;
 import com.estoqueapi.EstoqueApi.Exceptions.AcaoNaoPermitidaException;
 import com.estoqueapi.EstoqueApi.Repositorios.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
-public class UsuarioService {
+public class UsuarioService implements UserDetailsService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -88,5 +91,11 @@ public class UsuarioService {
         vUsuario.setPerfil(PerfilUsuario.DESABILITADO);
 
         return this.salvar(vUsuario);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Usuario user = this.consultarByEmail(username);
+        return user;
     }
 }
