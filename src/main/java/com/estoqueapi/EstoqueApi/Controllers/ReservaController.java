@@ -66,4 +66,10 @@ public class ReservaController {
         service.excluir(idreserva);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/hoje")
+    public ResponseEntity<List<Reserva>> consultaVencimentoHoje(){
+        return ResponseEntity.status(HttpStatus.OK).body(service.consultarVencimentoHoje());
+    }
+
 }

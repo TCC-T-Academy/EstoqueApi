@@ -6,12 +6,15 @@ import com.estoqueapi.EstoqueApi.Entidades.Reserva;
 import com.estoqueapi.EstoqueApi.Entidades.Usuario;
 import com.estoqueapi.EstoqueApi.Exceptions.AcaoNaoPermitidaException;
 import com.estoqueapi.EstoqueApi.Repositorios.ReservaRepository;
+import com.estoqueapi.EstoqueApi.Utils.ConversorData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -70,7 +73,7 @@ public class ReservaService {
         reserva = this.validarReserva(reserva);
 
         //Validacão especifica
-        if(!reserva.getDataPrevista().isAfter(Instant.now())) {
+        if(reserva.getDataPrevista().isBefore(LocalDate.now())) {
             throw new AcaoNaoPermitidaException("Informe uma data maior que a atual");
         }
 
@@ -110,7 +113,7 @@ public class ReservaService {
 
         // Não deixa alterar se nova data é anterior a atual da reserva e anterior a now()
         if(reserva.getDataPrevista().isBefore(res.getDataPrevista())
-                && reserva.getDataPrevista().isBefore(Instant.now())){
+                && reserva.getDataPrevista().isBefore(LocalDate.now())){
             throw new AcaoNaoPermitidaException("Informe uma data maior que a atual");
         }
 
@@ -137,7 +140,7 @@ public class ReservaService {
         return reservaRepository.consultarPendentesByIdItem(idItem);
     }
 
-    /**Metodo para validacao de uma previsao.
+    /**Metodo para validacao de uma reserva.
      * @param reserva Reserva - Objeto para ser validado;
      * @return Reserva - Objeto validado
      * */
@@ -183,4 +186,8 @@ public class ReservaService {
         return nRes;
     }
 
+    public List<Reserva> consultarVencimentoHoje() {
+        String date = (LocalDate.from(ConversorData.toLocalDateTime(Instant.now()))).toString();
+        return reservaRepository.consultarVencimentoHoje(date);
+    }
 }
