@@ -2,6 +2,8 @@ package com.estoqueapi.EstoqueApi.Controllers;
 
 import com.estoqueapi.EstoqueApi.Servicos.PrevisaoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,11 @@ public class PrevisaoController {
     @GetMapping("")
     public Iterable<Previsao> listarPrevisoes(){
         return service.listarPrevisoes();
+    }
+
+    @GetMapping("/paginada")
+    public ResponseEntity<Page<Previsao>> consultaPaginada(Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK).body(service.consultaPaginada(pageable));
     }
 
     //Rota para cadastrar novas previsões *Verificar validações*
