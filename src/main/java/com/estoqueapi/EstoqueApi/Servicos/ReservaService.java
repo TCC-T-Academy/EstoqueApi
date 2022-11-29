@@ -8,6 +8,8 @@ import com.estoqueapi.EstoqueApi.Exceptions.AcaoNaoPermitidaException;
 import com.estoqueapi.EstoqueApi.Repositorios.ReservaRepository;
 import com.estoqueapi.EstoqueApi.Utils.ConversorData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -31,6 +33,10 @@ public class ReservaService {
 
     public List<Reserva> consultar(){
         return reservaRepository.findAllOrderByDesc();
+    }
+
+    public Page<Reserva> consultaPaginada(Pageable p){
+        return reservaRepository.findAll(p);
     }
 
     public Reserva consultarById(Long id){

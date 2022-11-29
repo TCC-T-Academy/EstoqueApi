@@ -10,6 +10,8 @@ import com.estoqueapi.EstoqueApi.Repositorios.PrevisaoRepository;
 import com.estoqueapi.EstoqueApi.Utils.ConversorData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -39,9 +41,15 @@ public class PrevisaoService {
     private UsuarioService usuarioService;
 
     // Listar todas as previsões cadastradas
-   public Iterable<Previsao> listarPrevisoes() {
+    public Iterable<Previsao> listarPrevisoes() {
         return previsaoRepository.findAll();
     }
+
+    public Page<Previsao> consultaPaginada(Pageable pageable){
+        Page<Previsao> previsoes = previsaoRepository.findAll(pageable);
+        return previsoes;
+    }
+
 
     // Filtrar previsões por id do item
     public List<Previsao> consultarByIdItem(Long idItem) {
