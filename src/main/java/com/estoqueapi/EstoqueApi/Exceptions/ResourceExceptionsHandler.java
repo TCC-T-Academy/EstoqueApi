@@ -6,7 +6,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import javax.naming.directory.AttributeModificationException;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
@@ -14,6 +13,8 @@ import java.time.Instant;
 @ControllerAdvice
 public class ResourceExceptionsHandler {
 
+    /** Exception para recursos nao encontrados.
+     * */
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<StandardError> entityNotFound(EntityNotFoundException e,
                                                         HttpServletRequest req){
@@ -77,13 +78,13 @@ public class ResourceExceptionsHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
 
-    @ExceptionHandler(AlteracaoNaoPermitidaException.class)
-    public ResponseEntity<StandardError> itemForaDeEstoque(AlteracaoNaoPermitidaException e,
+    @ExceptionHandler(AcaoNaoPermitidaException.class)
+    public ResponseEntity<StandardError> itemForaDeEstoque(AcaoNaoPermitidaException e,
                                                            HttpServletRequest req){
         StandardError err = new StandardError();
         err.setTimeStamp(Instant.now());
         err.setStatus(HttpStatus.BAD_REQUEST.value());
-        err.setError("Modificacao nao permitida");
+        err.setError("Ação não permitida");
         err.setMessage(e.getMessage());
         err.setPath(req.getRequestURI());
 
