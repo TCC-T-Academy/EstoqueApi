@@ -2,6 +2,7 @@ package com.estoqueapi.EstoqueApi.Entidades;
 
 import java.sql.Date;
 import java.time.Instant;
+import java.time.LocalDate;
 
 import javax.persistence.*;
 
@@ -20,15 +21,15 @@ public class Previsao {
 
     private float quantidadePrevista;
 
-    @Column(columnDefinition = "datetime")
-    private Instant dataPrevista;
+    @Column(columnDefinition = "date")
+    private LocalDate dataPrevista;
     private String ordem;
     private boolean finalizada = false;
 
     public Previsao() {
     }
 
-    public Previsao(Item item, Usuario usuario, float quantidadePrevista, Instant dataPrevista, String ordem, boolean finalizada) {
+    public Previsao(Item item, Usuario usuario, float quantidadePrevista, LocalDate dataPrevista, String ordem, boolean finalizada) {
         this.item = item;
         this.usuario = usuario;
         this.quantidadePrevista = quantidadePrevista;
@@ -53,11 +54,11 @@ public class Previsao {
         this.quantidadePrevista = quantidadePrevista;
     }
 
-    public Instant getDataPrevista() {
+    public LocalDate getDataPrevista() {
         return dataPrevista;
     }
 
-    public void setDataPrevista(Instant dataPrevista) {
+    public void setDataPrevista(LocalDate dataPrevista) {
         this.dataPrevista = dataPrevista;
     }
 
@@ -96,4 +97,5 @@ public class Previsao {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
 }

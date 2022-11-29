@@ -1,5 +1,6 @@
 package com.estoqueapi.EstoqueApi.Controllers;
 
+import com.estoqueapi.EstoqueApi.Entidades.Reserva;
 import com.estoqueapi.EstoqueApi.Servicos.PrevisaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -89,4 +90,9 @@ public class PrevisaoController {
         service.excluirPrevisao(idPrevisao);
         return ResponseEntity.status(HttpStatus.OK).body("Removido com sucesso");
     }
+    @GetMapping("/hoje")
+    public ResponseEntity<List<Previsao>> consultaVencimentoHoje(){
+        return ResponseEntity.status(HttpStatus.OK).body(service.consultarVencimentoHoje());
+    }
+
 }

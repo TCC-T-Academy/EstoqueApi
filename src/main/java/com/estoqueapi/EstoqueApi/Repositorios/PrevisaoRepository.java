@@ -38,6 +38,10 @@ public interface PrevisaoRepository extends CrudRepository<Previsao, Long> {
 
     List<Previsao> findByOrdem(String ordem);
 
+    @Query(value = "SELECT * FROM previsao WHERE data_prevista = ?1", nativeQuery = true)
+    List<Previsao> consultarVencimentoHoje(String date);
+
     Page<Previsao> findAll(Pageable pageable);
+    
 }
 
