@@ -1,12 +1,14 @@
 package com.estoqueapi.EstoqueApi.Servicos;
 
+import com.estoqueapi.EstoqueApi.Dtos.MovimentacaoDTO;
 import com.estoqueapi.EstoqueApi.Entidades.Movimentacao;
 import com.estoqueapi.EstoqueApi.Entidades.Previsao;
 import com.estoqueapi.EstoqueApi.Entidades.Reserva;
-import com.estoqueapi.EstoqueApi.Repositorios.EstoqueRepository;
-import com.estoqueapi.EstoqueApi.Repositorios.ItemRepository;
+import com.estoqueapi.EstoqueApi.Mapper.Mapper;
 import com.estoqueapi.EstoqueApi.Repositorios.MovimentacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -43,6 +45,13 @@ public class MovimentacaoService {
      * */
     public List<Movimentacao> consultar(){
          return movimentacaoRepository.findAllOrderByDesc();
+    }
+
+    public Page<MovimentacaoDTO> consultaPaginada(Pageable pageable) {
+        Mapper mapper = new Mapper();
+        Page<Movimentacao> pageMov = movimentacaoRepository.findAll(pageable);
+        Page<MovimentacaoDTO> pageMovDTO = pageMov.map(mov -> mapper.toMovimentacaoDto(mov));
+        return pageMovDTO;
     }
 
     public List<Movimentacao> salvarVarios(List<Movimentacao> lista){
