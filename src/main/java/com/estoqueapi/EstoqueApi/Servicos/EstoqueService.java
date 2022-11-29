@@ -1,9 +1,9 @@
 package com.estoqueapi.EstoqueApi.Servicos;
 
 import com.estoqueapi.EstoqueApi.Entidades.Estoque;
-import com.estoqueapi.EstoqueApi.Entidades.Itens;
-import com.estoqueapi.EstoqueApi.Exceptions.AlteracaoNaoPermitidaException;
-import com.estoqueapi.EstoqueApi.Exceptions.ItemForaEstoqueException;
+import com.estoqueapi.EstoqueApi.Entidades.Item;
+import com.estoqueapi.EstoqueApi.Exceptions.AcaoNaoPermitidaException;
+import com.estoqueapi.EstoqueApi.Exceptions.MovimentacaoInvalidaException;
 import com.estoqueapi.EstoqueApi.Repositorios.EstoqueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,21 +18,21 @@ public class EstoqueService {
     private EstoqueRepository estoqueRepository;
 
     @Autowired
-    private ItensService itensService;
+    private ItemService itemService;
 
     public List<Estoque> listarEstoque(){
         return estoqueRepository.findAll();
     }
 
     public Estoque buscarEstoqueIdItem(long idItem){
-        Estoque estoque = estoqueRepository.findByIdItem(idItem).orElseThrow(()-> new EntityNotFoundException("Item nao encontrado no estoque"));
+        Estoque estoque = estoqueRepository.findByIdItem(idItem).orElseThrow(()-> new EntityNotFoundException("Item nao encontrado no estoque."));
         return estoque;
     }
 
     public Estoque adicionarEstoque(long idItem, float qtd) {
         Estoque estoque = this.buscarEstoqueIdItem(idItem);
         if(qtd <= 0){
-            throw new ItemForaEstoqueException("Quantidade Invalida");
+            throw new MovimentacaoInvalidaException("Quantidade Invalida");
         }
         estoque.setEstoqueReal(estoque.getEstoqueReal() + qtd);
         return estoqueRepository.save(estoque);
@@ -41,9 +41,9 @@ public class EstoqueService {
     public Estoque subtrairEstoque(long idItem, float qtd) {
         Estoque estoque = this.buscarEstoqueIdItem(idItem);
         if(qtd <= 0){
-            throw new ItemForaEstoqueException("Quantidade Invalida");
+            throw new MovimentacaoInvalidaException("Quantidade Invalida");
         }else if(qtd > estoque.getEstoqueReal()){
-            throw new ItemForaEstoqueException("Quantidade Indisponível");
+            throw new MovimentacaoInvalidaException("Quantidade Indisponível");
         }
 
         estoque.setEstoqueReal(estoque.getEstoqueReal() - qtd);
@@ -70,7 +70,7 @@ public class EstoqueService {
             estoqueAlterado.setLocalizacao(estoque.getLocalizacao());
         }
         if(estoque.getItem().getIdItem() > 0){
-            estoqueAlterado.setItem(itensService.consultarItemById(estoque.getItem().getIdItem()));
+            estoqueAlterado.setItem(itemService.consultarItemById(estoque.getItem().getIdItem()));
         }
 
         return this.salvar(estoqueAlterado);
@@ -78,13 +78,17 @@ public class EstoqueService {
     }
 
     public Estoque validarEstoque(Estoque e){
-        Itens item = itensService.consultarItemById(e.getItem().getIdItem());
+        Item item = itemService.consultarItemById(e.getItem().getIdItem());
         e.setItem(item);
         if(e.getEstoqueReal() <= 0){
-            throw new AlteracaoNaoPermitidaException("Estoque menor ou igual a zero");
+            throw new AcaoNaoPermitidaException("Estoque menor ou igual a zero");
         }else if(e.getLocalizacao().isEmpty() || e.getLocalizacao().isBlank()){
-            throw new AlteracaoNaoPermitidaException("Localizacao Invalida");
+            throw new AcaoNaoPermitidaException("Localizacao Invalida");
         }
         return e;
+    }
+
+    public List<Estoque> consultarEstoqueAbaixoLimite (){
+        return estoqueRepository.findItensAbaixoEstoque();
     }
 }

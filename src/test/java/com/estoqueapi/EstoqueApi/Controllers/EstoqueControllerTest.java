@@ -1,7 +1,7 @@
 package com.estoqueapi.EstoqueApi.Controllers;
 
 import com.estoqueapi.EstoqueApi.Entidades.Estoque;
-import com.estoqueapi.EstoqueApi.Entidades.Itens;
+import com.estoqueapi.EstoqueApi.Entidades.Item;
 import com.estoqueapi.EstoqueApi.Servicos.EstoqueService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class EstoqueControllerTest {
 
-    private Itens item;
+    private Item item;
     private Long idItemExistente;
     private Long idItemNaoExistente;
     private List<Estoque> lista;
@@ -59,7 +59,7 @@ public class EstoqueControllerTest {
         idItemNaoExistente = 2000l;
         lista = new ArrayList<>();
 
-        item = new Itens();
+        item = new Item();
         item.setIdItem(idItemExistente);
         item.setDescricao("Item teste para teste");
         item.setFamilia("Teste");
@@ -82,12 +82,12 @@ public class EstoqueControllerTest {
     }
 
     @Test
-    public void retornaFoundQuandoConsultaEstoque() throws Exception {
+    public void retornaOkQuandoConsultaEstoque() throws Exception {
 
         ResultActions resultado =
                 mockMvc.perform(get("/estoque").accept(MediaType.APPLICATION_JSON));
 
-        resultado.andExpect(status().isFound());
+        resultado.andExpect(status().isOk());
         resultado.andExpect(jsonPath("$.size()").value(lista.size()));
         resultado.andExpect(jsonPath("$[0].idEstoque").value(10));
 //        resultado.andDo(print());
@@ -98,7 +98,7 @@ public class EstoqueControllerTest {
         ResultActions resultado =
                 mockMvc.perform(get("/estoque/{idItem}", idItemExistente).accept(MediaType.APPLICATION_JSON));
 
-        resultado.andExpect(status().isFound());
+        resultado.andExpect(status().isOk());
         resultado.andExpect(jsonPath("$.idEstoque").value(10));
 //        resultado.andDo(print());
     }
