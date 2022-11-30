@@ -1,6 +1,11 @@
 package com.estoqueapi.EstoqueApi.Controllers;
 
+import com.estoqueapi.EstoqueApi.Dtos.PrevisaoDTO;
+import com.estoqueapi.EstoqueApi.Dtos.PrevisaoNovaDTO;
+import com.estoqueapi.EstoqueApi.Dtos.ReservaDTO;
+import com.estoqueapi.EstoqueApi.Dtos.ReservaNovaDTO;
 import com.estoqueapi.EstoqueApi.Entidades.Reserva;
+import com.estoqueapi.EstoqueApi.Mapper.Mapper;
 import com.estoqueapi.EstoqueApi.Servicos.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +24,10 @@ public class ReservaController {
 
     @Autowired
     ReservaService service;
+
+    @Autowired
+    private Mapper mapper;
+
     @GetMapping
     public ResponseEntity<List<Reserva>> consultarReservas(){
         List<Reserva> lista = service.consultar();
@@ -55,10 +64,11 @@ public class ReservaController {
         return ResponseEntity.status(HttpStatus.OK).body(listar);
     }
 
-    @PostMapping
-    public ResponseEntity<Reserva> salvar(@Valid @RequestBody Reserva reserva){
-        Reserva res = service.salvar(reserva);
-        return ResponseEntity.status(HttpStatus.CREATED).body(res);
+    // Salvar reserva nova
+    @PostMapping("")
+    public ResponseEntity<ReservaDTO> salvar(@Valid @RequestBody ReservaNovaDTO reservaNovaDTO){
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(mapper.toReservaDTO(service.salvar(mapper.toReserva(reservaNovaDTO))));
     }
 
     @PutMapping("/{idreserva}")

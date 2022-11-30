@@ -1,32 +1,24 @@
-package com.estoqueapi.EstoqueApi.Entidades;
+package com.estoqueapi.EstoqueApi.Dtos;
 
-import javax.persistence.*;
-import java.time.Instant;
+import com.estoqueapi.EstoqueApi.Entidades.Item;
+import com.estoqueapi.EstoqueApi.Entidades.Usuario;
+
 import java.time.LocalDate;
-import java.util.Date;
 
-@Entity
-public class Reserva {
+public class ReservaDTO {
 
-    @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY)
     private long idReserva;
     private boolean finalizada = false;
     private float quantidadeReserva;
-    @Column(columnDefinition = "date")
     private LocalDate dataPrevista;
     private String ordem;
-
-    @ManyToOne
-    private Usuario usuario;
-
-    @ManyToOne
+    private UsuarioPublicoDTO usuario;
     private Item item;
 
-    public Reserva() {
+    public ReservaDTO() {
     }
 
-    public Reserva(long idReserva, boolean finalizada, float quantidadeReserva, LocalDate dataPrevista, String ordem, Usuario usuario, Item item) {
+    public ReservaDTO(long idReserva, boolean finalizada, float quantidadeReserva, LocalDate dataPrevista, String ordem, UsuarioPublicoDTO usuario, Item item) {
         this.idReserva = idReserva;
         this.finalizada = finalizada;
         this.quantidadeReserva = quantidadeReserva;
@@ -76,11 +68,11 @@ public class Reserva {
         this.ordem = ordem;
     }
 
-    public Usuario getUsuario() {
+    public UsuarioPublicoDTO getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Usuario usuario) {
+    public void setUsuario(UsuarioPublicoDTO usuario) {
         this.usuario = usuario;
     }
 
@@ -91,5 +83,4 @@ public class Reserva {
     public void setItem(Item item) {
         this.item = item;
     }
-
 }

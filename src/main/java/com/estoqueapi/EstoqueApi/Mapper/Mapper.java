@@ -4,6 +4,7 @@ import com.estoqueapi.EstoqueApi.Dtos.*;
 import com.estoqueapi.EstoqueApi.Entidades.*;
 import com.estoqueapi.EstoqueApi.Enums.PerfilUsuario;
 import com.estoqueapi.EstoqueApi.Utils.ConversorData;
+import net.bytebuddy.asm.Advice;
 import org.aspectj.apache.bcel.generic.RET;
 import org.hibernate.loader.plan.spi.Return;
 import org.springframework.stereotype.Component;
@@ -124,5 +125,55 @@ public class Mapper {
     }
 
 
+    public ReservaDTO toReservaDTO(Reserva reserva) {
+
+        long idReserva = reserva.getIdReserva();
+        boolean finalizada = reserva.isFinalizada();
+        float quantidadeReserva = reserva.getQuantidadeReserva();
+        LocalDate dataPrevista = reserva.getDataPrevista();
+        String ordem = reserva.getOrdem();
+        Usuario usuario = reserva.getUsuario();
+        Item item = reserva.getItem();
+
+        return new ReservaDTO(idReserva,finalizada,quantidadeReserva,dataPrevista, ordem,this.toUsuarioPublicoDTO(usuario),item);
+    }
+
+    public Reserva toReserva(ReservaDTO reservaDTO) {
+        return new Reserva(
+                reservaDTO.getIdReserva(),
+                reservaDTO.isFinalizada(),
+                reservaDTO.getQuantidadeReserva(),
+                reservaDTO.getDataPrevista(),
+                reservaDTO.getOrdem(),
+                this.toUsuario(reservaDTO.getUsuario()),
+                reservaDTO.getItem());
+    }
+
+    public Reserva toReserva(ReservaNovaDTO reservaNovaDTO){
+        Usuario u = new Usuario();
+        u.setIdUsuario(reservaNovaDTO.getIdUsuario());
+
+        Item i = new Item();
+        i.setIdItem(reservaNovaDTO.getIdItem());
+
+        Reserva r = new Reserva();
+        r.setQuantidadeReserva(reservaNovaDTO.getQuantidadeReserva());
+        r.setDataPrevista(reservaNovaDTO.getDataPrevista());
+        r.setOrdem(reservaNovaDTO.getOrdem());
+        r.setFinalizada(reservaNovaDTO.isFinalizada());
+        r.setUsuario(u);
+        r.setItem(i);
+
+        return r;
+    }
+
+    public ReservaNovaDTO reservaNovaDTO(Reserva reserva){
+        return new ReservaNovaDTO(reserva.isFinalizada(),
+                reserva.getQuantidadeReserva(),
+                reserva.getDataPrevista(),
+                reserva.getOrdem(),
+                reserva.getUsuario().getIdUsuario(),
+                reserva.getItem().getIdItem());
+    }
 
 }
