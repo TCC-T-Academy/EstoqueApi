@@ -40,7 +40,7 @@ public class PrevisaoController {
         return ResponseEntity.status(HttpStatus.OK).body(service.consultaPaginada(pageable));
     }
 
-    
+
     // Rota para cadastrar nova previsão
     @PostMapping("")
     public ResponseEntity<PrevisaoDTO> cadastrarPrevisao(@RequestBody PrevisaoNovaDTO previsaoNovaDTO){

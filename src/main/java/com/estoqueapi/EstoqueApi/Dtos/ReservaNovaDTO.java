@@ -1,49 +1,34 @@
-package com.estoqueapi.EstoqueApi.Entidades;
+package com.estoqueapi.EstoqueApi.Dtos;
 
-import javax.persistence.*;
-import java.time.Instant;
+import com.estoqueapi.EstoqueApi.Entidades.Item;
+import com.estoqueapi.EstoqueApi.Entidades.Usuario;
+
 import java.time.LocalDate;
-import java.util.Date;
 
-@Entity
-public class Reserva {
+public class ReservaNovaDTO {
 
-    @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY)
-    private long idReserva;
     private boolean finalizada = false;
     private float quantidadeReserva;
-    @Column(columnDefinition = "date")
     private LocalDate dataPrevista;
     private String ordem;
+    private long idUsuario;
+    private long idItem;
 
-    @ManyToOne
-    private Usuario usuario;
-
-    @ManyToOne
-    private Item item;
-
-    public Reserva() {
+    // Construtor padrão
+    public ReservaNovaDTO() {
     }
 
-    public Reserva(long idReserva, boolean finalizada, float quantidadeReserva, LocalDate dataPrevista, String ordem, Usuario usuario, Item item) {
-        this.idReserva = idReserva;
+    // Construtor completo
+    public ReservaNovaDTO(boolean finalizada, float quantidadeReserva, LocalDate dataPrevista, String ordem, long idUsuario, long idItem) {
         this.finalizada = finalizada;
         this.quantidadeReserva = quantidadeReserva;
         this.dataPrevista = dataPrevista;
         this.ordem = ordem;
-        this.usuario = usuario;
-        this.item = item;
+        this.idUsuario = idUsuario;
+        this.idItem = idItem;
     }
 
-    public long getIdReserva() {
-        return idReserva;
-    }
-
-    public void setIdReserva(long idReserva) {
-        this.idReserva = idReserva;
-    }
-
+    // Getter e setters
     public boolean isFinalizada() {
         return finalizada;
     }
@@ -76,20 +61,19 @@ public class Reserva {
         this.ordem = ordem;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public long getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setIdUsuario(long idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
-    public Item getItem() {
-        return item;
+    public long getIdItem() {
+        return idItem;
     }
 
-    public void setItem(Item item) {
-        this.item = item;
+    public void setIdItem(long idItem) {
+        this.idItem = idItem;
     }
-
 }
