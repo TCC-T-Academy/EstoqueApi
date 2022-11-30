@@ -2,6 +2,7 @@ package com.estoqueapi.EstoqueApi.Servicos;
 
 import com.estoqueapi.EstoqueApi.Entidades.Item;
 import com.estoqueapi.EstoqueApi.Entidades.Previsao;
+import com.estoqueapi.EstoqueApi.Entidades.Reserva;
 import com.estoqueapi.EstoqueApi.Entidades.Usuario;
 import com.estoqueapi.EstoqueApi.Exceptions.AcaoNaoPermitidaException;
 import com.estoqueapi.EstoqueApi.Repositorios.ItemRepository;
@@ -9,11 +10,14 @@ import com.estoqueapi.EstoqueApi.Repositorios.PrevisaoRepository;
 import com.estoqueapi.EstoqueApi.Utils.ConversorData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -37,9 +41,15 @@ public class PrevisaoService {
     private UsuarioService usuarioService;
 
     // Listar todas as previsões cadastradas
-   public Iterable<Previsao> listarPrevisoes() {
+    public Iterable<Previsao> listarPrevisoes() {
         return previsaoRepository.findAll();
     }
+
+    public Page<Previsao> consultaPaginada(Pageable pageable){
+        Page<Previsao> previsoes = previsaoRepository.findAll(pageable);
+        return previsoes;
+    }
+
 
     // Filtrar previsões por id do item
     public List<Previsao> consultarByIdItem(Long idItem) {
@@ -57,7 +67,7 @@ public class PrevisaoService {
         pr = this.validarPrevisao(pr);
 
         //Validacão especifica
-        if(!pr.getDataPrevista().isAfter(Instant.now())) {
+        if(pr.getDataPrevista().isBefore(LocalDate.now())) {
             throw new AcaoNaoPermitidaException("Informe uma data maior que a atual");
         }
 
@@ -132,7 +142,7 @@ public class PrevisaoService {
 
         // Não deixa alterar se nova data é anterior a atual da previsao e anterior a now()
         if(previsao.getDataPrevista().isBefore(prev.getDataPrevista())
-                && previsao.getDataPrevista().isBefore(Instant.now())){
+                && previsao.getDataPrevista().isBefore(LocalDate.now())){
             throw new AcaoNaoPermitidaException("Informe uma data maior que a atual");
         }
 
@@ -213,6 +223,12 @@ public class PrevisaoService {
 
         return nPrev;
     }
+
+    public List<Previsao> consultarVencimentoHoje() {
+        String date = (LocalDate.from(ConversorData.toLocalDateTime(Instant.now()))).toString();
+        return previsaoRepository.consultarVencimentoHoje(date);
+    }
+
 
 }
 

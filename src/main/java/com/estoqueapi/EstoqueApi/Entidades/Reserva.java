@@ -2,6 +2,7 @@ package com.estoqueapi.EstoqueApi.Entidades;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -12,8 +13,8 @@ public class Reserva {
     private long idReserva;
     private boolean finalizada = false;
     private float quantidadeReserva;
-    @Column(columnDefinition = "datetime")
-    private Instant dataPrevista;
+    @Column(columnDefinition = "date")
+    private LocalDate dataPrevista;
     private String ordem;
 
     @ManyToOne
@@ -46,11 +47,11 @@ public class Reserva {
         this.quantidadeReserva = quantidadeReserva;
     }
 
-    public Instant getDataPrevista() {
+    public LocalDate getDataPrevista() {
         return dataPrevista;
     }
 
-    public void setDataPrevista(Instant dataPrevista) {
+    public void setDataPrevista(LocalDate dataPrevista) {
         this.dataPrevista = dataPrevista;
     }
 
@@ -77,4 +78,5 @@ public class Reserva {
     public void setItem(Item item) {
         this.item = item;
     }
+
 }

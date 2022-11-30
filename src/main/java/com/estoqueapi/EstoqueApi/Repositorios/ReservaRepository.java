@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,4 +26,9 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     @Query(value = "select * from reserva where finalizada = ?1 order by data_prevista asc;", nativeQuery = true)
     List<Reserva> findByDataPrevistaAVencer(Boolean finalizada);
     List<Reserva> findByOrdem(String ordem);
+
+    @Query(value = "SELECT * FROM reserva r WHERE data_prevista = ?1", nativeQuery = true)
+    List<Reserva> consultarVencimentoHoje(String date);
+
+
 }
