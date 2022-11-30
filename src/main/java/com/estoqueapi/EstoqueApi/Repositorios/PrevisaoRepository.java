@@ -1,5 +1,7 @@
 package com.estoqueapi.EstoqueApi.Repositorios;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -35,5 +37,11 @@ public interface PrevisaoRepository extends CrudRepository<Previsao, Long> {
     List<Previsao> findByDataPrevistaMaiorIgualFinalizada(boolean realizada);
 
     List<Previsao> findByOrdem(String ordem);
+
+    @Query(value = "SELECT * FROM previsao WHERE data_prevista = ?1", nativeQuery = true)
+    List<Previsao> consultarVencimentoHoje(String date);
+
+    Page<Previsao> findAll(Pageable pageable);
+    
 }
 

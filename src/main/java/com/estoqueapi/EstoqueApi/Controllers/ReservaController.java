@@ -3,6 +3,8 @@ package com.estoqueapi.EstoqueApi.Controllers;
 import com.estoqueapi.EstoqueApi.Entidades.Reserva;
 import com.estoqueapi.EstoqueApi.Servicos.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,10 +25,15 @@ public class ReservaController {
         return ResponseEntity.status(HttpStatus.OK).body(lista);
     }
 
-    /*@GetMapping("/{idreserva}")
-    public ResponseEntity<Reservas> consultarById(@PathVariable("idreserva") Long idreserva){
-        return  ResponseEntity.ok().body(service.consultarById(idreserva));
-    }*/
+    @GetMapping("/paginada")
+    public ResponseEntity<Page<Reserva>> consultaPaginada(Pageable p){
+        return ResponseEntity.status(HttpStatus.OK).body(service.consultaPaginada(p));
+    }
+
+//    @GetMapping("/{idreserva}")
+//    public ResponseEntity<Reserva> consultarById(@PathVariable("idreserva") Long idreserva){
+//        return  ResponseEntity.ok().body(service.consultarById(idreserva));
+//    }
 
     @GetMapping("/{iditem}")
     public ResponseEntity<List<Reserva>> consultarReservasByIdItem(@PathVariable("iditem") Long iditem){
@@ -66,4 +73,11 @@ public class ReservaController {
         service.excluir(idreserva);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/hoje")
+    public ResponseEntity<List<Reserva>> consultaVencimentoHoje(){
+        return ResponseEntity.status(HttpStatus.OK).body(service.consultarVencimentoHoje());
+    }
+
+
 }
