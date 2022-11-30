@@ -1,6 +1,7 @@
 package com.estoqueapi.EstoqueApi.Entidades;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 public class Estoque {
@@ -10,6 +11,9 @@ public class Estoque {
     private long idEstoque;
     private String localizacao;
     private Float estoqueReal;
+    private Float estoqueFuturo;
+    private LocalDate dataFutura;
+
 
     @ManyToOne
     private Item item;
@@ -53,5 +57,21 @@ public class Estoque {
 
     public void setItem(Item item) {
         this.item = item;
+    }
+
+    public Float getEstoqueFuturo() {
+        return estoqueFuturo;
+    }
+
+    public void setEstoqueFuturo(Float estoqueFuturo) {
+        this.estoqueFuturo = estoqueFuturo;
+    }
+
+    public LocalDate getDataFutura() {
+        return dataFutura;
+    }
+
+    public void setDataFutura(LocalDate dataFutura) {
+        this.dataFutura = dataFutura;
     }
 }
