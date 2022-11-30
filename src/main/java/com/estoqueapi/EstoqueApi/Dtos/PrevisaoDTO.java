@@ -1,33 +1,29 @@
-package com.estoqueapi.EstoqueApi.Entidades;
+package com.estoqueapi.EstoqueApi.Dtos;
 
+import com.estoqueapi.EstoqueApi.Entidades.Item;
+import com.estoqueapi.EstoqueApi.Entidades.Usuario;
+
+import javax.persistence.Column;
+import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 
-import javax.persistence.*;
+public class PrevisaoDTO {
 
-@Entity
-public class Previsao {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idPrevisao;
-
-    @ManyToOne
     private Item item;
-
-    @ManyToOne
-    private Usuario usuario;
-
+    private UsuarioPublicoDTO usuario;
     private float quantidadePrevista;
-
-    @Column(columnDefinition = "date")
     private LocalDate dataPrevista;
     private String ordem;
     private boolean finalizada = false;
 
-    public Previsao() {
+    // Construtor padrão
+    public PrevisaoDTO() {
     }
 
-    public Previsao(long idPrevisao, Item item, Usuario usuario, float quantidadePrevista, LocalDate dataPrevista, String ordem, boolean finalizada) {
+    // Construtor
+    public PrevisaoDTO(long idPrevisao, Item item, UsuarioPublicoDTO usuario, float quantidadePrevista, LocalDate dataPrevista, String ordem, boolean finalizada) {
+        this.idPrevisao = idPrevisao;
         this.item = item;
         this.usuario = usuario;
         this.quantidadePrevista = quantidadePrevista;
@@ -36,16 +32,33 @@ public class Previsao {
         this.finalizada = finalizada;
     }
 
+    // Getter e setters
     public long getIdPrevisao() {
-        return this.idPrevisao;
+        return idPrevisao;
     }
 
     public void setIdPrevisao(long idPrevisao) {
         this.idPrevisao = idPrevisao;
     }
 
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    public UsuarioPublicoDTO getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(UsuarioPublicoDTO usuario) {
+        this.usuario = usuario;
+    }
+
     public float getQuantidadePrevista() {
-        return this.quantidadePrevista;
+        return quantidadePrevista;
     }
 
     public void setQuantidadePrevista(float quantidadePrevista) {
@@ -61,7 +74,7 @@ public class Previsao {
     }
 
     public String getOrdem() {
-        return this.ordem;
+        return ordem;
     }
 
     public void setOrdem(String ordem) {
@@ -69,31 +82,10 @@ public class Previsao {
     }
 
     public boolean isFinalizada() {
-        return this.finalizada;
-    }
-
-    public boolean getFinalizada() {
-        return this.finalizada;
+        return finalizada;
     }
 
     public void setFinalizada(boolean finalizada) {
         this.finalizada = finalizada;
     }
-
-    public Item getItem() {
-        return item;
-    }
-
-    public void setItem(Item item) {
-        this.item = item;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
 }
