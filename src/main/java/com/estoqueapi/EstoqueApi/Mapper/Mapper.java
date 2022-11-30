@@ -1,8 +1,6 @@
 package com.estoqueapi.EstoqueApi.Mapper;
 
-import com.estoqueapi.EstoqueApi.Dtos.MovimentacaoDTO;
-import com.estoqueapi.EstoqueApi.Dtos.MovimentacaoNovaDTO;
-import com.estoqueapi.EstoqueApi.Dtos.UsuarioPublicoDTO;
+import com.estoqueapi.EstoqueApi.Dtos.*;
 import com.estoqueapi.EstoqueApi.Entidades.*;
 import com.estoqueapi.EstoqueApi.Enums.PerfilUsuario;
 import com.estoqueapi.EstoqueApi.Utils.ConversorData;
@@ -10,6 +8,7 @@ import org.aspectj.apache.bcel.generic.RET;
 import org.hibernate.loader.plan.spi.Return;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -72,5 +71,58 @@ public class Mapper {
                 ,movimentacao.getItem().getIdItem()
                 , movimentacao.getUsuario().getIdUsuario());
     }
+
+    public PrevisaoDTO toPrevisaoDTO (Previsao previsao) {
+
+        long idPrevisao = previsao.getIdPrevisao();
+        String ordem = previsao.getOrdem();
+        Usuario usuario = previsao.getUsuario();
+        Item item = previsao.getItem();
+        float quantidadePrevista = previsao.getQuantidadePrevista();
+        LocalDate dataPrevista = previsao.getDataPrevista();
+        boolean finalizada = previsao.getFinalizada();
+
+        return new PrevisaoDTO(idPrevisao,item,this.toUsuarioPublicoDTO(usuario),quantidadePrevista,dataPrevista,ordem,finalizada);
+    }
+
+    public Previsao toPrevisao(PrevisaoDTO previsaoDTO) {
+        return new Previsao(
+                previsaoDTO.getIdPrevisao(),
+                previsaoDTO.getItem(),
+                this.toUsuario(previsaoDTO.getUsuario()),
+                previsaoDTO.getQuantidadePrevista(),
+                previsaoDTO.getDataPrevista(),
+                previsaoDTO.getOrdem(),
+                previsaoDTO.isFinalizada());
+    }
+
+    public Previsao toPrevisao(PrevisaoNovaDTO previsaoNovaDTO){
+        Usuario u = new Usuario();
+        u.setIdUsuario(previsaoNovaDTO.getIdUsuario());
+
+        Item i = new Item();
+        i.setIdItem(previsaoNovaDTO.getIdItem());
+
+        Previsao p = new Previsao();
+        p.setQuantidadePrevista(previsaoNovaDTO.getQuantidadePrevisao());
+        p.setDataPrevista(previsaoNovaDTO.getDataPrevisao());
+        p.setOrdem(previsaoNovaDTO.getOrdem());
+        p.setFinalizada(previsaoNovaDTO.isFinalizada());
+        p.setUsuario(u);
+        p.setItem(i);
+
+        return p;
+    }
+
+    public PrevisaoNovaDTO previsaoNovaDTO(Previsao previsao){
+        return new PrevisaoNovaDTO(previsao.getOrdem(),
+                previsao.getQuantidadePrevista(),
+                previsao.getItem().getIdItem(),
+                previsao.getUsuario().getIdUsuario(),
+                previsao.getDataPrevista(),
+                previsao.getFinalizada());
+    }
+
+
 
 }
