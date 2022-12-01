@@ -40,6 +40,9 @@ public class PrevisaoService {
     @Autowired
     private UsuarioService usuarioService;
 
+    @Autowired
+    private EstoqueService estoqueService;
+
     // Listar todas as previsões cadastradas
     public Iterable<Previsao> listarPrevisoes() {
         return previsaoRepository.findAll();
@@ -86,6 +89,8 @@ public class PrevisaoService {
                 return this.alterarPrevisao(p.getIdPrevisao(),p);
             }
         }
+
+        //estoqueService.alterarEstoqueVirtual(pr);
 
         return previsaoRepository.save(pr);
     }
@@ -200,6 +205,9 @@ public class PrevisaoService {
         //Vai lancar excecao se o item for invalido
         Item i = itemService.consultarItemById(previsao.getItem().getIdItem());
         Usuario u = usuarioService.buscarUsuarioById(previsao.getUsuario().getIdUsuario());
+
+        previsao.setItem(i);
+        previsao.setUsuario(u);
 
         return previsao;
     }

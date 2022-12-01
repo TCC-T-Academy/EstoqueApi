@@ -105,8 +105,8 @@ public class Mapper {
         i.setIdItem(previsaoNovaDTO.getIdItem());
 
         Previsao p = new Previsao();
-        p.setQuantidadePrevista(previsaoNovaDTO.getQuantidadePrevisao());
-        p.setDataPrevista(previsaoNovaDTO.getDataPrevisao());
+        p.setQuantidadePrevista(previsaoNovaDTO.getQuantidadePrevista());
+        p.setDataPrevista(previsaoNovaDTO.getDataPrevista());
         p.setOrdem(previsaoNovaDTO.getOrdem());
         p.setFinalizada(previsaoNovaDTO.isFinalizada());
         p.setUsuario(u);
