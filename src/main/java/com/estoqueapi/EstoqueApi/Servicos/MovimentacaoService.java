@@ -5,6 +5,7 @@ import com.estoqueapi.EstoqueApi.Entidades.Movimentacao;
 import com.estoqueapi.EstoqueApi.Entidades.Previsao;
 import com.estoqueapi.EstoqueApi.Entidades.Reserva;
 import com.estoqueapi.EstoqueApi.Mapper.Mapper;
+import com.estoqueapi.EstoqueApi.Repositorios.LogFuturoRepository;
 import com.estoqueapi.EstoqueApi.Repositorios.MovimentacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,6 +33,8 @@ public class MovimentacaoService {
 
     @Autowired
     private ReservaService reservaService;
+    @Autowired
+    private LogFuturoService logFuturoService;
 
 
 
@@ -87,6 +90,9 @@ public class MovimentacaoService {
 
         estoqueService.adicionarEstoque(mov.getItem().getIdItem(), mov.getQuantidade());
 
+        //Atualiza estoque futuro
+        atualizaEstoqueFuturo(m);
+
         return this.salvar(m);
     }
 
@@ -108,7 +114,14 @@ public class MovimentacaoService {
 
         estoqueService.subtrairEstoque(mov.getItem().getIdItem(), mov.getQuantidade());
 
+        //Atualiza estoque futuro
+        atualizaEstoqueFuturo(m);
+
         return this.salvar(m);
+    }
+
+    private void atualizaEstoqueFuturo(Movimentacao m){
+        estoqueService.atualizarEstoqueFuturo(logFuturoService.buscarLogIdItem(m.getItem().getIdItem()));
     }
 
 }

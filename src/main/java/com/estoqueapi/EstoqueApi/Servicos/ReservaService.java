@@ -30,6 +30,10 @@ public class ReservaService {
     private ItemService itemService;
     @Autowired
     private UsuarioService usuarioService;
+    @Autowired
+    private EstoqueService estoqueService;
+    @Autowired
+    private LogFuturoService logFuturoService;
 
     public List<Reserva> consultar(){
         return reservaRepository.findAllOrderByDesc();
@@ -99,7 +103,12 @@ public class ReservaService {
             }
         }
 
-        return reservaRepository.save(reserva);
+        Reserva reserva1 = reservaRepository.save(reserva);
+
+        //Atualiza o estoque futuro do item
+        estoqueService.atualizarEstoqueFuturo(logFuturoService.buscarLogIdItem(idItem));
+
+        return reserva1;
     }
 
 
@@ -133,7 +142,12 @@ public class ReservaService {
         res.setUsuario(reserva.getUsuario());
         res.setItem(reserva.getItem());
 
-        return reservaRepository.save(res);
+        Reserva reserva1 = reservaRepository.save(res);
+
+        //Atualiza o estoque futuro do item
+        estoqueService.atualizarEstoqueFuturo(logFuturoService.buscarLogIdItem(res.getItem().getIdItem()));
+
+        return reserva1;
     }
 
     @Transactional
