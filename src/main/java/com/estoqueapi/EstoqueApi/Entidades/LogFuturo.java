@@ -5,6 +5,7 @@ import org.hibernate.annotations.Subselect;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -17,12 +18,12 @@ public class LogFuturo {
     private long idItem;
     private String tipoMovimentacao;
     private String origemDestino;
-    private Instant data;
+    private LocalDate data;
     private Float quantidade;
    private Float estoqueMomento;
 
 
-    public LogFuturo(String tipoMovimentacao, String origemDestino, Instant data, Float quantidade) {
+    public LogFuturo(String tipoMovimentacao, String origemDestino, LocalDate data, Float quantidade) {
         this.tipoMovimentacao = tipoMovimentacao;
         this.origemDestino = origemDestino;
         this.data = data;
@@ -30,7 +31,7 @@ public class LogFuturo {
         this.estoqueMomento = estoqueMomento;
     }
 
-    public LogFuturo(Instant data, String origemDestino, Float quantidade) {
+    public LogFuturo(LocalDate data, String origemDestino, Float quantidade) {
         this.origemDestino = origemDestino;
         this.data = data;
         this.quantidade = quantidade;
@@ -55,11 +56,11 @@ public class LogFuturo {
         this.origemDestino = origemDestino;
     }
 
-    public Instant getData() {
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(Instant data) {
+    public void setData(LocalDate data) {
         this.data = data;
     }
 

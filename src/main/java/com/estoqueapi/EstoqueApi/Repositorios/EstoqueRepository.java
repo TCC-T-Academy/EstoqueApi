@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,4 +19,5 @@ public interface EstoqueRepository extends JpaRepository<Estoque,Long> {
                         "on e.item_id_item = i.id_item " +
                     "where e.estoque_real <= i.estoque_seguranca" ,nativeQuery = true)
     List<Estoque> findItensAbaixoEstoque();
+
 }

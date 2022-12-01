@@ -2,6 +2,7 @@ package com.estoqueapi.EstoqueApi.Servicos;
 
 import com.estoqueapi.EstoqueApi.Entidades.Estoque;
 import com.estoqueapi.EstoqueApi.Entidades.Item;
+import com.estoqueapi.EstoqueApi.Entidades.LogFuturo;
 import com.estoqueapi.EstoqueApi.Exceptions.AcaoNaoPermitidaException;
 import com.estoqueapi.EstoqueApi.Exceptions.MovimentacaoInvalidaException;
 import com.estoqueapi.EstoqueApi.Repositorios.EstoqueRepository;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -90,5 +92,18 @@ public class EstoqueService {
 
     public List<Estoque> consultarEstoqueAbaixoLimite (){
         return estoqueRepository.findItensAbaixoEstoque();
+    }
+
+    public Estoque atualizarEstoqueFuturo(List<LogFuturo> log){
+        Float quantidade = log.get(log.size()-1).getEstoqueMomento();
+        LocalDate data = log.get(log.size()-1).getData();
+        Long idItem = log.get(log.size()-1).getIdItem();
+
+        Estoque e = this.buscarEstoqueIdItem(idItem);
+        e.setDataFutura(data);
+        e.setEstoqueFuturo(quantidade);
+
+        return estoqueRepository.save(e);
+
     }
 }

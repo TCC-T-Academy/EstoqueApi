@@ -5,6 +5,7 @@ import com.estoqueapi.EstoqueApi.Entidades.Previsao;
 import com.estoqueapi.EstoqueApi.Entidades.Reserva;
 import com.estoqueapi.EstoqueApi.Entidades.Usuario;
 import com.estoqueapi.EstoqueApi.Exceptions.AcaoNaoPermitidaException;
+import com.estoqueapi.EstoqueApi.Repositorios.EstoqueRepository;
 import com.estoqueapi.EstoqueApi.Repositorios.ItemRepository;
 import com.estoqueapi.EstoqueApi.Repositorios.PrevisaoRepository;
 import com.estoqueapi.EstoqueApi.Utils.ConversorData;
@@ -36,6 +37,10 @@ public class PrevisaoService {
 
     @Autowired
     private ItemService itemService;
+    @Autowired
+    private EstoqueService estoqueService;
+    @Autowired
+    private LogFuturoService logFuturoService;
 
     @Autowired
     private UsuarioService usuarioService;
@@ -87,7 +92,11 @@ public class PrevisaoService {
             }
         }
 
-        return previsaoRepository.save(pr);
+        //Atualiza estoque futuro
+        Previsao previsao1 = previsaoRepository.save(pr);
+        estoqueService.atualizarEstoqueFuturo(logFuturoService.buscarLogIdItem(idItem));
+
+        return previsao1;
     }
 
 
@@ -156,7 +165,11 @@ public class PrevisaoService {
         prev.setQuantidadePrevista(previsao.getQuantidadePrevista());
         prev.setDataPrevista(previsao.getDataPrevista());
 
-        return previsaoRepository.save(prev);
+        //Atualiza estoque futuro
+        Previsao previsao1 = previsaoRepository.save(prev);
+        estoqueService.atualizarEstoqueFuturo(logFuturoService.buscarLogIdItem(prev.getItem().getIdItem()));
+
+        return previsao1;
     }
 
 
