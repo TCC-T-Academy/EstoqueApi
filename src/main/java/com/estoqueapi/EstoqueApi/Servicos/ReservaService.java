@@ -170,6 +170,9 @@ public class ReservaService {
         Item i = itemService.consultarItemById(reserva.getItem().getIdItem());
         Usuario u = usuarioService.buscarUsuarioById(reserva.getUsuario().getIdUsuario());
 
+        reserva.setItem(i);
+        reserva.setUsuario(u);
+
         return reserva;
     }
 

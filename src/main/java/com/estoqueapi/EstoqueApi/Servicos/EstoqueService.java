@@ -2,6 +2,8 @@ package com.estoqueapi.EstoqueApi.Servicos;
 
 import com.estoqueapi.EstoqueApi.Entidades.Estoque;
 import com.estoqueapi.EstoqueApi.Entidades.Item;
+import com.estoqueapi.EstoqueApi.Entidades.Previsao;
+import com.estoqueapi.EstoqueApi.Entidades.Reserva;
 import com.estoqueapi.EstoqueApi.Exceptions.AcaoNaoPermitidaException;
 import com.estoqueapi.EstoqueApi.Exceptions.MovimentacaoInvalidaException;
 import com.estoqueapi.EstoqueApi.Repositorios.EstoqueRepository;
