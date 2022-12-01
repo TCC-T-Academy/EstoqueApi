@@ -1,5 +1,9 @@
 package com.estoqueapi.EstoqueApi.Controllers;
 
+import com.estoqueapi.EstoqueApi.Dtos.MovimentacaoDTO;
+import com.estoqueapi.EstoqueApi.Dtos.MovimentacaoNovaDTO;
+import com.estoqueapi.EstoqueApi.Dtos.PrevisaoDTO;
+import com.estoqueapi.EstoqueApi.Dtos.PrevisaoNovaDTO;
 import com.estoqueapi.EstoqueApi.Entidades.Reserva;
 import com.estoqueapi.EstoqueApi.Servicos.PrevisaoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.estoqueapi.EstoqueApi.Mapper.Mapper;
 
 import com.estoqueapi.EstoqueApi.Entidades.Previsao;
 
@@ -21,6 +26,8 @@ public class PrevisaoController {
 
     @Autowired
     private PrevisaoService service;
+    @Autowired
+    private Mapper mapper;
 
     //Rota para listar todas as previsões cadastradas
     @GetMapping("")
@@ -33,11 +40,12 @@ public class PrevisaoController {
         return ResponseEntity.status(HttpStatus.OK).body(service.consultaPaginada(pageable));
     }
 
-    //Rota para cadastrar novas previsões *Verificar validações*
+
+    // Rota para cadastrar nova previsão
     @PostMapping("")
-    public ResponseEntity<Previsao> cadastrarPrevisoes(@Valid @RequestBody Previsao pr){
-        Previsao prev = service.cadastrarPrevisoes(pr);
-        return ResponseEntity.status(HttpStatus.CREATED).body(prev);
+    public ResponseEntity<PrevisaoDTO> cadastrarPrevisao(@RequestBody PrevisaoNovaDTO previsaoNovaDTO){
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(mapper.toPrevisaoDTO(service.cadastrarPrevisoes(mapper.toPrevisao(previsaoNovaDTO))));
     }
     //Filtrar por ID da previsão
     @GetMapping("/{idPrevisao}")
