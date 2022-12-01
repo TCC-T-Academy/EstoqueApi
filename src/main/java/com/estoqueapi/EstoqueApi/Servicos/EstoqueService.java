@@ -84,7 +84,7 @@ public class EstoqueService {
         e.setItem(item);
         if(e.getEstoqueReal() <= 0){
             throw new AcaoNaoPermitidaException("Estoque menor ou igual a zero");
-        }else igit f(e.getLocalizacao().isEmpty() || e.getLocalizacao().isBlank()){
+        }else if(e.getLocalizacao().isEmpty() || e.getLocalizacao().isBlank()){
             throw new AcaoNaoPermitidaException("Localizacao Invalida");
         }
         return e;
