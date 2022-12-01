@@ -5,18 +5,18 @@ import java.time.LocalDate;
 public class PrevisaoNovaDTO {
 
     private String ordem;
-    private float quantidadePrevisao;
+    private float quantidadePrevista;
     private long idItem;
     private long idUsuario;
-    private LocalDate dataPrevisao;
+    private LocalDate dataPrevista;
     private boolean finalizada = false;
 
-    public PrevisaoNovaDTO(String ordem, float quantidade, long idItem, long idUsuario, LocalDate dataPrevisao, boolean finalizada) {
+    public PrevisaoNovaDTO(String ordem, float quantidade, long idItem, long idUsuario, LocalDate dataPrevista, boolean finalizada) {
         this.ordem = ordem;
-        this.quantidadePrevisao = quantidade;
+        this.quantidadePrevista = quantidade;
         this.idItem = idItem;
         this.idUsuario = idUsuario;
-        this.dataPrevisao = dataPrevisao;
+        this.dataPrevista = dataPrevista;
         this.finalizada = finalizada;
     }
 
@@ -31,12 +31,12 @@ public class PrevisaoNovaDTO {
         this.ordem = ordem;
     }
 
-    public float getQuantidadePrevisao() {
-        return quantidadePrevisao;
+    public float getQuantidadePrevista() {
+        return quantidadePrevista;
     }
 
-    public void setQuantidadePrevisao(float quantidade) {
-        this.quantidadePrevisao = quantidade;
+    public void setQuantidadePrevista(float quantidade) {
+        this.quantidadePrevista = quantidade;
     }
 
     public long getIdItem() {
@@ -55,13 +55,9 @@ public class PrevisaoNovaDTO {
         this.idUsuario = idUsuario;
     }
 
-    public LocalDate getDataPrevisao() {
-        return dataPrevisao;
-    }
+    public LocalDate getDataPrevista() { return dataPrevista; }
 
-    public void setDataPrevisao(LocalDate dataPrevisao) {
-        this.dataPrevisao = dataPrevisao;
-    }
+    public void setDataPrevista(LocalDate dataPrevista) { this.dataPrevista = dataPrevista; }
 
     public boolean isFinalizada() {
         return finalizada;

@@ -1,6 +1,9 @@
 package com.estoqueapi.EstoqueApi.Servicos;
 
+import com.estoqueapi.EstoqueApi.Entidades.Estoque;
 import com.estoqueapi.EstoqueApi.Entidades.LogFuturo;
+import com.estoqueapi.EstoqueApi.Entidades.Previsao;
+import com.estoqueapi.EstoqueApi.Entidades.Reserva;
 import com.estoqueapi.EstoqueApi.Repositorios.LogFuturoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +36,27 @@ public class LogFuturoService {
         return log;
 
     }
-
+//    public Estoque alterarEstoqueVirtual(Previsao previsao){
+//        Estoque e  = this.buscarLogIdItem(previsao.getItem().getIdItem())
+//                .stream()
+//                .max();
+//        if (e.getDataFutura().isBefore(previsao.getDataPrevista())){
+//            e.setDataFutura(previsao.getDataPrevista());
+//        }
+//        e.setEstoqueFuturo(e.getEstoqueFuturo() + previsao.getQuantidadePrevista());
+//
+//        return e;
+//    }
+//
+//    public Estoque alterarEstoqueVirtual(Reserva reserva){
+//        Estoque e  = estoqueService.buscarEstoqueIdItem(reserva.getItem().getIdItem());
+//        if (e.getDataFutura().isBefore(reserva.getDataPrevista())){
+//            e.setDataFutura(reserva.getDataPrevista());
+//        }
+//        e.setEstoqueFuturo(e.getEstoqueFuturo() + reserva.getQuantidadeReserva());
+//
+//        return e;
+//    }
 
 
 
