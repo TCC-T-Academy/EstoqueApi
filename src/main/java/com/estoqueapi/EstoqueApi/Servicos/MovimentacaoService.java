@@ -1,6 +1,7 @@
 package com.estoqueapi.EstoqueApi.Servicos;
 
 import com.estoqueapi.EstoqueApi.Dtos.MovimentacaoDTO;
+import com.estoqueapi.EstoqueApi.Entidades.Item;
 import com.estoqueapi.EstoqueApi.Entidades.Movimentacao;
 import com.estoqueapi.EstoqueApi.Entidades.Previsao;
 import com.estoqueapi.EstoqueApi.Entidades.Reserva;
@@ -36,6 +37,9 @@ public class MovimentacaoService {
     @Autowired
     private LogFuturoService logFuturoService;
 
+    @Autowired
+    private  ItemService itemService;
+
 
 
 
@@ -69,6 +73,9 @@ public class MovimentacaoService {
     }
 
     public List<Movimentacao> consultarByIdItem(Long idItem){
+        //Lança exceção se o item nao existir.
+        Item i = itemService.consultarItemById(idItem);
+
         return movimentacaoRepository.findAllByIdItem(idItem);
     }
 

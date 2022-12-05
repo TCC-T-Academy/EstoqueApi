@@ -22,9 +22,7 @@ public class EstoqueService {
     @Autowired
     private ItemService itemService;
 
-    public List<Estoque> listarEstoque(){
-        return estoqueRepository.findAll();
-    }
+    public List<Estoque> listarEstoque(){ return estoqueRepository.findAll(); }
 
     public Estoque buscarEstoqueIdItem(long idItem){
         Estoque estoque = estoqueRepository.findByIdItem(idItem).orElseThrow(()-> new EntityNotFoundException("Item nao encontrado no estoque."));
@@ -91,7 +89,11 @@ public class EstoqueService {
     }
 
     public List<Estoque> consultarEstoqueAbaixoLimite (){
-        return estoqueRepository.findItensAbaixoEstoque();
+        List<Estoque> list = estoqueRepository.findItensAbaixoEstoque();
+        if(list.size() == 0){
+            throw new EntityNotFoundException("Lista nao encontrada");
+        }
+        return list;
     }
 
     public Estoque atualizarEstoqueFuturo(List<LogFuturo> log){

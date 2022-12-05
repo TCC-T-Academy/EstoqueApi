@@ -56,6 +56,9 @@ public class ReservaService {
     }
 
     public List<Reserva> consultarByIdItem(Long idItem){
+        //Lança exceção se o item nao existir.
+        Item i = itemService.consultarItemById(idItem);
+
         return reservaRepository.ConsultarByIdItem(idItem);
     }
 
