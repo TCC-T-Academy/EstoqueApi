@@ -58,6 +58,9 @@ public class PrevisaoService {
 
     // Filtrar previsões por id do item
     public List<Previsao> consultarByIdItem(Long idItem) {
+        //Lança exceção se o item nao existir.
+        Item i = itemService.consultarItemById(idItem);
+
         return previsaoRepository.ConsultarByIdItem(idItem);
     }
 
