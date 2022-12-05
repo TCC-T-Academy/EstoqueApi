@@ -29,9 +29,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Autowired
     private Environment env;
 
-    private static final String[] PUBLIC = {"/oauth/token","/**"};
-    private static final String[] ADMIN = {"/oauth/token"};
-    private static final String[] USUARIO = {"/usuarios"};
+    //private static final String[] PUBLIC = {"/oauth/token","/**"};
+    private static final String[] PUBLIC = {"/oauth/token"};
+    private static final String[] ADMIN = {"/**"};
+    private static final String[] USUARIO_GET= {"/**"};
+    private static final String[] USUARIO_POST = {"/movimentacoes", "/movimentacoes/**"};
     private static final String[] OPERADOR = {"/oauth/token","/usuarios"};
 
     @Override
@@ -48,8 +50,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers(PUBLIC).permitAll()
-                .antMatchers(HttpMethod.GET, USUARIO).hasRole("USUARIO")
-                .antMatchers(HttpMethod.POST, USUARIO).hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, USUARIO_GET).hasAnyRole("USUARIO","ADMIN")
+                .antMatchers(HttpMethod.POST, USUARIO_POST).hasAnyRole("USUARIO","ADMIN")
                 .antMatchers(ADMIN).hasRole("ADMIN")
                 .anyRequest().authenticated();
         http.cors().configurationSource(corsConfigurationSource());
