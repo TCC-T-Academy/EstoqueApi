@@ -3,10 +3,7 @@ package com.estoqueapi.EstoqueApi.Servicos;
 import com.estoqueapi.EstoqueApi.Entidades.Item;
 import com.estoqueapi.EstoqueApi.Entidades.Reserva;
 import com.estoqueapi.EstoqueApi.Entidades.Usuario;
-import com.estoqueapi.EstoqueApi.Enums.PerfilUsuario;
 import com.estoqueapi.EstoqueApi.Repositorios.ReservaRepository;
-import net.bytebuddy.asm.Advice;
-import net.bytebuddy.dynamic.DynamicType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -45,7 +41,7 @@ public class ReservaServiceTest {
     @BeforeEach
     public void setup(){
 
-        usuario = new Usuario("Jose","1234", PerfilUsuario.COMUM,"jose@jose");
+        usuario = new Usuario("Jose","1234", "jose@jose");
 
         item1 = new Item(1l,"ITEM 1","GRUPO 1","FAM","UND",25);
         item2 = new Item(2l,"ITEM 2","GRUPO 1","FAM","UND",25);

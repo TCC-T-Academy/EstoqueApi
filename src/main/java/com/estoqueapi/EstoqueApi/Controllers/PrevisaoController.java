@@ -35,6 +35,7 @@ public class PrevisaoController {
         return service.listarPrevisoes();
     }
 
+    //EndPoint não utilizado
     @GetMapping("/paginada")
     public ResponseEntity<Page<Previsao>> consultaPaginada(Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(service.consultaPaginada(pageable));
@@ -47,18 +48,23 @@ public class PrevisaoController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(mapper.toPrevisaoDTO(service.cadastrarPrevisoes(mapper.toPrevisao(previsaoNovaDTO))));
     }
+
+    //EndPoint não utilizado
     //Filtrar por ID da previsão
     @GetMapping("/{idPrevisao}")
     public ResponseEntity<Previsao> filtrarId(@PathVariable ("idPrevisao") long idPrevisao) {
         return ResponseEntity.status(HttpStatus.OK).body(service.filtrarId(idPrevisao));
     }
 
+    //EndPoint não utilizado
     // Filtra previsões com 2 opções: Data com vencimento anterior ou a partir de hoje / Finalizada (true ou false)
     @GetMapping("/iditem/{iditem}")
     public ResponseEntity<List<Previsao>> consultarPrevisaoByIdItem(@PathVariable("iditem") Long iditem){
         List<Previsao> lista = service.consultarByIdItem(iditem);
         return ResponseEntity.status(HttpStatus.OK).body(lista);
     }
+
+    //EndPoint não utilizado
     //Filtrar por ordem de compra/produção realizadas ou não
     @GetMapping("/status/{finalizada}")
     public ResponseEntity<List<Previsao>> findByFinalizada(@PathVariable ("finalizada") boolean finalizada){
@@ -66,6 +72,7 @@ public class PrevisaoController {
         return ResponseEntity.status(HttpStatus.OK).body(listar);
     }
 
+    //EndPoint não utilizado
     //Filtrar pela data as previsões que já venceram
     @GetMapping("/vencidas")
     public ResponseEntity<List<Previsao>> consultaVencidos(){
@@ -73,6 +80,7 @@ public class PrevisaoController {
         return ResponseEntity.status(HttpStatus.OK).body(listar);
     }
 
+    //EndPoint não utilizado
     //Filtrar pela data as previsões que ainda serão realizadas (pendentes)
     @GetMapping("/pendentes")
     public ResponseEntity<List<Previsao>> findByDataPrevistaVencidos(){
@@ -80,12 +88,14 @@ public class PrevisaoController {
         return ResponseEntity.status(HttpStatus.OK).body(listar);
     }
 
+    //EndPoint não utilizado
     @GetMapping("/vencimentoefinalizada/{vencida}/{finalizada}")
     public ResponseEntity<List<Previsao>> findByDataPrevistaVencidos(@PathVariable("vencida") boolean vencida, @PathVariable("finalizada") boolean finalizada){
         List<Previsao> listar = service.findByDataPrevistaFinalizada(vencida, finalizada);
         return ResponseEntity.status(HttpStatus.OK).body(listar);
     }
 
+    //EndPoint não utilizado
     //Alterar previsões
     @PutMapping("/alterar/{idPrevisao}")
     public ResponseEntity<Object> alterarPrevisao(@PathVariable ("idPrevisao") Long idPrevisao,
@@ -94,13 +104,15 @@ public class PrevisaoController {
                 .body(mapper.toPrevisaoDTO(service.alterarPrevisao(idPrevisao, mapper.toPrevisao(previsaoNovaDTO))));
     }
 
-
+    //EndPoint não utilizado
     //Excluir previsão (só pode ser excluído quando finalizada = false)
     @DeleteMapping("/excluir/{idPrevisao}")
     public ResponseEntity<String> excluirPrevisao(@PathVariable ("idPrevisao") long idPrevisao){
         service.excluirPrevisao(idPrevisao);
         return ResponseEntity.status(HttpStatus.OK).body("Removido com sucesso");
     }
+
+    //EndPoint não utilizado
     @GetMapping("/hoje")
     public ResponseEntity<List<Previsao>> consultaVencimentoHoje(){
         return ResponseEntity.status(HttpStatus.OK).body(service.consultarVencimentoHoje());

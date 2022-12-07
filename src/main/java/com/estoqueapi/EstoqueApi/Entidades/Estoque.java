@@ -1,4 +1,5 @@
 package com.estoqueapi.EstoqueApi.Entidades;
+import com.estoqueapi.EstoqueApi.Entidades.Item;
 
 import javax.persistence.*;
 import java.time.LocalDate;

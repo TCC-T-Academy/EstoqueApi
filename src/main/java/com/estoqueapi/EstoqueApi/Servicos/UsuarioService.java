@@ -1,17 +1,20 @@
 package com.estoqueapi.EstoqueApi.Servicos;
 
+import com.estoqueapi.EstoqueApi.Entidades.Role;
 import com.estoqueapi.EstoqueApi.Entidades.Usuario;
-import com.estoqueapi.EstoqueApi.Enums.PerfilUsuario;
 import com.estoqueapi.EstoqueApi.Exceptions.AcaoNaoPermitidaException;
 import com.estoqueapi.EstoqueApi.Repositorios.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UsuarioService implements UserDetailsService {
@@ -19,12 +22,17 @@ public class UsuarioService implements UserDetailsService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    BCryptPasswordEncoder b;
+
     private boolean usuarioExiste(String email) {
         return usuarioRepository.findByEmail(email).orElse(null) != null;
     }
 
     public Usuario consultarByEmail(String email){
-       return usuarioRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("Usuario nao encontrado"));
+       return usuarioRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("Usuario não encontrado"));
     }
 
     public List<Usuario> listarUsuarios() {
@@ -46,19 +54,17 @@ public class UsuarioService implements UserDetailsService {
     }
 
     private Usuario validarUsuario(Usuario usuarios){
-
+        HashSet<Role> roles = new HashSet<Role>();
+            roles.add(roleService.consultarByAuthority(usuarios.getRoles().stream().findFirst().orElseThrow(() -> new EntityNotFoundException("Role não encontrada")).getAuthority()));
+            usuarios.setRoles(roles);
+            usuarios.setSenha(b.encode(usuarios.getPassword()));
         if(usuarios.getNome().isEmpty() || usuarios.getNome().isBlank()){
             throw new AcaoNaoPermitidaException("nome vazio");
-        }else if(usuarios.getPerfil() == null){
-            throw new AcaoNaoPermitidaException("perfil vazio");
-        }else if(usuarios.getSenha().isEmpty() || usuarios.getSenha().isBlank()){
-            throw new AcaoNaoPermitidaException("senha vazia");
         }else if(usuarios.getSenha().isEmpty() || usuarios.getSenha().isBlank()){
             throw new AcaoNaoPermitidaException("senha vazia");
         }else {
             return usuarios;
         }
-
     }
 
 
@@ -69,9 +75,6 @@ public class UsuarioService implements UserDetailsService {
 
         if(!usuario.getNome().isEmpty() && !usuario.getNome().isBlank()){
             vUsuario.setNome(usuario.getNome());
-        }
-        if(usuario.getPerfil() != null){
-            vUsuario.setPerfil(usuario.getPerfil());
         }
         if(!usuario.getSenha().isEmpty() && !usuario.getSenha().isBlank()){
             vUsuario.setSenha(usuario.getSenha());
@@ -88,7 +91,6 @@ public class UsuarioService implements UserDetailsService {
 
         Usuario vUsuario = this.consultarByEmail(email);
 
-        vUsuario.setPerfil(PerfilUsuario.DESABILITADO);
 
         return this.salvar(vUsuario);
     }

@@ -1,6 +1,5 @@
 package com.estoqueapi.EstoqueApi.Entidades;
 
-import com.estoqueapi.EstoqueApi.Enums.PerfilUsuario;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,7 +20,7 @@ public class Usuario implements UserDetails {
     @Column(unique = true)
     private String email = "";
     @Column(columnDefinition = "integer default 1")
-    private PerfilUsuario perfil = PerfilUsuario.COMUM;
+
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -34,10 +33,9 @@ public class Usuario implements UserDetails {
     public Usuario() {
     }
 
-    public Usuario(String nome, String senha, PerfilUsuario perfil, String email) {
+    public Usuario(String nome, String senha, String email) {
         this.nome = nome;
         this.senha = senha;
-        this.perfil = perfil;
         this.email = email;
     }
 
@@ -81,13 +79,6 @@ public class Usuario implements UserDetails {
         this.roles = roles;
     }
 
-    public PerfilUsuario getPerfil() {
-        return perfil;
-    }
-
-    public void setPerfil(PerfilUsuario perfil) {
-        this.perfil = perfil;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

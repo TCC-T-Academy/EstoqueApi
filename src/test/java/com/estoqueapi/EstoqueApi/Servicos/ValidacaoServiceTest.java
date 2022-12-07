@@ -1,10 +1,8 @@
 package com.estoqueapi.EstoqueApi.Servicos;
 
 import com.estoqueapi.EstoqueApi.Entidades.*;
-import com.estoqueapi.EstoqueApi.Enums.PerfilUsuario;
 import com.estoqueapi.EstoqueApi.Exceptions.MovimentacaoInvalidaException;
 import com.estoqueapi.EstoqueApi.Repositorios.MovimentacaoRepository;
-import com.estoqueapi.EstoqueApi.Servicos.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -64,7 +62,7 @@ class ValidacaoServiceTest {
         estoque.setLocalizacao("AA1234");
         estoque.setIdEstoque(10l);
 
-        user = new Usuario("JOSE","asdf", PerfilUsuario.COMUM,"jose@jose");
+        user = new Usuario("JOSE","asdf","jose@jose");
         user.setIdUsuario(1l);
 
         m = new Movimentacao();

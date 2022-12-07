@@ -38,6 +38,7 @@ public class EstoqueController {
         return ResponseEntity.status(HttpStatus.OK).body(estoqueService.buscarEstoqueIdItem(idItem));
     }
 
+    //EndPoint não utilizado
     @PutMapping("/{idEstoque}")
     public ResponseEntity<Estoque> alterarEstoque(@PathVariable("idEstoque") long idEstoque, @RequestBody Estoque estoque){
         return ResponseEntity.status(HttpStatus.OK).body(estoqueService.alterarEstoque(idEstoque,estoque));

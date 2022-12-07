@@ -2,16 +2,13 @@ package com.estoqueapi.EstoqueApi.Mapper;
 
 import com.estoqueapi.EstoqueApi.Dtos.*;
 import com.estoqueapi.EstoqueApi.Entidades.*;
-import com.estoqueapi.EstoqueApi.Enums.PerfilUsuario;
 import com.estoqueapi.EstoqueApi.Utils.ConversorData;
-import net.bytebuddy.asm.Advice;
-import org.aspectj.apache.bcel.generic.RET;
-import org.hibernate.loader.plan.spi.Return;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.util.HashSet;
 
 @Component
 public class Mapper {
@@ -42,12 +39,28 @@ public class Mapper {
     public UsuarioPublicoDTO toUsuarioPublicoDTO(Usuario usuario){
         long idUsuario = usuario.getIdUsuario();
         String nome = usuario.getNome();
-        PerfilUsuario perfil = usuario.getPerfil();
+        String email = usuario.getEmail();
+        String role = usuario.getRoles().stream().findFirst().orElseThrow(() -> new EntityNotFoundException("Role não encontrada")).getAuthority();
 
-        return new UsuarioPublicoDTO( idUsuario, nome, perfil);
+
+        return new UsuarioPublicoDTO( idUsuario, nome, email, role);
     }
     public Usuario toUsuario(UsuarioPublicoDTO usuarioPublicoDTO){
-        return new Usuario(usuarioPublicoDTO.getNome(),"",usuarioPublicoDTO.getPerfilUsuario(),"");
+        return new Usuario(usuarioPublicoDTO.getNome(),"","");
+    }
+
+    public Usuario toUsuario(UsuarioNovoDTO usuarioNovoDTO){
+        Usuario usuario = new Usuario();
+        Role role = new Role();
+        HashSet<Role> roles = new HashSet<Role>();
+        roles.add(role);
+        role.setAuthority(usuarioNovoDTO.getRole());
+        usuario.setIdUsuario(0l);
+        usuario.setNome(usuarioNovoDTO.getNome());
+        usuario.setEmail(usuarioNovoDTO.getEmail());
+        usuario.setSenha(usuarioNovoDTO.getSenha());
+        usuario.setRoles(roles);
+        return usuario;
     }
 
     public Movimentacao toMovimentacao(MovimentacaoNovaDTO movimentacaoNovaDTO){

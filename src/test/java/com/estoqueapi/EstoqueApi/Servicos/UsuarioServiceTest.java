@@ -1,7 +1,6 @@
 package com.estoqueapi.EstoqueApi.Servicos;
 
 import com.estoqueapi.EstoqueApi.Entidades.Usuario;
-import com.estoqueapi.EstoqueApi.Enums.PerfilUsuario;
 import com.estoqueapi.EstoqueApi.Repositorios.UsuarioRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +29,7 @@ public class UsuarioServiceTest {
 
     @BeforeEach
     void setup(){
-        usuario = new Usuario("Jose","1234", PerfilUsuario.COMUM,"jose@jose");
+        usuario = new Usuario("Jose","1234", "jose@jose");
         usuario.setIdUsuario(1l);
     }
 
