@@ -16,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.sql.Date;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +81,7 @@ public class MovimentacaoServiceTest {
         previsao.setQuantidadePrevista(10);
         previsao.setOrdem("CP1000");
         previsao.setItem(item);
-        previsao.setDataPrevista(ConversorData.toInstant(LocalDateTime.parse("2022-11-16T00:00:00")));
+        previsao.setDataPrevista(LocalDate.parse("2022-11-16T00:00:00"));
         previsao.setUsuario(user);
         previsao.setIdPrevisao(10l);
 
@@ -89,7 +90,7 @@ public class MovimentacaoServiceTest {
         reserva.setQuantidadeReserva(10);
         reserva.setOrdem("PO1000");
         reserva.setItem(item);
-        reserva.setDataPrevista(ConversorData.toInstant(LocalDateTime.parse("2022-11-16T00:00:00")));
+        reserva.setDataPrevista(LocalDate.parse("2022-11-16T00:00:00"));
         reserva.setUsuario(user);
         reserva.setIdReserva(10l);
 
