@@ -32,9 +32,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     //private static final String[] PUBLIC = {"/oauth/token","/**"};
     private static final String[] PUBLIC = {"/oauth/token"};
     private static final String[] ADMIN = {"/**"};
+    private static final String[] GERENTE_POST = {"/reservas", "/reservas/**", "/previsoes", "/previsoes/**", "/movimentacoes", "/movimentacoes/**"};
+    private static final String[] GERENTE_GET= {"/**"};
     private static final String[] USUARIO_GET= {"/**"};
     private static final String[] USUARIO_POST = {"/movimentacoes", "/movimentacoes/**"};
-    private static final String[] OPERADOR = {"/oauth/token","/usuarios"};
+    /*private static final String[] OPERADOR = {"/oauth/token","/usuarios"};*/
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
@@ -51,6 +53,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers(PUBLIC).permitAll()
                 .antMatchers(HttpMethod.GET, USUARIO_GET).hasAnyRole("USUARIO","ADMIN")
+                .antMatchers(HttpMethod.GET, GERENTE_GET).hasAnyRole("USUARIO", "GERENTE", "ADMIN")
+                .antMatchers(HttpMethod.POST, GERENTE_POST).hasAnyRole("GERENTE", "ADMIN")
                 .antMatchers(HttpMethod.POST, USUARIO_POST).hasAnyRole("USUARIO","ADMIN")
                 .antMatchers(ADMIN).hasRole("ADMIN")
                 .anyRequest().authenticated();
