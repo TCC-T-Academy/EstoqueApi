@@ -22,6 +22,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
@@ -48,7 +49,7 @@ public class PrevisaoServiceTest {
 
     @BeforeEach
     void setup() {
-        Instant data = ConversorData.toInstant(LocalDateTime.parse("2022-11-16T00:00:00"));
+        LocalDate data = LocalDate.parse("2022-11-16T00:00:00");
         idNaoExistente = 7L;
         previsao = new Previsao();
         previsao.setIdPrevisao(22);
@@ -71,7 +72,7 @@ public class PrevisaoServiceTest {
         mockUsuario.setIdUsuario(1l);
         previsao.setUsuario(mockUsuario);
 
-        previsao.setDataPrevista(Instant.now().plus(5, ChronoUnit.DAYS));
+        previsao.setDataPrevista(LocalDate.now().plus(5, ChronoUnit.DAYS));
 
         List<Previsao> mockList = new ArrayList<>();
         mockList.add(previsao);
@@ -119,7 +120,7 @@ public class PrevisaoServiceTest {
         mockUsuario.setIdUsuario(1l);
         previsao.setUsuario(mockUsuario);
 
-        previsao.setDataPrevista(Instant.now().plus(5, ChronoUnit.DAYS));
+        previsao.setDataPrevista(LocalDate.now().plus(5, ChronoUnit.DAYS));
 
         List<Previsao> mockList = new ArrayList<>();
         mockList.add(previsao);

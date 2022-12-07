@@ -5,6 +5,7 @@ import com.estoqueapi.EstoqueApi.Entidades.Reserva;
 import com.estoqueapi.EstoqueApi.Entidades.Usuario;
 import com.estoqueapi.EstoqueApi.Enums.PerfilUsuario;
 import com.estoqueapi.EstoqueApi.Repositorios.ReservaRepository;
+import net.bytebuddy.asm.Advice;
 import net.bytebuddy.dynamic.DynamicType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +18,7 @@ import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +57,7 @@ public class ReservaServiceTest {
         reserva1.setUsuario(usuario);
         reserva1.setItem(item1);
         reserva1.setFinalizada(false);
-        reserva1.setDataPrevista(Instant.now().plus(5, ChronoUnit.DAYS));
+        reserva1.setDataPrevista(LocalDate.now().plus(5, ChronoUnit.DAYS));
 
         reserva2 = new Reserva();
         reserva2.setIdReserva(2l);
@@ -64,7 +66,7 @@ public class ReservaServiceTest {
         reserva2.setUsuario(usuario);
         reserva2.setItem(item2);
         reserva2.setFinalizada(false);
-        reserva2.setDataPrevista(Instant.now().plus(4, ChronoUnit.DAYS));
+        reserva2.setDataPrevista(LocalDate.now().now().plus(4, ChronoUnit.DAYS));
 
         listReserva = new ArrayList<>();
         listReserva.add(reserva1);
@@ -81,7 +83,7 @@ public class ReservaServiceTest {
         mockReserva.setUsuario(usuario);
         mockReserva.setItem(item2);
         mockReserva.setFinalizada(false);
-        mockReserva.setDataPrevista(Instant.now().plus(5, ChronoUnit.DAYS));
+        mockReserva.setDataPrevista(LocalDate.now().plus(5, ChronoUnit.DAYS));
 
         Mockito.when(reservaRepository.save(mockReserva)).thenReturn(reserva1);
         Mockito.when(usuarioService.buscarUsuarioById(reserva1.getUsuario().getIdUsuario())).thenReturn(usuario);
@@ -99,7 +101,7 @@ public class ReservaServiceTest {
         mockReserva.setUsuario(usuario);
         mockReserva.setItem(item1);
         mockReserva.setFinalizada(false);
-        mockReserva.setDataPrevista(Instant.now().plus(5, ChronoUnit.DAYS));
+        mockReserva.setDataPrevista(LocalDate.now().plus(5, ChronoUnit.DAYS));
 
         Optional<Reserva> optRes = Optional.of(reserva1);
 
