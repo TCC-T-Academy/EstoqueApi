@@ -3,7 +3,6 @@ package com.estoqueapi.EstoqueApi.Controllers;
 import com.estoqueapi.EstoqueApi.Entidades.Item;
 import com.estoqueapi.EstoqueApi.Entidades.Reserva;
 import com.estoqueapi.EstoqueApi.Entidades.Usuario;
-import com.estoqueapi.EstoqueApi.Enums.PerfilUsuario;
 import com.estoqueapi.EstoqueApi.Servicos.ReservaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -107,7 +106,6 @@ public class ReservaControllerTest {
         u = new Usuario();
         u.setNome("Usuário de teste");
         u.setEmail("usuario@email.com");
-        u.setPerfil(PerfilUsuario.COMUM);
 
         r1 = new Reserva();
         r1.setIdReserva(idReservaExistente1);

@@ -3,9 +3,7 @@ package com.estoqueapi.EstoqueApi.Controllers;
 import com.estoqueapi.EstoqueApi.Entidades.Item;
 import com.estoqueapi.EstoqueApi.Entidades.Previsao;
 import com.estoqueapi.EstoqueApi.Entidades.Usuario;
-import com.estoqueapi.EstoqueApi.Enums.PerfilUsuario;
 import com.estoqueapi.EstoqueApi.Servicos.PrevisaoService;
-import com.estoqueapi.EstoqueApi.Utils.ConversorData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,10 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.persistence.EntityNotFoundException;
-import java.sql.Date;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +53,7 @@ public class PrevisaoControllerTest {
         idNaoExistente = 2000L;
         previsaoNova = new Previsao();
         Item item = new Item(1600, "PARAF SEXT RI 1/4 X 1-3/4 UNC20 C7/16 A3,8 POLIDO", "INDUSTRIALIZAÇÃO", "PARAFUSOS", "PC",58);
-        Usuario usuario = new Usuario("Joao Silva", "1234", PerfilUsuario.COMUM, "joao.silva@empresa.com");
+        Usuario usuario = new Usuario("Joao Silva", "1234", "joao.silva@empresa.com");
         LocalDate data = LocalDate.parse("2022-11-22T00:00:00");
         previsaoExistente = new Previsao(idExistente, item,usuario, 150, data, "string", false);
 

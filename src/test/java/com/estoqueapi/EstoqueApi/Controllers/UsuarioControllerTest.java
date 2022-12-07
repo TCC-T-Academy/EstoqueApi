@@ -2,7 +2,6 @@ package com.estoqueapi.EstoqueApi.Controllers;
 
 
 import com.estoqueapi.EstoqueApi.Entidades.Usuario;
-import com.estoqueapi.EstoqueApi.Enums.PerfilUsuario;
 import com.estoqueapi.EstoqueApi.Servicos.UsuarioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +26,6 @@ public class UsuarioControllerTest {
     private Long idUsuarioExistente;
     private String nome;
     private String senha;
-    private PerfilUsuario perfil = PerfilUsuario.COMUM;
     private String emailExistente = "joaquim.soares@empresa.com";
 
     private Usuario usuarioNovo;
@@ -49,16 +47,13 @@ public class UsuarioControllerTest {
         usuarioNovo.setIdUsuario(22l);
         usuarioNovo.setNome("teste");
         usuarioNovo.setSenha("teste123");
-        usuarioNovo.setPerfil(PerfilUsuario.COMUM);
         usuarioNovo.setEmail("teste@teste.com");
 
         usuarioAlterado = new Usuario();
         usuarioAlterado.setNome("Joaquim Soares");
         usuarioAlterado.setSenha("1234");
-        usuarioAlterado.setPerfil(PerfilUsuario.ADMINISTRADOR);
         usuarioAlterado.setEmail("joaquim.soares.silva@empresa.com");
 
-        usuarioDesabilitado = new Usuario();
 
     }
 

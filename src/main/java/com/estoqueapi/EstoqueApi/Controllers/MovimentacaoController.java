@@ -42,6 +42,7 @@ public class MovimentacaoController {
                         .collect(Collectors.toList()));
     }
 
+    //EndPoint não utilizado
     @GetMapping("/paginada")
     public ResponseEntity<Page<MovimentacaoDTO>> consultaPaginada(Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(movimentacaoService.consultaPaginada(pageable));

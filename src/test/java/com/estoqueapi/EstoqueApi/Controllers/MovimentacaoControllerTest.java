@@ -7,7 +7,6 @@ import com.estoqueapi.EstoqueApi.Entidades.Estoque;
 import com.estoqueapi.EstoqueApi.Entidades.Item;
 import com.estoqueapi.EstoqueApi.Entidades.Movimentacao;
 import com.estoqueapi.EstoqueApi.Entidades.Usuario;
-import com.estoqueapi.EstoqueApi.Enums.PerfilUsuario;
 import com.estoqueapi.EstoqueApi.Mapper.Mapper;
 import com.estoqueapi.EstoqueApi.Servicos.MovimentacaoService;
 import com.estoqueapi.EstoqueApi.Utils.ConversorData;
@@ -127,7 +126,6 @@ public class MovimentacaoControllerTest {
         u = new Usuario();
         u.setNome("Usuário de teste");
         u.setEmail("usuario@email.com");
-        u.setPerfil(PerfilUsuario.COMUM);
 
         m1 = new Movimentacao();
         m1.setIdMovimentacao(0l);
@@ -173,7 +171,7 @@ public class MovimentacaoControllerTest {
                 m1.getTipo(),
                 m1.getOrigemDestino(),
                 m1.getQuantidade(),
-                new UsuarioPublicoDTO(u.getIdUsuario(), u.getNome(), u.getPerfil()),
+                new UsuarioPublicoDTO(u.getIdUsuario(), u.getNome()),
                 m1.getEstoque());
         mNovaDTO2 = new MovimentacaoNovaDTO(m2.getOrigemDestino(),m2.getQuantidade(),m2.getItem().getIdItem(),m2.getUsuario().getIdUsuario());
         mDTO2 = new MovimentacaoDTO(m2.getIdMovimentacao(),
@@ -181,7 +179,7 @@ public class MovimentacaoControllerTest {
                 m2.getTipo(),
                 m2.getOrigemDestino(),
                 m2.getQuantidade(),
-                new UsuarioPublicoDTO(u.getIdUsuario(), u.getNome(), u.getPerfil()),
+                new UsuarioPublicoDTO(u.getIdUsuario(), u.getNome()),
                 m2.getEstoque());
 
         Mockito.when(service.consultar()).thenReturn(listaTotal);

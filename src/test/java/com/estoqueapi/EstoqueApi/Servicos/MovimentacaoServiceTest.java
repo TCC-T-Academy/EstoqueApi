@@ -1,9 +1,7 @@
 package com.estoqueapi.EstoqueApi.Servicos;
 
 import com.estoqueapi.EstoqueApi.Entidades.*;
-import com.estoqueapi.EstoqueApi.Enums.PerfilUsuario;
 import com.estoqueapi.EstoqueApi.Repositorios.MovimentacaoRepository;
-import com.estoqueapi.EstoqueApi.Utils.ConversorData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,10 +12,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,7 +63,7 @@ public class MovimentacaoServiceTest {
         estoque.setLocalizacao("AA1234");
         estoque.setIdEstoque(10l);
 
-        user = new Usuario("JOSE","asdf", PerfilUsuario.COMUM,"jose@jose");
+        user = new Usuario("JOSE","asdf", "jose@jose");
 
         m = new Movimentacao();
         m.setItem(new Item());
