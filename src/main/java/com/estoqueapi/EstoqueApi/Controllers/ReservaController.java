@@ -74,8 +74,9 @@ public class ReservaController {
     @PutMapping("/{idreserva}")
     public ResponseEntity<Object> alterar(
             @PathVariable("idreserva") Long idreserva,
-            @Valid @RequestBody Reserva reserva){
-        return ResponseEntity.status(HttpStatus.OK).body(service.alterar(idreserva, reserva));
+            @Valid @RequestBody ReservaNovaDTO reservaNovaDTO){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(mapper.toReservaDTO(service.alterar(idreserva, mapper.toReserva(reservaNovaDTO))));
     }
 
     @DeleteMapping("/{idreserva}")
