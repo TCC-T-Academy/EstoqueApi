@@ -30,7 +30,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     private Environment env;
 
     //private static final String[] PUBLIC = {"/oauth/token","/**"};
-    private static final String[] PUBLIC = {"/oauth/token"};
+    private static final String[] PUBLIC = {"/oauth/token","/swagger-ui/**","/v3/api-docs/**"};
     private static final String[] ADMIN = {"/**"};
     private static final String[] GERENTE_POST = {"/reservas", "/reservas/**", "/previsoes", "/previsoes/**", "/movimentacoes", "/movimentacoes/**"};
     private static final String[] GERENTE_GET= {"/**"};
