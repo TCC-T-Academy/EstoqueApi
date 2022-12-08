@@ -5,6 +5,7 @@ insert into usuario(nome, email, senha)values('antonia','antonia@gmail.com','$2a
 insert into role(authority)values('ROLE_USUARIO');
 insert into role(authority)values('ROLE_ADMIN');
 insert into role(authority)values('ROLE_GERENTE');
+insert into role(authority)values('ROLE_DESABILITADO');
 
 insert into usuario_role(usuario_id,role_id)values(1,2);
 insert into usuario_role(usuario_id,role_id)values(2,1);
