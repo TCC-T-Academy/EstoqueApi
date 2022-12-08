@@ -84,7 +84,7 @@ public class ReservaService {
         }
         Reserva reserva1 = reservaRepository.save(reserva);
         //Atualiza o estoque futuro do item
-        estoqueService.atualizarEstoqueFuturo(logFuturoService.buscarLogIdItem(idItem));
+        estoqueService.atualizarEstoqueFuturo(idItem, logFuturoService.buscarLogIdItem(idItem));
         return reserva1;
     }
 
@@ -113,7 +113,7 @@ public class ReservaService {
         Reserva reserva1 = reservaRepository.save(res);
 
         //Atualiza o estoque futuro do item
-        estoqueService.atualizarEstoqueFuturo(logFuturoService.buscarLogIdItem(res.getItem().getIdItem()));
+        estoqueService.atualizarEstoqueFuturo(res.getItem().getIdItem(), logFuturoService.buscarLogIdItem(res.getItem().getIdItem()));
         return reserva1;
     }
 

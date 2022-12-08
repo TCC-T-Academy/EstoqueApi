@@ -86,7 +86,7 @@ public class PrevisaoService {
         }
         //Atualiza estoque futuro
         Previsao previsao1 = previsaoRepository.save(pr);
-        estoqueService.atualizarEstoqueFuturo(logFuturoService.buscarLogIdItem(idItem));
+        estoqueService.atualizarEstoqueFuturo(idItem ,logFuturoService.buscarLogIdItem(idItem));
         return previsao1;
     }
 
@@ -127,7 +127,7 @@ public class PrevisaoService {
         prev.setDataPrevista(previsao.getDataPrevista());
         //Atualiza estoque futuro
         Previsao previsao1 = previsaoRepository.save(prev);
-        estoqueService.atualizarEstoqueFuturo(logFuturoService.buscarLogIdItem(prev.getItem().getIdItem()));
+        estoqueService.atualizarEstoqueFuturo(prev.getItem().getIdItem(),logFuturoService.buscarLogIdItem(prev.getItem().getIdItem()));
         return previsao1;
     }
 

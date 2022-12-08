@@ -92,14 +92,20 @@ public class EstoqueService {
         return list;
     }
 
-    public Estoque atualizarEstoqueFuturo(List<LogFuturo> log){
-        Float quantidade = log.get(log.size()-1).getEstoqueMomento();
-        LocalDate data = log.get(log.size()-1).getData();
-        Long idItem = log.get(log.size()-1).getIdItem();
-
+    public Estoque atualizarEstoqueFuturo(long idItem, List<LogFuturo> log){
+        Float quantidade;
+        LocalDate data;
         Estoque e = this.buscarEstoqueIdItem(idItem);
-        e.setDataFutura(data);
-        e.setEstoqueFuturo(quantidade);
+
+        if(log.size() > 0) {
+            quantidade = log.get(log.size() - 1).getEstoqueMomento();
+            data = log.get(log.size() - 1).getData();
+            e.setDataFutura(data);
+            e.setEstoqueFuturo(quantidade);
+        }else{
+            e.setDataFutura(LocalDate.now());
+            e.setEstoqueFuturo(e.getEstoqueReal());
+        }
 
         return estoqueRepository.save(e);
     }
