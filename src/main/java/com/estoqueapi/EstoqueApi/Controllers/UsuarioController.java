@@ -43,8 +43,9 @@ public class UsuarioController {
 
 
     @PutMapping("/alterar/{email}")
-    public ResponseEntity<Usuario> alterar(@PathVariable("email") String email, @RequestBody Usuario usuario){
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(usuarioService.alterar(email,usuario));
+    public ResponseEntity<UsuarioNovoDTO> alterar(@PathVariable("email") String email, @RequestBody UsuarioNovoDTO usuarioNovoDTO){
+        return ResponseEntity.status(HttpStatus.ACCEPTED).
+                body(mapper.toUsuarioNovoDTO(usuarioService.alterar(email, mapper.toUsuario(usuarioNovoDTO))));
     }
 
     //Alterar de perfil para role
