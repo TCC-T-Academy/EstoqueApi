@@ -75,7 +75,7 @@ public class UsuarioService implements UserDetailsService {
         if(!usuario.getNome().isEmpty() && !usuario.getNome().isBlank()){
             vUsuario.setNome(usuario.getNome());
         }
-        if(!usuario.getSenha().isEmpty() && !usuario.getSenha().isBlank()){
+        if(usuario.getSenha() != null && !usuario.getSenha().isEmpty()){
             vUsuario.setSenha(usuario.getSenha());
         }
         if(!usuario.getEmail().isEmpty() && !usuario.getEmail().isBlank()){

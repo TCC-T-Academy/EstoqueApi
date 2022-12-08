@@ -45,6 +45,17 @@ public class Mapper {
 
         return new UsuarioPublicoDTO( idUsuario, nome, email, role);
     }
+
+    public UsuarioNovoDTO toUsuarioNovoDTO(Usuario usuario){
+        long idUsuario = usuario.getIdUsuario();
+
+        String nome = usuario.getNome();
+        String email = usuario.getEmail();
+        String role = usuario.getRoles().stream().findFirst().orElseThrow(() -> new EntityNotFoundException("Role não encontrada")).getAuthority();
+        String senha = usuario.getSenha();
+
+        return new UsuarioNovoDTO( idUsuario, nome, email, role, senha);
+    }
     public Usuario toUsuario(UsuarioPublicoDTO usuarioPublicoDTO){
         return new Usuario(usuarioPublicoDTO.getNome(),"","");
     }
