@@ -2,7 +2,9 @@ package com.estoqueapi.EstoqueApi.Mapper;
 
 import com.estoqueapi.EstoqueApi.Dtos.*;
 import com.estoqueapi.EstoqueApi.Entidades.*;
+import com.estoqueapi.EstoqueApi.Servicos.RoleService;
 import com.estoqueapi.EstoqueApi.Utils.ConversorData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityNotFoundException;
@@ -12,6 +14,10 @@ import java.util.HashSet;
 
 @Component
 public class Mapper {
+
+    @Autowired
+    private RoleService roleService;
+
     public MovimentacaoDTO toMovimentacaoDto (Movimentacao movimentacao) {
 
         long idMovimentacao = movimentacao.getIdMovimentacao();
@@ -54,7 +60,7 @@ public class Mapper {
         String role = usuario.getRoles().stream().findFirst().orElseThrow(() -> new EntityNotFoundException("Role não encontrada")).getAuthority();
         String senha = usuario.getSenha();
 
-        return new UsuarioNovoDTO( idUsuario, nome, email, role, senha);
+        return new UsuarioNovoDTO( idUsuario, nome, senha, email, role);
     }
     public Usuario toUsuario(UsuarioPublicoDTO usuarioPublicoDTO){
         return new Usuario(usuarioPublicoDTO.getNome(),"","");
@@ -62,10 +68,9 @@ public class Mapper {
 
     public Usuario toUsuario(UsuarioNovoDTO usuarioNovoDTO){
         Usuario usuario = new Usuario();
-        Role role = new Role();
+        Role role = roleService.consultarByAuthority(usuarioNovoDTO.getRole());
         HashSet<Role> roles = new HashSet<Role>();
         roles.add(role);
-        role.setAuthority(usuarioNovoDTO.getRole());
         usuario.setIdUsuario(0l);
         usuario.setNome(usuarioNovoDTO.getNome());
         usuario.setEmail(usuarioNovoDTO.getEmail());

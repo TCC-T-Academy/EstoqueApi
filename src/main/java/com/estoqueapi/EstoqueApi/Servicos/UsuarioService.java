@@ -81,6 +81,9 @@ public class UsuarioService implements UserDetailsService {
         if(!usuario.getEmail().isEmpty() && !usuario.getEmail().isBlank()){
             vUsuario.setEmail(usuario.getEmail());
         }
+
+        vUsuario.setRoles(usuario.getRoles());
+
         return usuarioRepository.save(vUsuario);
     }
 
