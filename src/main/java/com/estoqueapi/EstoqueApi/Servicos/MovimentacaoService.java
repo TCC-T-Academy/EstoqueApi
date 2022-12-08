@@ -47,9 +47,7 @@ public class MovimentacaoService {
         return movimentacaoRepository.save(movimentacao);
     }
 
-    /** Metodo para consultar todas as movimentacoes
-     * @return List<Movimentacao> - retorna lista ordenada de movimentacoes
-     * */
+    /** Metodo para consultar todas as movimentacoes * */
     public List<Movimentacao> consultar(){
          return movimentacaoRepository.findAllOrderByDesc();
     }
@@ -61,17 +59,6 @@ public class MovimentacaoService {
         return pageMovDTO;
     }
 
-    public List<Movimentacao> salvarVarios(List<Movimentacao> lista){
-
-        List<Movimentacao> listaSaida = new ArrayList<>();
-
-        lista.forEach(movimentacoes->{
-            listaSaida.add(this.entradaItem(movimentacoes));
-        });
-
-        return listaSaida;
-    }
-
     public List<Movimentacao> consultarByIdItem(Long idItem){
         //Lança exceção se o item nao existir.
         Item i = itemService.consultarItemById(idItem);
@@ -79,10 +66,7 @@ public class MovimentacaoService {
         return movimentacaoRepository.findAllByIdItem(idItem);
     }
 
-    /** Metodo para efetuar uma movimentacao de entrada.
-     * @param mov Movimentacao - objeto movimentacao referente a entrada
-     * @return Movimentacao - retorna movimentacao efetuada
-     * */
+    /** Metodo para efetuar uma movimentacao de entrada. * */
     public Movimentacao entradaItem(Movimentacao mov){
         mov.setDataMovimentacao(Instant.now());
         mov.setTipo("IN");
@@ -94,19 +78,13 @@ public class MovimentacaoService {
             p2.setFinalizada(true);
             previsaoService.alterarPrevisao(p.getIdPrevisao(), p2);
         }
-
         estoqueService.adicionarEstoque(mov.getItem().getIdItem(), mov.getQuantidade());
-
         //Atualiza estoque futuro
         atualizaEstoqueFuturo(m);
-
         return this.salvar(m);
     }
 
-    /** Metodo para efetuar uma movimentacao de saida.
-     * @param mov Movimentacao - objeto movimentacao referente a saida
-     * @return Movimentacao - retorna movimentacao efetuada
-     * */
+    /** Metodo para efetuar uma movimentacao de saida. * */
     public Movimentacao saidaItem(Movimentacao mov){
         mov.setDataMovimentacao(Instant.now());
         mov.setTipo("OUT");
@@ -118,17 +96,14 @@ public class MovimentacaoService {
             r2.setFinalizada(true);
             reservaService.alterar(r.getIdReserva(), r2);
         }
-
         estoqueService.subtrairEstoque(mov.getItem().getIdItem(), mov.getQuantidade());
 
         //Atualiza estoque futuro
         atualizaEstoqueFuturo(m);
-
         return this.salvar(m);
     }
 
     private void atualizaEstoqueFuturo(Movimentacao m){
         estoqueService.atualizarEstoqueFuturo(logFuturoService.buscarLogIdItem(m.getItem().getIdItem()));
     }
-
 }

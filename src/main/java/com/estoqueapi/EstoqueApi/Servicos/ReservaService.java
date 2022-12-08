@@ -39,10 +39,6 @@ public class ReservaService {
         return reservaRepository.findAllOrderByDesc();
     }
 
-    public Page<Reserva> consultaPaginada(Pageable p){
-        return reservaRepository.findAll(p);
-    }
-
     public Reserva consultarById(Long id){
         Optional<Reserva> obj = reservaRepository.findById(id);
         Reserva res = null;// obj.orElseThrow(()-> new EntityNotFoundException("Reserva não encontrada"));
@@ -58,28 +54,10 @@ public class ReservaService {
     public List<Reserva> consultarByIdItem(Long idItem){
         //Lança exceção se o item nao existir.
         Item i = itemService.consultarItemById(idItem);
-
         return reservaRepository.ConsultarByIdItem(idItem);
     }
 
-        /*public List<Reservas> consultarByFinalizada(Boolean finalizada){
-        return reservasRepository.consultarByFinalizada(finalizada);
-    }*/
-
-    public List<Reserva> findByDataPrevista(boolean vencida, boolean finalizada) {
-        if (vencida == true) {
-            List<Reserva> lista = (finalizada) ? reservaRepository.findByDataPrevistaVencidos(finalizada) : reservaRepository.findByDataPrevistaVencidos(finalizada);
-            return lista;
-        } else{
-            List<Reserva> lista = (finalizada) ? reservaRepository.findByDataPrevistaAVencer(finalizada) : reservaRepository.findByDataPrevistaAVencer(finalizada);
-            return lista;
-        }
-    }
-
-    /** Metodo para cadastrar novas reserva.
-     * @param reserva Reserva: Objeto a ser cadastrado.
-     * @return Reserva: Objeto retornado pelo repositorio após validacoes.
-     * */
+    /** Metodo para cadastrar novas reserva. **/
     @Transactional
     public Reserva salvar(Reserva reserva){
         //Validacoes gerais
@@ -89,7 +67,6 @@ public class ReservaService {
         if(reserva.getDataPrevista().isBefore(LocalDate.now())) {
             throw new AcaoNaoPermitidaException("Informe uma data maior que a atual");
         }
-
 
         //  Verifica se existe a uma reserva de status finalizado = false para a ordem
         //    alterando a quantidade em caso positivo.
@@ -105,22 +82,14 @@ public class ReservaService {
                 return this.alterar(r.getIdReserva(),r);
             }
         }
-
         Reserva reserva1 = reservaRepository.save(reserva);
-
         //Atualiza o estoque futuro do item
         estoqueService.atualizarEstoqueFuturo(logFuturoService.buscarLogIdItem(idItem));
-
         return reserva1;
     }
 
 
-    /**
-     * Metodo para alteracao de uma reserva a partir de um id.
-     * @param idreserva Long: Id da reserva a ser alterada.
-     * @param reserva Reserva: objeto reserva com as informacoes para atualizacao.
-     * @return Reserva: objeto retornado pelo repositorio após validacoes
-     * */
+    /** Metodo para alteracao de uma reserva a partir de um id. **/
     public Reserva alterar(Long idreserva, Reserva reserva){
         Reserva res = this.consultarById(idreserva);
 
@@ -128,28 +97,23 @@ public class ReservaService {
         if (res.isFinalizada()) {
             throw new AcaoNaoPermitidaException("Reserva já finalizada");
         }
-
         // Não deixa alterar se nova data é anterior a atual da reserva e anterior a now()
         if(reserva.getDataPrevista().isBefore(res.getDataPrevista())
                 && reserva.getDataPrevista().isBefore(LocalDate.now())){
             throw new AcaoNaoPermitidaException("Informe uma data maior que a atual");
         }
-
         //Lancará excecões caso haja problemas
         reserva = this.validarReserva(reserva);
-
         res.setFinalizada(reserva.isFinalizada());
         res.setQuantidadeReserva(reserva.getQuantidadeReserva());
         res.setDataPrevista(reserva.getDataPrevista());
         res.setOrdem(reserva.getOrdem());
         res.setUsuario(reserva.getUsuario());
         res.setItem(reserva.getItem());
-
         Reserva reserva1 = reservaRepository.save(res);
 
         //Atualiza o estoque futuro do item
         estoqueService.atualizarEstoqueFuturo(logFuturoService.buscarLogIdItem(res.getItem().getIdItem()));
-
         return reserva1;
     }
 
@@ -163,12 +127,8 @@ public class ReservaService {
         return reservaRepository.consultarPendentesByIdItem(idItem);
     }
 
-    /**Metodo para validacao de uma reserva.
-     * @param reserva Reserva - Objeto para ser validado;
-     * @return Reserva - Objeto validado
-     * */
+    /** Metodo para validacao de uma reserva. **/
     public Reserva validarReserva(Reserva reserva) {
-
         if (reserva.getQuantidadeReserva() <= 0) {
             throw new AcaoNaoPermitidaException("Quantidade inválida");
         }
@@ -178,29 +138,20 @@ public class ReservaService {
         if (reserva.getItem() == null) {
             throw new AcaoNaoPermitidaException("Item nao informado");
         }
-
         if (reserva.getDataPrevista() == null) {
             throw new AcaoNaoPermitidaException("Informe uma data válida");
         }
-
         //Vai lancar excecao se o item for invalido
         Item i = itemService.consultarItemById(reserva.getItem().getIdItem());
         Usuario u = usuarioService.buscarUsuarioById(reserva.getUsuario().getIdUsuario());
-
         reserva.setItem(i);
         reserva.setUsuario(u);
-
         return reserva;
     }
 
-    /**
-     * Metodo para criar uma copia de objeto em memoria para evitar conflitos.
-     * @param reserva Reserva: objeto base para clonagem
-     * @return Reserva: objeto com endereco de memoria diferente.
-     * */
+    /** Metodo para criar uma copia de objeto em memoria para evitar conflitos. **/
     public Reserva clonar(Reserva reserva){
         Reserva nRes = new Reserva();
-
         nRes.setItem(reserva.getItem());
         nRes.setUsuario(reserva.getUsuario());
         nRes.setIdReserva(reserva.getIdReserva());
@@ -208,13 +159,6 @@ public class ReservaService {
         nRes.setOrdem(reserva.getOrdem());
         nRes.setQuantidadeReserva(reserva.getQuantidadeReserva());
         nRes.setDataPrevista(reserva.getDataPrevista());
-
         return nRes;
     }
-
-    public List<Reserva> consultarVencimentoHoje() {
-        String date = (LocalDate.from(ConversorData.toLocalDateTime(Instant.now()))).toString();
-        return reservaRepository.consultarVencimentoHoje(date);
-    }
-
 }

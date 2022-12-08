@@ -10,7 +10,4 @@ import java.util.Optional;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
     Optional<Usuario> findByEmail(String email);
-
-    @Query(value = "select count(*) from Usuario where usuario.email = :email ", nativeQuery = true)
-    Long existsByEmail(String email);
 }

@@ -188,5 +188,4 @@ public class Mapper {
                 reserva.getUsuario().getIdUsuario(),
                 reserva.getItem().getIdItem());
     }
-
 }

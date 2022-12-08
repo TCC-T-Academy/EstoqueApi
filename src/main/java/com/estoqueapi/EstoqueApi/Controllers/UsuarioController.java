@@ -41,7 +41,7 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toUsuarioPublicoDTO(usuarioService.salvar(mapper.toUsuario(usuarioNovoDTO))));
     }
 
-
+    //Alterar para DTO
     @PutMapping("/alterar/{email}")
     public ResponseEntity<Usuario> alterar(@PathVariable("email") String email, @RequestBody Usuario usuario){
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(usuarioService.alterar(email,usuario));
@@ -52,5 +52,4 @@ public class UsuarioController {
     public ResponseEntity<Usuario> desabilitar(@PathVariable("email") String email){
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(usuarioService.desabilitarUsuario(email));
     }
-
 }

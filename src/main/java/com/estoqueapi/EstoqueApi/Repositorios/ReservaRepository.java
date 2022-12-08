@@ -21,14 +21,5 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     @Query("select r from Reserva r order by r.dataPrevista desc")
     List<Reserva> findAllOrderByDesc();
 
-    @Query(value = "select * from reserva where data_prevista < localtime() and finalizada = ?1 order by data_prevista asc;", nativeQuery = true)
-    List<Reserva> findByDataPrevistaVencidos(Boolean finalizada);
-    @Query(value = "select * from reserva where finalizada = ?1 order by data_prevista asc;", nativeQuery = true)
-    List<Reserva> findByDataPrevistaAVencer(Boolean finalizada);
     List<Reserva> findByOrdem(String ordem);
-
-    @Query(value = "SELECT * FROM reserva r WHERE data_prevista = ?1", nativeQuery = true)
-    List<Reserva> consultarVencimentoHoje(String date);
-
-
 }

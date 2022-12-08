@@ -44,13 +44,10 @@ public class ValidacaoService {
         m.setUsuario(usuario);
         m.setEstoque(estoque);
         m.setItem(item);
-
         /*
         * Validacoes de usuário, quantidade, item ou outras
         * */
-
         return m;
-
     }
 
     public Previsao consultaPrevisoesByMovimentacao(Movimentacao m){
@@ -89,5 +86,4 @@ public class ValidacaoService {
         }
         return stream.findFirst().orElseThrow(()-> new MovimentacaoInvalidaException("Reserva não encontrada"));
     }
-
 }

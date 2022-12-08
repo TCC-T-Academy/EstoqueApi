@@ -34,7 +34,5 @@ public class LogFuturoService {
             log.get(i).setEstoqueMomento(estoqueFuturoItem);
         }
         return log;
-
     }
-
 }

@@ -15,6 +15,4 @@ public class RoleService {
     public Role consultarByAuthority(String authority){
         return roleRepository.findByAuthority(authority).orElseThrow(() -> new EntityNotFoundException("Role não encontrada"));
     }
-
-
 }

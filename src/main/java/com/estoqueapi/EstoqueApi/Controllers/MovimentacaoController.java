@@ -26,26 +26,11 @@ public class MovimentacaoController {
 
     @GetMapping
     public ResponseEntity<List<MovimentacaoDTO>> consultar(){
-        /*
-        * List<Movimentacao> list = movimentacaoService.consultar();
-        * List<MovimentacaoDTO> listDTO = new ArrayList<>();
-        * list.forEach(movimentacao -> listDTO.add(mapper.toMovimentacaoDto(movimentacao)));
-        * return  ResponseEntity.status(HttpStatus.OK).body(listDTO);
-        *
-        * RETORNO OTIMIZADO PARA RECURSO ABAIXO:
-        * */
-
         return ResponseEntity.status(HttpStatus.OK)
                 .body(movimentacaoService.consultar()
                         .stream()
                         .map(mapper::toMovimentacaoDto)
                         .collect(Collectors.toList()));
-    }
-
-    //EndPoint não utilizado
-    @GetMapping("/paginada")
-    public ResponseEntity<Page<MovimentacaoDTO>> consultaPaginada(Pageable pageable){
-        return ResponseEntity.status(HttpStatus.OK).body(movimentacaoService.consultaPaginada(pageable));
     }
 
     @GetMapping("/{idItem}")
@@ -68,5 +53,4 @@ public class MovimentacaoController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(mapper.toMovimentacaoDto(movimentacaoService.saidaItem(mapper.toMovimentacao(movimentacaoNovaDTO))));
     }
-
 }

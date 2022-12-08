@@ -50,12 +50,6 @@ public class PrevisaoService {
         return previsaoRepository.findAll();
     }
 
-    public Page<Previsao> consultaPaginada(Pageable pageable){
-        Page<Previsao> previsoes = previsaoRepository.findAll(pageable);
-        return previsoes;
-    }
-
-
     // Filtrar previsões por id do item
     public List<Previsao> consultarByIdItem(Long idItem) {
         //Lança exceção se o item nao existir.
@@ -65,10 +59,7 @@ public class PrevisaoService {
     }
 
 
-    /** Metodo para cadastrar novas previsoes.
-     * @param pr Previsao: Objeto a ser cadastrado.
-     * @return Previsao: Objeto retornado pelo repositorio após validacoes.
-     * */
+    /** Metodo para cadastrar novas previsoes. **/
     @Transactional
     public Previsao cadastrarPrevisoes(Previsao pr){
         //Validacoes gerais
@@ -78,7 +69,6 @@ public class PrevisaoService {
         if(pr.getDataPrevista().isBefore(LocalDate.now())) {
             throw new AcaoNaoPermitidaException("Informe uma data maior que a atual");
         }
-
 
         //  Verifica se existe a uma previsao de status finalizado = false para a ordem
         //    alterando a quantidade em caso positivo.
@@ -94,14 +84,11 @@ public class PrevisaoService {
                 return this.alterarPrevisao(p.getIdPrevisao(),p);
             }
         }
-
         //Atualiza estoque futuro
         Previsao previsao1 = previsaoRepository.save(pr);
         estoqueService.atualizarEstoqueFuturo(logFuturoService.buscarLogIdItem(idItem));
-
         return previsao1;
     }
-
 
     //Filtrar previsão por idPrevisao
     public Previsao filtrarId(long idPrevisao){
@@ -115,36 +102,8 @@ public class PrevisaoService {
         return prev;
     }
 
-    //Filtrar por ordem de compra/produção realizadas ou não
-    public List<Previsao> findByFinalizada(boolean finalizada){
-        return previsaoRepository.findByFinalizada(finalizada);
-    }
-
-    //Filtrar pela data as previsões que venceram e estão a vencer.
-    public List<Previsao> findByDataPrevistaVencidos(boolean finalizada) {
-        if (finalizada == true) {
-            return previsaoRepository.findByDataPrevistaVencidos();
-        } else
-            return previsaoRepository.findByDataPrevistaAVencer();
-    }
-
-        // Lista previsões com opção de escolha tanto com data anterior quanto a partir de hoje e finalizadas ou não
-    public List<Previsao> findByDataPrevistaFinalizada(boolean vencimento, boolean finalizada) {
-        if (vencimento == true) {
-            return previsaoRepository.findByDataPrevistaMenorFinalizada(finalizada);
-        } else {
-            return previsaoRepository.findByDataPrevistaMaiorIgualFinalizada(finalizada);
-        }
-    }
-
-    /**
-     * Metodo para alteracao de uma previsao a partir de um id.
-     * @param idPrevisao Long: Id da previsao a ser alterada.
-     * @param previsao Previsao: objeto previsao com as informacoes para atualizacao.
-     * @return Previsao: objeto retornado pelo repositorio após validacoes
-     * */
+    /** Metodo para alteracao de uma previsao a partir de um id. * */
     public Previsao alterarPrevisao(Long idPrevisao, Previsao previsao){
-
         Previsao prev = this.filtrarId(idPrevisao);
 
         // Não deixa alterar se previsao finalizada
@@ -160,18 +119,15 @@ public class PrevisaoService {
 
         //Lancará excecões caso haja problemas
         previsao = this.validarPrevisao(previsao);
-
         prev.setItem(previsao.getItem());
         prev.setUsuario(previsao.getUsuario());
         prev.setFinalizada(previsao.getFinalizada());
         prev.setOrdem(previsao.getOrdem());
         prev.setQuantidadePrevista(previsao.getQuantidadePrevista());
         prev.setDataPrevista(previsao.getDataPrevista());
-
         //Atualiza estoque futuro
         Previsao previsao1 = previsaoRepository.save(prev);
         estoqueService.atualizarEstoqueFuturo(logFuturoService.buscarLogIdItem(prev.getItem().getIdItem()));
-
         return previsao1;
     }
 
@@ -193,12 +149,8 @@ public class PrevisaoService {
     }
 
 
-    /**Metodo para validacao de uma previsao.
-     * @param previsao Previsao - Objeto para ser validado;
-     * @return Previsao - Objeto validado
-     * */
+    /** Metodo para validacao de uma previsao. * */
     public Previsao validarPrevisao(Previsao previsao) {
-
         if (previsao.getQuantidadePrevista() <= 0) {
             throw new AcaoNaoPermitidaException("Quantidade inválida");
         }
@@ -208,24 +160,17 @@ public class PrevisaoService {
         if (previsao.getItem() == null) {
             throw new AcaoNaoPermitidaException("Item nao informado");
         }
-
         if (previsao.getDataPrevista() == null) {
             throw new AcaoNaoPermitidaException("Informe uma data válida");
         }
-
         //Vai lancar excecao se o item for invalido
         Item i = itemService.consultarItemById(previsao.getItem().getIdItem());
         Usuario u = usuarioService.buscarUsuarioById(previsao.getUsuario().getIdUsuario());
-
         return previsao;
     }
 
 
-    /**
-     * Metodo para criar uma copia de objeto em memoria para evitar conflitos.
-     * @param previsao Previsao: objeto base para clonagem
-     * @return Previsao: objeto com endereco de memoria diferente.
-     * */
+    /** Metodo para criar uma copia de objeto em memoria para evitar conflitos. **/
     public Previsao clonar(Previsao previsao){
         Previsao nPrev = new Previsao();
 
@@ -236,15 +181,7 @@ public class PrevisaoService {
         nPrev.setOrdem(previsao.getOrdem());
         nPrev.setQuantidadePrevista(previsao.getQuantidadePrevista());
         nPrev.setDataPrevista(previsao.getDataPrevista());
-
         return nPrev;
     }
-
-    public List<Previsao> consultarVencimentoHoje() {
-        String date = (LocalDate.from(ConversorData.toLocalDateTime(Instant.now()))).toString();
-        return previsaoRepository.consultarVencimentoHoje(date);
-    }
-
-
 }
 

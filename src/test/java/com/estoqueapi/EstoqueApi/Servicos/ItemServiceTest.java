@@ -61,42 +61,4 @@ public class ItemServiceTest {
         Assertions.assertEquals(msgEsperada,ex.getMessage());
 
     }
-
-    @Test
-    @DisplayName("Retorna item apos salvamento correto")
-    public void retornaItemAposSalvamentoCorreto(){
-
-        //Mockando retorno
-        Mockito.when(itemRepository.save(item)).thenReturn(item);
-
-        //Testando
-        Assertions.assertEquals(item, itemService.salvar(item));
-    }
-
-    @Test
-    @DisplayName("Retorna item alterado apos alteracao")
-    public void retornaItemAlteradoAposAlteracao(){
-        Item itemAlterado = new Item();
-        itemAlterado.setIdItem(item.getIdItem());
-        itemAlterado.setFamilia("NOVA FAMILIA");
-        itemAlterado.setDescricao("NOVA DESCRICAO");
-        itemAlterado.setGrupo("NOVO GRUPO");
-        itemAlterado.setEstoqueSeguranca(20f);
-        itemAlterado.setUnidade("NOVA UNIDADE");
-
-        //Mockando retorno
-        Mockito.when(itemRepository.findById(item.getIdItem())).thenReturn(optItem);
-        Mockito.when(itemRepository.save(item)).thenReturn(item);
-
-        //Testando se a alteracao do item realmente aconteceu
-        Item itenRetornado = itemService.alterarItem(item.getIdItem(), itemAlterado);
-        Assertions.assertEquals(itemAlterado.getFamilia(),itenRetornado.getFamilia());
-        Assertions.assertEquals(itemAlterado.getDescricao(),itenRetornado.getDescricao());
-        Assertions.assertEquals(itemAlterado.getGrupo(),itenRetornado.getGrupo());
-        Assertions.assertEquals(itemAlterado.getUnidade(),itenRetornado.getUnidade());
-        Assertions.assertEquals(itemAlterado.getEstoqueSeguranca(),itenRetornado.getEstoqueSeguranca());
-    }
-
-
-
 }
