@@ -76,12 +76,12 @@ public class UsuarioService implements UserDetailsService {
             vUsuario.setNome(usuario.getNome());
         }
         if(usuario.getSenha() != null && !usuario.getSenha().isEmpty()){
-            vUsuario.setSenha(usuario.getSenha());
+            vUsuario.setSenha(b.encode(usuario.getSenha()));
         }
         if(!usuario.getEmail().isEmpty() && !usuario.getEmail().isBlank()){
             vUsuario.setEmail(usuario.getEmail());
         }
-        return this.salvar(vUsuario);
+        return usuarioRepository.save(vUsuario);
     }
 
     public Usuario desabilitarUsuario(String email) {
