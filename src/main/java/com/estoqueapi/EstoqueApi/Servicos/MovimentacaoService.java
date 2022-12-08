@@ -128,7 +128,7 @@ public class MovimentacaoService {
     }
 
     private void atualizaEstoqueFuturo(Movimentacao m){
-        estoqueService.atualizarEstoqueFuturo(logFuturoService.buscarLogIdItem(m.getItem().getIdItem()));
+        estoqueService.atualizarEstoqueFuturo(m.getItem().getIdItem(), logFuturoService.buscarLogIdItem(m.getItem().getIdItem()));
     }
 
 }
