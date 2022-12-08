@@ -192,6 +192,4 @@ public class EstoqueServiceTest {
         EntityNotFoundException ex = Assertions.assertThrows(EntityNotFoundException.class,() -> estoqueService.buscarEstoqueById(idEstoqueErrado));
         Assertions.assertEquals(msgEsperada,ex.getMessage());
     }
-
-
 }

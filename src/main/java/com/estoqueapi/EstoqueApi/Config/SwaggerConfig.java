@@ -19,5 +19,4 @@ public class SwaggerConfig {
                         .description("SpringShop Wiki Documentation")
                         .url("https://springshop.wiki.github.org/docs"));
     }
-    //teste
 }

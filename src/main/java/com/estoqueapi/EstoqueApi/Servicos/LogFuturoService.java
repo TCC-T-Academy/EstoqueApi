@@ -38,7 +38,5 @@ public class LogFuturoService {
         }
 
         return log;
-
     }
-
 }

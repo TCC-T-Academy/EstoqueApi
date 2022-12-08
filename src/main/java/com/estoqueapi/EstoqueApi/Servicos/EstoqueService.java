@@ -45,14 +45,12 @@ public class EstoqueService {
         }else if(qtd > estoque.getEstoqueReal()){
             throw new MovimentacaoInvalidaException("Quantidade Indisponível");
         }
-
         estoque.setEstoqueReal(estoque.getEstoqueReal() - qtd);
         return estoqueRepository.save(estoque);
     }
 
     public Estoque buscarEstoqueById(long idEstoque) {
         Estoque estoque = estoqueRepository.findById(idEstoque).orElseThrow(() -> new EntityNotFoundException("Estoque nao encontrado"));
-
         return estoque;
     }
 
@@ -60,7 +58,7 @@ public class EstoqueService {
         return this.validarEstoque(estoque);
     }
 
-    public Estoque alterarEstoque(long idEstoque, Estoque estoque){
+    /*public Estoque alterarEstoque(long idEstoque, Estoque estoque){
         Estoque estoqueAlterado = this.buscarEstoqueById(idEstoque);
 
         if(estoque.getEstoqueReal() > 0){
@@ -72,10 +70,8 @@ public class EstoqueService {
         if(estoque.getItem().getIdItem() > 0){
             estoqueAlterado.setItem(itemService.consultarItemById(estoque.getItem().getIdItem()));
         }
-
         return this.salvar(estoqueAlterado);
-
-    }
+    }*/
 
     public Estoque validarEstoque(Estoque e){
         Item item = itemService.consultarItemById(e.getItem().getIdItem());
@@ -112,6 +108,5 @@ public class EstoqueService {
         }
 
         return estoqueRepository.save(e);
-
     }
 }

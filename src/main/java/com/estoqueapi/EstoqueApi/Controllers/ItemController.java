@@ -20,26 +20,4 @@ public class ItemController {
     public ResponseEntity<Item> consultarItemById(@PathVariable("idItem") long idItem){
         return ResponseEntity.status(HttpStatus.OK).body(itemService.consultarItemById(idItem));
     }
-
-
-    //EndPoint não utilizado
-    @GetMapping
-    public ResponseEntity<List<Item>> consultarItens(){
-        return ResponseEntity.status(HttpStatus.OK).body(itemService.listarItens());
-    }
-
-
-    //EndPoint não utilizado
-    @PostMapping
-    public ResponseEntity<Item> salvarItem (@RequestBody Item item){
-        return ResponseEntity.status(HttpStatus.CREATED).body(itemService.salvar(item));
-    }
-
-
-    //EndPoint não utilizado
-    @PutMapping("/{idItem}")
-    public ResponseEntity<Item> salvarItem (@PathVariable("idItem") long idItem, @RequestBody Item item){
-        return ResponseEntity.status(HttpStatus.OK).body(itemService.alterarItem(idItem, item));
-    }
-
 }

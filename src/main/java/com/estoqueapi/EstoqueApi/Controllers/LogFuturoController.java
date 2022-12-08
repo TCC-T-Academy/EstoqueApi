@@ -24,6 +24,4 @@ public class LogFuturoController {
     public ResponseEntity<List<LogFuturo>> consultarLogIdItem(@PathVariable("idItem") long idItem){
         return ResponseEntity.status(HttpStatus.OK).body(logFuturoService.buscarLogIdItem(idItem));
     }
-
-
 }

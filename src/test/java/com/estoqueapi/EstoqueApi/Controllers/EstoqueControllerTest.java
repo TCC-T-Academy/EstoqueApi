@@ -24,12 +24,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/**
- * Testar seguintes endpoints:
- * GET /estoque/
- * GET /estoque/{idItemExistente}
- * GET /estoque/{idItemInexistente}
- */
 
 @SpringBootTest
 @AutoConfigureMockMvc

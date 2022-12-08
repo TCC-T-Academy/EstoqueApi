@@ -34,14 +34,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/**
- * Testar seguintes endpoints:
- * GET /movimentacoes/
- * GET /movimentacoes/{idItem}
- * GET /movimentacoes/{idItemInexistente}
- * POST /movimentacoes/entrada
- * POST /movimentacoes/saida
- */
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -197,7 +189,6 @@ public class MovimentacaoControllerTest {
 
         resultado.andExpect(status().isOk());
         resultado.andExpect(jsonPath("$.size()").value(listaTotal.size()));
-//        resultado.andDo(print());
     }
 
     @Test
@@ -207,7 +198,6 @@ public class MovimentacaoControllerTest {
 
         resultado.andExpect(status().isOk());
         resultado.andExpect(jsonPath("$.size()").value(listaPorItem1.size()));
-//        resultado.andDo(print());
     }
 
     @Test
@@ -217,7 +207,6 @@ public class MovimentacaoControllerTest {
 
         resultado.andExpect(status().isOk());
         resultado.andExpect(jsonPath("$.size()").value(listaPorItem2.size()));
-//        resultado.andDo(print());
     }
 
     @Test
@@ -229,7 +218,6 @@ public class MovimentacaoControllerTest {
         resultado.andExpect(status().isNotFound());
         resultado.andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.error").value(
                 "Recurso não encontrado"));
-//        resultado.andDo(print());
     }
 
     @Test
@@ -244,7 +232,6 @@ public class MovimentacaoControllerTest {
         resultado.andExpect(status().isCreated());
         resultado.andExpect(jsonPath("$.idMovimentacao").exists());
         resultado.andExpect(jsonPath("$.idMovimentacao").value(0));
-//        resultado.andDo(print());
     }
     @Test
     public void retornaCreatedQuandoPostMovimentacaoSaida() throws Exception {
@@ -259,6 +246,5 @@ public class MovimentacaoControllerTest {
         resultado.andExpect(status().isCreated());
         resultado.andExpect(jsonPath("$.idMovimentacao").exists());
         resultado.andExpect(jsonPath("$.idMovimentacao").value(1));
-//        resultado.andDo(print());
     }
 }

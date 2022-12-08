@@ -14,6 +14,9 @@ public class UsuarioPublicoDTO {
         this.role = role;
     }
 
+    public UsuarioPublicoDTO(long idUsuario, String nome) {
+    }
+
     public String getEmail() {
         return email;
     }

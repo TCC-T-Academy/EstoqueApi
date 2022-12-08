@@ -49,7 +49,6 @@ public class UsuarioService implements UserDetailsService {
         if(vUsuario.getIdUsuario() == 0 && this.usuarioExiste(usuario.getEmail())){
             throw new AcaoNaoPermitidaException("Email ja existe");
         }
-
         return usuarioRepository.save(vUsuario);
     }
 
@@ -82,16 +81,11 @@ public class UsuarioService implements UserDetailsService {
         if(!usuario.getEmail().isEmpty() && !usuario.getEmail().isBlank()){
             vUsuario.setEmail(usuario.getEmail());
         }
-
         return this.salvar(vUsuario);
-
     }
 
     public Usuario desabilitarUsuario(String email) {
-
         Usuario vUsuario = this.consultarByEmail(email);
-
-
         return this.salvar(vUsuario);
     }
 

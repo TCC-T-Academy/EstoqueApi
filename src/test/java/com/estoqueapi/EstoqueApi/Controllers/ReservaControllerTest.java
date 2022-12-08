@@ -177,7 +177,6 @@ public class ReservaControllerTest {
         resultado.andExpect(status().isOk());
         resultado.andExpect(jsonPath("$.size()").value(listaDeReservasPorItem1.size()));
         resultado.andExpect(jsonPath("$[0].item.descricao").value("Item 1"));
-//        resultado.andDo(print());
     }
 
     @Test
@@ -188,7 +187,6 @@ public class ReservaControllerTest {
         resultado.andExpect(status().isOk());
         resultado.andExpect(jsonPath("$.size()").value(listaDeReservasPorItem2.size()));
         resultado.andExpect(jsonPath("$[0].item.descricao").value("Item 2"));
-//        resultado.andDo(print());
     }
 
     @Test
@@ -213,7 +211,6 @@ public class ReservaControllerTest {
         resultado.andExpect(status().isOk());
         resultado.andExpect(jsonPath("$.idReserva").value(r2.getIdReserva()));
         resultado.andExpect(jsonPath("$.ordem").value("ORDEM 999"));
-//        resultado.andDo(print());
 
     }
 
