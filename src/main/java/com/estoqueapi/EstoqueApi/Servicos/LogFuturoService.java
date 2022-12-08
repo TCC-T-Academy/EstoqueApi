@@ -26,13 +26,17 @@ public class LogFuturoService {
     public List<LogFuturo> buscarLogIdItem(long idItem) {
         List<LogFuturo> log = repository.findLogByIdItem(idItem);
         Float estoqueAtual = estoqueService.buscarEstoqueIdItem(idItem).getEstoqueReal();
-        Float estoqueFuturoItem = log.get(0).getQuantidade() + estoqueAtual;
-        log.get(0).setEstoqueMomento(estoqueFuturoItem);
 
-        for (int i = 1; i != log.size(); i++){
-            estoqueFuturoItem = log.get(i).getQuantidade() + log.get(i-1).getEstoqueMomento();
-            log.get(i).setEstoqueMomento(estoqueFuturoItem);
+        if(log.size() > 0){
+            Float estoqueFuturoItem = log.get(0).getQuantidade() + estoqueAtual;
+            log.get(0).setEstoqueMomento(estoqueFuturoItem);
+
+            for (int i = 1; i != log.size(); i++){
+                estoqueFuturoItem = log.get(i).getQuantidade() + log.get(i-1).getEstoqueMomento();
+                log.get(i).setEstoqueMomento(estoqueFuturoItem);
+            }
         }
+
         return log;
 
     }
