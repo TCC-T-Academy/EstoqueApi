@@ -1,8 +1,9 @@
 package com.estoqueapi.EstoqueApi.Servicos;
 
 import com.estoqueapi.EstoqueApi.Entidades.Estoque;
-import com.estoqueapi.EstoqueApi.Entidades.Itens;
+import com.estoqueapi.EstoqueApi.Entidades.Item;
 import com.estoqueapi.EstoqueApi.Exceptions.ItemForaEstoqueException;
+import com.estoqueapi.EstoqueApi.Exceptions.MovimentacaoInvalidaException;
 import com.estoqueapi.EstoqueApi.Repositorios.EstoqueRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +21,7 @@ import java.util.Optional;
 @ExtendWith(SpringExtension.class)
 public class EstoqueServiceTest {
 
-    private Itens item;
+    private Item item;
     private Estoque estoque;
     private Optional<Estoque> optEstoque;
 
@@ -32,7 +33,7 @@ public class EstoqueServiceTest {
 
     @BeforeEach
     void setup(){
-        item = new Itens();
+        item = new Item();
         item.setIdItem(1000l);
         item.setDescricao("Item teste para teste");
         item.setFamilia("Teste");
@@ -63,7 +64,7 @@ public class EstoqueServiceTest {
     @DisplayName("Lanca excecao se objeto estoque nao encontrado")
     public void lancaExcecaoSeObjetoEstoqueNaoEncontrado(){
         optEstoque = Optional.of(estoque);
-        String msgEsperada = "Item nao encontrado no estoque";
+        String msgEsperada = "Item nao encontrado no estoque.";
         long idItemErrado = 100;
 
         //Mockando funcoes do repositorio do estoque
@@ -124,7 +125,7 @@ public class EstoqueServiceTest {
         Mockito.when(estoqueRepository.save(estoque)).thenReturn(estoque);
 
         //testando funcao
-        ItemForaEstoqueException ex = Assertions.assertThrows(ItemForaEstoqueException.class,() -> estoqueService.adicionarEstoque(item.getIdItem(),qtd));
+        MovimentacaoInvalidaException ex = Assertions.assertThrows(MovimentacaoInvalidaException.class,() -> estoqueService.adicionarEstoque(item.getIdItem(),qtd));
         Assertions.assertEquals(msgEsperada,ex.getMessage());
     }
 
@@ -143,7 +144,7 @@ public class EstoqueServiceTest {
         Mockito.when(estoqueRepository.save(estoque)).thenReturn(estoque);
 
         //testando funcao
-        ItemForaEstoqueException ex = Assertions.assertThrows(ItemForaEstoqueException.class,() -> estoqueService.subtrairEstoque(item.getIdItem(),qtd));
+        MovimentacaoInvalidaException ex = Assertions.assertThrows(MovimentacaoInvalidaException.class,() -> estoqueService.subtrairEstoque(item.getIdItem(),qtd));
         Assertions.assertEquals(msgEsperada,ex.getMessage());
     }
 
@@ -160,7 +161,7 @@ public class EstoqueServiceTest {
         Mockito.when(estoqueRepository.save(estoque)).thenReturn(estoque);
 
         //testando funcao
-        ItemForaEstoqueException ex = Assertions.assertThrows(ItemForaEstoqueException.class,() -> estoqueService.subtrairEstoque(item.getIdItem(),qtd));
+        MovimentacaoInvalidaException ex = Assertions.assertThrows(MovimentacaoInvalidaException.class,() -> estoqueService.subtrairEstoque(item.getIdItem(),qtd));
         Assertions.assertEquals(msgEsperada,ex.getMessage());
     }
 
@@ -191,6 +192,4 @@ public class EstoqueServiceTest {
         EntityNotFoundException ex = Assertions.assertThrows(EntityNotFoundException.class,() -> estoqueService.buscarEstoqueById(idEstoqueErrado));
         Assertions.assertEquals(msgEsperada,ex.getMessage());
     }
-
-
 }

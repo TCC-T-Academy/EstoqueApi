@@ -100,6 +100,16 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2Njk4MjUxODcsInVzZXJfbmFtZSI6Im1hcmlhQGdtYWlsLmNvbSIsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNVQVJJTyJdLCJqdGkiOiJiZTNmZjU3OS0wOWQ5LTRiMzItODZkZS1iYmU5NmJiN2FjZmMiLCJjbGllbnRfaWQiOiJ3ZWJzdG9jayIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdfQ.udHluVBLE6Dxxg_DpfRP4vmlASDiKhCHb9HVJm1JXFE",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -135,14 +145,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8081/reservas/1540",
+							"raw": "localhost:8081/reservas",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
-								"reservas",
-								"1540"
+								"reservas"
 							]
 						}
 					},
@@ -330,7 +339,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"item\": {\r\n            \"idItem\": 1540\r\n        },\r\n        \"usuario\": {\r\n            \"idUsuario\": 1\r\n        },\r\n        \"quantidadePrevista\": 91.0,\r\n        \"dataPrevista\": \"2022-11-16\",\r\n        \"ordem\": \"CP1008\",\r\n        \"finalizada\": false\r\n    }",
+							"raw": "{\r\n        \"item\": {\r\n            \"idItem\": 1540\r\n        },\r\n        \"usuario\": {\r\n            \"idUsuario\": 1\r\n        },\r\n        \"quantidadePrevista\": 91.0,\r\n        \"dataPrevista\": \"2022-11-16T00:00:00.0Z\",\r\n        \"ordem\": \"CP1008\",\r\n        \"finalizada\": false\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -670,17 +679,27 @@
 				{
 					"name": "ConsultarPorIdItem",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2Njk4MjUxODcsInVzZXJfbmFtZSI6Im1hcmlhQGdtYWlsLmNvbSIsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNVQVJJTyJdLCJqdGkiOiJiZTNmZjU3OS0wOWQ5LTRiMzItODZkZS1iYmU5NmJiN2FjZmMiLCJjbGllbnRfaWQiOiJ3ZWJzdG9jayIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdfQ.udHluVBLE6Dxxg_DpfRP4vmlASDiKhCHb9HVJm1JXFE",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8081/estoque/1540",
+							"raw": "localhost:8081/estoque/baixo",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
 								"estoque",
-								"1540"
+								"baixo"
 							]
 						}
 					},
@@ -721,6 +740,25 @@
 			"item": [
 				{
 					"name": "Consulta movimentações do item",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/movimentacoes/1690",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"movimentacoes",
+								"1690"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta movimentações do item Copy",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -813,6 +851,85 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "GetToken",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "maria@gmail.com",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "default"
+								},
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8081/oauth/token",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"oauth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "WebStock123",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "webstock",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }

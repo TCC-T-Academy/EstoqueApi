@@ -1,3 +1,4 @@
+USE estoque_api;
 drop function if exists getIntAleatorio; 
 delimiter $$
 create function getIntAleatorio(idInicio bigint, idFim bigint, incremento int) 
@@ -39,15 +40,15 @@ begin
 	declare idFim bigint;
     declare idInicio bigint;
     
-    select max(id_item) into idFim from itens;
-    select min(id_item) into idInicio from itens;
+    select max(id_item) into idFim from item;
+    select min(id_item) into idInicio from item;
     
-    set compras = (select COUNT(*) from previsoes) + 1000;
+    set compras = (select COUNT(*) from previsao) + 1000;
         
 	set qtd = getFloatAleatorio(50,100);    
     select getIntAleatorio(idInicio,idFim,10) into idItem;
     
-    insert into previsoes (data_prevista,finalizada,ordem,quantidade_prevista,item_id_item,usuario_id_usuario)
+    insert into previsao (data_prevista,finalizada,ordem,quantidade_prevista,item_id_item,usuario_id_usuario)
 			values (date_add(now(), interval dias day),0,concat('CP',compras),qtd,idItem,1);
     
 end$$
@@ -63,23 +64,23 @@ begin
 	declare idFim bigint;
     declare idInicio bigint;
     
-    select max(id_item) into idFim from itens;
-    select min(id_item) into idInicio from itens;
+    select max(id_item) into idFim from item;
+    select min(id_item) into idInicio from item;
     
-    set po = (select COUNT(*) from reservas) + 1000;
+    set po = (select COUNT(*) from reserva) + 1000;
         
 	set qtd = getFloatAleatorio(50,100);    
     select getIntAleatorio(idInicio,idFim,10) into idItem;
     
-    insert into reservas (data_prevista,finalizada,ordem,quantidade_reserva,item_id_item,usuario_id_usuario)
+    insert into reserva (data_prevista,finalizada,ordem,quantidade_reserva,item_id_item,usuario_id_usuario)
 			values (date_add(now(), interval dias day),0,concat('PO',po),qtd,idItem,1);
     
 end$$
 delimiter ;
 
-drop procedure if exists gerarReservasAleatorias;
+drop procedure if exists gerarreservaAleatorias;
 delimiter $$
-create procedure gerarReservasAleatorias()
+create procedure gerarreservaAleatorias()
 begin
     declare qtd int;   
 	set qtd = 10;
@@ -90,9 +91,9 @@ begin
 end$$
 delimiter ;
 
-drop procedure if exists gerarPrevisoesAleatorias;
+drop procedure if exists gerarprevisaoAleatorias;
 delimiter $$
-create procedure gerarPrevisoesAleatorias()
+create procedure gerarprevisaoAleatorias()
 begin
     declare qtd int;   
 	set qtd = 10;
@@ -114,7 +115,7 @@ begin
 	set qtdReal = (select e.estoque_real from estoque as e where e.item_id_item = idItem);
 	
 	if (tipo = 'IN') then
-		insert into movimentacoes(data_movimentacao, origem_destino, quantidade, tipo, estoque_id_estoque, item_id_item, usuario_id_usuario)
+		insert into movimentacao(data_movimentacao, origem_destino, quantidade, tipo, estoque_id_estoque, item_id_item, usuario_id_usuario)
 					values(dtMovimento,org_dstn, qtd, tipo,idEstoque,idItem,1);
 	
 		update estoque set estoque_real = (qtdReal + qtd) where item_id_item = idItem;
@@ -122,7 +123,7 @@ begin
 	elseif(tipo = 'OUT') then
 	
 		if (qtdReal > qtd) then
-			insert into movimentacoes(data_movimentacao, origem_destino, quantidade, tipo, estoque_id_estoque, item_id_item, usuario_id_usuario)
+			insert into movimentacao(data_movimentacao, origem_destino, quantidade, tipo, estoque_id_estoque, item_id_item, usuario_id_usuario)
 					values(dtMovimento,org_dstn, qtd, tipo,idEstoque,idItem,1);
 		
 			update estoque set estoque_real = (qtdReal - qtd) where item_id_item = idItem;
@@ -131,30 +132,35 @@ begin
 end$$
 delimiter ;
 
-drop procedure if exists gerarMovimentacoesUltimasReservas;
+drop procedure if exists gerarmovimentacaoUltimasreserva;
 Delimiter $$
-create procedure gerarMovimentacoesUltimasReservas(in num int)
+create procedure gerarmovimentacaoUltimasreserva(in num int)
 begin
 	
     declare idItem bigint;
     declare idReserva bigint;
     declare qtd float;
     declare vdia int;
+    declare vParam int;
     declare destino varchar(25);
     declare nData datetime;
 
     set vdia = (round(rand() * (30 - 10 - 1)) + 1);
         
 	while num > 0 do
-		select ifnull(min(id_reserva),0) into idReserva from reservas where finalizada = false and data_prevista <= now(); 	-- busca a primeira previsao possível para entrada
+		select ifnull(min(id_reserva),0) into idReserva from reserva where finalizada = false and data_prevista <= now(); 	-- busca a primeira previsao possível para entrada
         if(idReserva > 0) then        
-			select quantidade_reserva into qtd from reservas where id_reserva = idReserva;
-            select item_id_item into idItem from reservas where id_reserva = idReserva;
-            select ordem into destino from reservas where id_reserva = idReserva;
-            select data_prevista into ndata from reservas where id_reserva = idReserva;            
+			select quantidade_reserva into qtd from reserva where id_reserva = idReserva;
+            select item_id_item into idItem from reserva where id_reserva = idReserva;
+            select ordem into destino from reserva where id_reserva = idReserva;
+            select data_prevista into ndata from reserva where id_reserva = idReserva;
+			
+            set vParam = datediff(now(),ndata);
+            set ndata = date_add(now(),interval -vParam day);
+            
 			call gerarMovimento(idItem,'OUT',qtd,destino,nData);
             
-            update reservas set finalizada = true where id_reserva = idReserva;
+            update reserva set finalizada = true where id_reserva = idReserva;
             
         end if;
         set num = num - 1;
@@ -162,9 +168,9 @@ begin
 end $$
 Delimiter ;
 
-drop procedure if exists gerarMovimentacoesUltimasPrevisoes;
+drop procedure if exists gerarmovimentacaoUltimasprevisao;
 Delimiter $$
-create procedure gerarMovimentacoesUltimasPrevisoes(in num int)
+create procedure gerarmovimentacaoUltimasprevisao(in num int)
 begin
 	
     declare idItem bigint;
@@ -176,19 +182,20 @@ begin
     declare nData datetime;
        
 	while num > 0 do
-		select ifnull(min(id_previsao),0) into idPrevisao from previsoes where finalizada = false and data_prevista <= now(); 	-- busca a primeira previsao possível para entrada
+		select ifnull(min(id_previsao),0) into idPrevisao from previsao where finalizada = false and data_prevista <= now(); 	-- busca a primeira previsao possível para entrada
         if(idPrevisao > 0) then        
-			select quantidade_prevista into qtd from previsoes where id_previsao = idPrevisao;
-            select item_id_item into idItem from previsoes where id_previsao = idPrevisao;
-            select ordem into origem from previsoes where id_previsao = idPrevisao;          
-            select data_prevista into ndata from previsoes where id_previsao = idPrevisao;
+			select quantidade_prevista into qtd from previsao where id_previsao = idPrevisao;
+            select item_id_item into idItem from previsao where id_previsao = idPrevisao;
+            select ordem into origem from previsao where id_previsao = idPrevisao;          
+            select data_prevista into ndata from previsao where id_previsao = idPrevisao;
 			
-            set vParam = datediff(now(),ndata); 
+            set vParam = datediff(now(),ndata);
+            set ndata = date_add(now(),interval -vParam day);
 			set vdia = (round(rand() * (vParam - 2)) + 1);
             set ndata = date_add(ndata, interval vdia day);          
 			call gerarMovimento(idItem,'IN',qtd,origem,nData);
             
-            update previsoes set finalizada = true where id_previsao = idPrevisao;
+            update previsao set finalizada = true where id_previsao = idPrevisao;
             
         end if;
         set num = num - 1;
@@ -196,9 +203,9 @@ begin
 end $$
 Delimiter ;
 
-drop procedure if exists gerarMovimentacoesAvulsas;
+drop procedure if exists gerarmovimentacaoAvulsas;
 Delimiter $$
-create procedure gerarMovimentacoesAvulsas(in qtdMovimentos int, in dias int)
+create procedure gerarmovimentacaoAvulsas(in qtdMovimentos int, in dias int)
 begin	
     declare idInicio bigint;
     declare idFim bigint;
@@ -209,20 +216,22 @@ begin
     declare qtdReal float;
     declare vdia int;
     
-    select max(id_item) into idFim from itens;
-    select min(id_item) into idInicio from itens;
+    select max(id_item) into idFim from item;
+    select min(id_item) into idInicio from item;
     
 	while qtdMovimentos > 0 do
-		select getIntAleatorio(idInicio,idFim,10) into idItem;	
+		select getIntAleatorio(idInicio,idFim,10) into idItem;
+        
 		set idEstoque = (select e.id_estoque from estoque as e where e.item_id_item = idItem);
 		set qtdReal = (select e.estoque_real from estoque as e where e.item_id_item = idItem);
-		set qtdMinima = (select i.estoque_seguranca from itens as i where i.id_item = idItem);
+		set qtdMinima = (select i.estoque_seguranca from item as i where i.id_item = idItem);
 		
 		set qtd = getFloatAleatorio(1,qtdMinima);		
 		   
 		if(qtdReal > qtd) then
 			
-			call gerarMovimento(idItem,'OUT',qtd,'avulso',date_add(now(), interval dias day));
+            set vdia = (round(rand() * (dias - 2)) + 1);
+			call gerarMovimento(idItem,'OUT',qtd,'avulso',date_add(now(), interval vdia day));
             
 		end if;
         
@@ -232,15 +241,20 @@ begin
 end $$
 Delimiter ;
 
-call gerarPrevisoesAleatorias();
-call gerarReservasAleatorias();
-call gerarMovimentacoesUltimasReservas(10);
-call gerarMovimentacoesUltimasPrevisoes(10);
-call gerarMovimentacoesAvulsas(10,5);
+call gerarprevisaoAleatorias();
+call gerarreservaAleatorias();
+call gerarmovimentacaoUltimasreserva(10);
+call gerarmovimentacaoUltimasprevisao(10);
+call gerarmovimentacaoAvulsas(10,5);
 
 
-select * from movimentacoes m
-	inner join itens on id_item= m.item_id_item
+select * from -- movimentacao m
+	-- inner join 
+    item 
+    -- on id_item= m.item_id_item
     inner join estoque e on id_item = e.item_id_item
-    order by m.data_movimentacao
+    
+where item.id_item = 1490
+-- order by m.data_movimentacao
 ;
+
