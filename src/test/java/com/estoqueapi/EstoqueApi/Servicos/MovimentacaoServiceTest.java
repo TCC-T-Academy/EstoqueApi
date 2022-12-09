@@ -14,6 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +43,12 @@ public class MovimentacaoServiceTest {
 
     @Mock
     private ReservaService reservaService;
+
+    @Mock
+    private ItemService itemService;
+
+    @Mock
+    private LogFuturoService logFuturoService;
 
     @InjectMocks
     private MovimentacaoService movimentacaoService;
@@ -77,7 +84,7 @@ public class MovimentacaoServiceTest {
         previsao.setQuantidadePrevista(10);
         previsao.setOrdem("CP1000");
         previsao.setItem(item);
-        previsao.setDataPrevista(LocalDate.parse("2022-11-16T00:00:00"));
+        previsao.setDataPrevista(LocalDate.parse("2022-11-16"));
         previsao.setUsuario(user);
         previsao.setIdPrevisao(10l);
 
@@ -86,7 +93,7 @@ public class MovimentacaoServiceTest {
         reserva.setQuantidadeReserva(10);
         reserva.setOrdem("PO1000");
         reserva.setItem(item);
-        reserva.setDataPrevista(LocalDate.parse("2022-11-16T00:00:00"));
+        reserva.setDataPrevista(LocalDate.parse("2022-11-16"));
         reserva.setUsuario(user);
         reserva.setIdReserva(10l);
 
@@ -147,7 +154,9 @@ public class MovimentacaoServiceTest {
         mockReserva.setDataPrevista(reserva.getDataPrevista());
         mockReserva.setOrdem(reserva.getOrdem());
 
-
+        LogFuturo mockLog = new LogFuturo("Reserva",reserva.getOrdem(),LocalDate.now().plus(10, ChronoUnit.DAYS),20f);
+        List<LogFuturo> mockLogs = new ArrayList<>();
+        mockLogs.add(mockLog);
 
         //Mockando as funcoes
         Mockito.when(movimentacaoRepository.save(m)).thenReturn(m);
@@ -156,6 +165,7 @@ public class MovimentacaoServiceTest {
         Mockito.when(estoqueService.adicionarEstoque(item.getIdItem(), m.getQuantidade())).thenReturn(estoque);
         Mockito.when(reservaService.alterar(reserva.getIdReserva(),reserva)).thenReturn(reserva);
         Mockito.when(reservaService.clonar(reserva)).thenReturn(mockReserva);
+        Mockito.when(estoqueService.atualizarEstoqueFuturo(reserva.getItem().getIdItem(),mockLogs)).thenReturn(new Estoque());
 
         //Testando
         Assertions.assertEquals(tipoEsperado, movimentacaoService.saidaItem(m).getTipo());

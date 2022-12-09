@@ -1,8 +1,6 @@
 package com.estoqueapi.EstoqueApi.Servicos;
 
-import com.estoqueapi.EstoqueApi.Entidades.Item;
-import com.estoqueapi.EstoqueApi.Entidades.Previsao;
-import com.estoqueapi.EstoqueApi.Entidades.Usuario;
+import com.estoqueapi.EstoqueApi.Entidades.*;
 import com.estoqueapi.EstoqueApi.Exceptions.AcaoNaoPermitidaException;
 import com.estoqueapi.EstoqueApi.Repositorios.ItemRepository;
 import com.estoqueapi.EstoqueApi.Repositorios.PrevisaoRepository;
@@ -44,12 +42,18 @@ public class PrevisaoServiceTest {
     @Mock
     private UsuarioService usuarioService;
 
+    @Mock
+    private LogFuturoService logFuturoService;
+
+    @Mock
+    private EstoqueService estoqueService;
+
     @InjectMocks
     private PrevisaoService previsaoService;
 
     @BeforeEach
     void setup() {
-        LocalDate data = LocalDate.parse("2022-11-16T00:00:00");
+        LocalDate data = LocalDate.parse("2022-11-16");
         idNaoExistente = 7L;
         previsao = new Previsao();
         previsao.setIdPrevisao(22);
@@ -125,6 +129,10 @@ public class PrevisaoServiceTest {
         List<Previsao> mockList = new ArrayList<>();
         mockList.add(previsao);
 
+        LogFuturo mockLog = new LogFuturo("Previsao",previsao.getOrdem(),LocalDate.now().plus(10,ChronoUnit.DAYS),20f);
+        List<LogFuturo> mockLogs = new ArrayList<>();
+        mockLogs.add(mockLog);
+
         float mockNovaQuantidade = 10;
         Previsao mockPrev = new Previsao();
         mockPrev.setDataPrevista(previsao.getDataPrevista());
@@ -141,6 +149,7 @@ public class PrevisaoServiceTest {
         Mockito.when(previsaoRepository.save(previsao)).thenReturn(previsao);
         Mockito.when(previsaoRepository.findById(previsao.getIdPrevisao())).thenReturn(optPrevisoes);
         Mockito.when(previsaoRepository.findByOrdem(previsao.getOrdem())).thenReturn(mockList);
+        Mockito.when(estoqueService.atualizarEstoqueFuturo(previsao.getItem().getIdItem(),mockLogs)).thenReturn(new Estoque());
 
         float retornoEsperado = previsao.getQuantidadePrevista() + mockNovaQuantidade;
 
