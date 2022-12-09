@@ -1,8 +1,6 @@
 package com.estoqueapi.EstoqueApi.Servicos;
 
-import com.estoqueapi.EstoqueApi.Entidades.Item;
-import com.estoqueapi.EstoqueApi.Entidades.Reserva;
-import com.estoqueapi.EstoqueApi.Entidades.Usuario;
+import com.estoqueapi.EstoqueApi.Entidades.*;
 import com.estoqueapi.EstoqueApi.Repositorios.ReservaRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,6 +33,11 @@ public class ReservaServiceTest {
     private UsuarioService usuarioService;
     @Mock
     private ItemService itemService;
+    @Mock
+    private LogFuturoService logFuturoService;
+    @Mock
+    private EstoqueService estoqueService;
+
     @InjectMocks
     private ReservaService reservaService;
 
@@ -77,13 +80,18 @@ public class ReservaServiceTest {
         mockReserva.setOrdem("1000");
         mockReserva.setQuantidadeReserva(25);
         mockReserva.setUsuario(usuario);
-        mockReserva.setItem(item2);
+        mockReserva.setItem(item1);
         mockReserva.setFinalizada(false);
         mockReserva.setDataPrevista(LocalDate.now().plus(5, ChronoUnit.DAYS));
+
+        LogFuturo mockLog = new LogFuturo("Reserva",reserva1.getOrdem(),LocalDate.now().plus(10,ChronoUnit.DAYS),20f);
+        List<LogFuturo> mockLogs = new ArrayList<>();
+        mockLogs.add(mockLog);
 
         Mockito.when(reservaRepository.save(mockReserva)).thenReturn(reserva1);
         Mockito.when(usuarioService.buscarUsuarioById(reserva1.getUsuario().getIdUsuario())).thenReturn(usuario);
         Mockito.when(itemService.consultarItemById(reserva1.getItem().getIdItem())).thenReturn(item1);
+        Mockito.when(estoqueService.atualizarEstoqueFuturo(reserva1.getItem().getIdItem(),mockLogs)).thenReturn(new Estoque());
 
         Assertions.assertEquals(mockReserva.getIdReserva(),reservaService.salvar(mockReserva).getIdReserva());
     }
@@ -101,11 +109,16 @@ public class ReservaServiceTest {
 
         Optional<Reserva> optRes = Optional.of(reserva1);
 
+        LogFuturo mockLog = new LogFuturo("Previsao",reserva1.getOrdem(),LocalDate.now().plus(10,ChronoUnit.DAYS),20f);
+        List<LogFuturo> mockLogs = new ArrayList<>();
+        mockLogs.add(mockLog);
+
         Mockito.when(reservaRepository.save(reserva1)).thenReturn(reserva1);
         Mockito.when(usuarioService.buscarUsuarioById(reserva1.getUsuario().getIdUsuario())).thenReturn(usuario);
         Mockito.when(itemService.consultarItemById(reserva1.getItem().getIdItem())).thenReturn(item1);
         Mockito.when(reservaRepository.findByOrdem(mockReserva.getOrdem())).thenReturn(listReserva);
         Mockito.when(reservaRepository.findById(reserva1.getIdReserva())).thenReturn(optRes);
+        Mockito.when(estoqueService.atualizarEstoqueFuturo(reserva1.getItem().getIdItem(),mockLogs)).thenReturn(new Estoque());
 
         float valorEsperado = reserva1.getQuantidadeReserva() + mockReserva.getQuantidadeReserva();
         Assertions.assertEquals(valorEsperado,reservaService.salvar(mockReserva).getQuantidadeReserva());
