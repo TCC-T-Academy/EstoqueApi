@@ -166,6 +166,9 @@ public class PrevisaoService {
         //Vai lancar excecao se o item for invalido
         Item i = itemService.consultarItemById(previsao.getItem().getIdItem());
         Usuario u = usuarioService.buscarUsuarioById(previsao.getUsuario().getIdUsuario());
+
+        previsao.setItem(i);
+        previsao.setUsuario(u);
         return previsao;
     }
 
