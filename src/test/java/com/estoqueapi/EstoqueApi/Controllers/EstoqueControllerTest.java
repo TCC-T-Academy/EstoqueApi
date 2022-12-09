@@ -30,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class EstoqueControllerTest {
 
     private Item item;
+    private String token;
     private Long idItemExistente;
     private Long idItemNaoExistente;
     private List<Estoque> lista;
@@ -48,6 +49,8 @@ public class EstoqueControllerTest {
 
     @BeforeEach
     void setup(){
+
+        token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzA2NTUwMzEsInVzZXJfbmFtZSI6Im1hcmlhQGdtYWlsLmNvbSIsImF1dGhvcml0aWVzIjpbIlJPTEVfQURNSU4iXSwianRpIjoiYjIxYmJlZWYtYThjYi00Mjg3LTg5NGQtZWNlOGZhOTMzZjY4IiwiY2xpZW50X2lkIjoid2Vic3RvY2siLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXX0.ZSOQzjs6Gax50oKGBlVJ6Nhk0jF7g18t3eOB9Fy_Z5I";
 
         idItemExistente = 1000l;
         idItemNaoExistente = 2000l;
@@ -79,7 +82,9 @@ public class EstoqueControllerTest {
     public void retornaOkQuandoConsultaEstoque() throws Exception {
 
         ResultActions resultado =
-                mockMvc.perform(get("/estoque").accept(MediaType.APPLICATION_JSON));
+                mockMvc.perform(get("/estoque")
+                                .header("Authorization", "Bearer " + token)
+                                .accept(MediaType.APPLICATION_JSON));
 
         resultado.andExpect(status().isOk());
         resultado.andExpect(jsonPath("$.size()").value(lista.size()));
@@ -90,7 +95,9 @@ public class EstoqueControllerTest {
     @Test
     public void retornaFoundQuandoConsultaEstoquePorIdItem() throws Exception {
         ResultActions resultado =
-                mockMvc.perform(get("/estoque/{idItem}", idItemExistente).accept(MediaType.APPLICATION_JSON));
+                mockMvc.perform(get("/estoque/{idItem}", idItemExistente)
+                        .header("Authorization", "Bearer " + token)
+                        .accept(MediaType.APPLICATION_JSON));
 
         resultado.andExpect(status().isOk());
         resultado.andExpect(jsonPath("$.idEstoque").value(10));
@@ -100,7 +107,9 @@ public class EstoqueControllerTest {
     @Test
     public void retornaNotFoundQuandoConsultaEstoquePorIdItemInexistente() throws Exception {
         ResultActions resultado =
-                mockMvc.perform(get("/estoque/{idItemInexistente}", idItemNaoExistente).accept(MediaType.APPLICATION_JSON));
+                mockMvc.perform(get("/estoque/{idItemInexistente}", idItemNaoExistente)
+                        .header("Authorization", "Bearer " + token)
+                        .accept(MediaType.APPLICATION_JSON));
 
         resultado.andExpect(res -> assertTrue(res.getResolvedException() instanceof EntityNotFoundException));
         resultado.andExpect(status().isNotFound());
