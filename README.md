@@ -1,6 +1,8 @@
 # WebStock 
 
-Este repositório contém um projeto *full-stack* usando *Spring Boot* e *Angular*.
+Este repositório contém uma API com Spring e compõe um projeto *full-stack* usando *Spring* e *Angular*.
+
+[Repositório da aplicação Angular](https://github.com/TCC-T-Academy/app-webstock)
 
 O projeto é um trabalho avaliativo proposto pelo programa de treinamento *T-Academy*, ocorrido entre 
 03/10/2022 e 15/12/2022, e promovido pela [T-Systems do Brasil](https://www.t-systems.com/br/pt) em parceria com a [ProWay](https://www.proway.com.br/).
