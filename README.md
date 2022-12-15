@@ -62,26 +62,39 @@ O diagrama abaixo objetiva explicar o fluxo de atividades no sistema de gerencia
 - Altere a propriedade `profiles` no arquivo `src/main/resources/application.properties` para `spring.profiles.
   active=dev` se for usar o perfil **DEV** (é necessário usar o MySQL Workbench) e `spring.profiles.active=test` 
   se decidir usar o perfil **TEST** (que usa o banco de dados *on-line* H2).
-  - Perfil **TEST** (`src/main/resources/application-test.properties`):
-    - Não é necessária nenhuma configuração manual. As tabelas serão geradas automaticamente no banco de dados H2 e
-      excluídas ao fim da execução.
-    - As tabelas geradas estarão vazias, ao contrário do que ocorre no perfil **DEV**.
-    - Acesse o `localhost:8081`.
-  - Perfil **DEV** (`src/main/resources/application-dev.properties`)
-    - Execute o comando `CREATE SCHEMA estoque_api` no MySQL Workbench.
-    - Verifique se o *username* e senha são os mesmos no seu MySQL local. Por padrão, no projeto é utilizado o 
-      *username* **root**, com a senha também como **root**.
-    - No arquivo `application-dev.properties`, editar a propriedade `ddl-auto` para `spring.jpa.hibernate.
-      ddl-auto:create`.
-    - Executar o projeto a partir do arquivo `src/main/java/com.estoqueapi.EstoqueApi/EstoqueApiApplication`. Assim, 
-      o *Hibernate* poderá criar as tabelas e inserir dados conforme arquivo `src/main/resources/import.sql`.
-    - No arquivo `application-dev.properties`, editar novamente a propriedade `ddl-auto` para `spring.jpa.hibernate.
-      ddl-auto:none`.
-    - Se a propriedade `ddl-auto` permanecer configurada como `create`, o banco de dados será sobrescrito a cada 
-      execução do projeto.
-    - Acesse o `localhost:8081`.
+<details>
+  <summary>Perfil <b>TEST</b> (<em>src/main/resources/application-test.properties</em>)</summary>
+  <ul>
+    <li>Não é necessária nenhuma configuração manual. As tabelas serão geradas automaticamente no banco de dados H2 e
+  excluídas ao fim da execução.</li>
+    <li>As tabelas geradas estarão vazias, ao contrário do que ocorre no perfil **DEV**.</li>
+    <li>Acesse o `localhost:8081`.</li>
+  </ul>  
+</details>
 
-## Testes
+<details>
+  <summary>Perfil <b>DEV</b> (<em>src/main/resources/application-test.properties</em>)</summary>
+  <ul>
+    <li>Execute o comando <em>CREATE SCHEMA estoque_api</em> no MySQL Workbench.</li>
+    <li>Verifique se o <em>username</em> e senha são os mesmos no seu MySQL local. Por padrão, no projeto é utilizado o 
+      <em>username</em> <b>root</b>, com a senha também como <b>root</b>.</li>
+    <li>No arquivo <em>application-dev.properties</em>, editar a propriedade <em>dl-auto</em> para <em>spring.jpa.hibernate.
+      ddl-auto:create</em>.</li>
+    <li>Executar o projeto a partir do arquivo <em>src/main/java/com.estoqueapi.EstoqueApi/EstoqueApiApplication</em>>. Assim, 
+      o <b>Hibernate</b> poderá criar as tabelas e inserir dados conforme arquivo <em>src/main/resources/import.sql</em>.</li>
+    <li>No arquivo <em>application-dev.properties</em>, editar novamente a propriedade <em>ddl-auto</em> para <em>spring.jpa.hibernate.
+      ddl-auto:none</em>.</li>
+    <li>Se a propriedade <e>ddl-auto</e> permanecer configurada como <em>create</em>, o banco de dados será sobrescrito a cada 
+      execução do projeto.</li>
+    <li>Acesse o <em>localhost:8081</em></li>
+  </ul>  
+</details>
+
+## Importe ambiente no Postman
+- Caso deseje usar o Postman para testar a API, há um arquivo específico no arquivo `resources` criado para ser importado no Postman.
+- Abre o Postman no *Scratch Pad* e procure pela opção `Import`, à esquerda da tela.
+- Importe o arquivo `src/main/resources/scriptspostman/TCC_T-Academy.postman_collection.json`.
+- Teste a API.
 
 
 ## Equipe de desenvolvimento
